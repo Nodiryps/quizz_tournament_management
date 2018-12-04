@@ -99,7 +99,7 @@ public class Tournament {
          ListMatchString.add(res);
        }
     }
-    public void soutOpponentsListWithoutThisPlayer(Player p) {
+    public void removeOpponentsListWithoutThisPlayer(Player p) {
         for (int i = 0; i < this.opponentsList.size(); ++i) {
             if (!opponentsList.get(i).equals(p.getFirstName())) {
                 //System.out.println(opponentsList.get(i));
@@ -115,16 +115,15 @@ public class Tournament {
         for (Match m : matchList) {
             if (m.getPlayer1() == p || m.getPlayer2() == p) {
                 matchPlayed.add(m);
-                addOpponentInvalidList(p, matchPlayed);// vas cree directement la liste jouer qui ont deja jouer contre player p ont lui pasant les matchs qu'il a jouer 
-
             }
         }
+        addOpponentInvalidList(p);// vas cree directement la liste jouer qui ont deja jouer contre player p ont lui pasant les matchs qu'il a jouer 
         ConvertMatchList();
     }
 
     // ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
-    public void addOpponentInvalidList(Player p, Set<Match> li) {
-        for (Match m : li) {
+    public void addOpponentInvalidList(Player p) {
+        for (Match m : matchPlayed) {
             if (!m.getPlayer1().getFirstName().equals(p.getFirstName())) {
                 opponentInvalidList.add(m.getPlayer1().getFirstName());
 
@@ -144,9 +143,9 @@ public class Tournament {
                 // System.out.println(s.getName());
                 testJouerValide.add(s.getFirstName());
             }
-            if (testJouerValide.contains(selected.getFirstName())) {
-                testJouerValide.remove(selected.getFirstName());
-            }
+            
+            
+            
         }
     }
     

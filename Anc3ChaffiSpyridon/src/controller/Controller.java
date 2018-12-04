@@ -32,6 +32,10 @@ public final class Controller {
     }
     
     
+    public TournamentFacade getFacade(){
+       return facade;
+    }
+    
    
  
  

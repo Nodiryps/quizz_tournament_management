@@ -36,9 +36,9 @@ import model.*;
 public class View extends VBox implements Observer {
 
     private Stage stage;
+    private Controller ctrl;
+    private TournamentFacade facade;
 
-    private TournamentFacade facade = new TournamentFacade();
-    private Controller ctrl = new Controller(facade);
     private testList ts = new testList();
     private RESULTS r;
     private static final int MAX_WORD_LENGTH = 15;
@@ -50,15 +50,13 @@ public class View extends VBox implements Observer {
     private final HBox topZone = new HBox();
     private final HBox bottomZone = new HBox();
 
-    
-    
     private final ListView<Player> listInscrit = new ListView<>();
     private final TableView<Match> listMatch = new TableView<>();
     private final ListView<Tournament> listTournoi = new ListView<>();
     private final Label lbNbLines = new Label();
-    private final ComboBox listJouer = new ComboBox();
-    private final ComboBox listadversaire = new ComboBox();
-    private final ComboBox result = new ComboBox();
+    private final ComboBox cbListJoueur = new ComboBox();
+    private final ComboBox cbListadversaire = new ComboBox();
+    private final ComboBox cbResult = new ComboBox();
     private final Button valider = new Button();
     private final Label titreTournois = new Label();
     private final Label titreInscrit = new Label();
@@ -70,6 +68,7 @@ public class View extends VBox implements Observer {
 
     public View(Stage primaryStage, Controller ctrl) {
         this.ctrl = ctrl;
+        this.facade = ctrl.getFacade();
         initData();
         Scene scene = new Scene(displayZone, 1125, 500);
         primaryStage.setTitle("Gestion de  Tournois");
@@ -128,11 +127,11 @@ public class View extends VBox implements Observer {
         boutonGrid.setHgap(30);
         boutonGrid.setPadding(new Insets(20, 0, 0, 20));
         boutonGrid.add(new Label("jouer 1: "), 0, 0);
-        boutonGrid.add(listJouer, 1, 0);
+        boutonGrid.add(cbListJoueur, 1, 0);
         boutonGrid.add(new Label("jouer 2: "), 2, 0);
-        boutonGrid.add(listadversaire, 3, 0);
+        boutonGrid.add(cbListadversaire, 3, 0);
         boutonGrid.add(new Label("Resultat "), 4, 0);
-        boutonGrid.add(result, 5, 0);
+        boutonGrid.add(cbResult, 5, 0);
         valider.setText("valider");
         boutonGrid.add(valider, 6, 0);
 
@@ -143,7 +142,7 @@ public class View extends VBox implements Observer {
 
     public void addElemComboBox() {
 
-        result.getItems().addAll(
+        cbResult.getItems().addAll(
                 RESULTS.DRAW,
                 RESULTS.WINNER_P1,
                 RESULTS.WINNER_P2
@@ -198,19 +197,21 @@ public class View extends VBox implements Observer {
 
     public void addListernerComboBox() {
 
-        listJouer.getSelectionModel().selectedIndexProperty()
+        cbListJoueur.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-
+                    Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
+                    System.out.println("Appel de facade.getValidPlayerList(p)");
+                    facade.getValidPlayerList(p);
                 });
 
-        listadversaire.getSelectionModel().selectedIndexProperty()
+        cbListadversaire.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    System.out.println(listadversaire.getSelectionModel().getSelectedItem());
+                    System.out.println(cbListadversaire.getSelectionModel().getSelectedItem());
                 });
 
-        result.getSelectionModel().selectedIndexProperty()
+        cbResult.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    System.out.println(result.getSelectionModel().getSelectedItem());
+                    System.out.println(cbResult.getSelectionModel().getSelectedItem());
                 });
 
         valider.setOnAction((ActionEvent event) -> {
@@ -225,35 +226,29 @@ public class View extends VBox implements Observer {
 
         switch (typeNotif) {
             case INIT:
-                 ObservableList<Player> sub1=FXCollections.observableArrayList(facade.getSubscrib());
-               
+                ObservableList<Player> sub1 = FXCollections.observableArrayList(facade.getSubscrib());
+
                 System.out.println("update INIT");
                 listTournoi.getItems().clear();
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
-                
 
                 for (Tournament t : facade.getTournamentList()) {
                     listTournoi.getItems().add(t);
                 }
                 for (Player p : facade.getSubscrib()) {
                     listInscrit.getItems().add(p);
-
                 }
-               
-
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
-                
-                 listJouer.setItems(sub1);
-               listadversaire.setItems(sub1);
-              
+                cbListJoueur.setItems(sub1);
+                cbListadversaire.setItems(sub1);
 
                 break;
 
             case TOURNAMENT_SELECTED:
-               ObservableList<Player> sub=FXCollections.observableArrayList(facade.getSubscrib());
+                ObservableList<Player> sub = FXCollections.observableArrayList(facade.getSubscrib());
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
 
@@ -262,12 +257,21 @@ public class View extends VBox implements Observer {
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
-                
-                listJouer.setItems(sub);
-               listadversaire.setItems(sub);
+                cbListJoueur.setItems(sub);
+                cbListadversaire.setItems(sub);
                 break;
+
             case LINE_ADDED:
                 System.out.println("coucou");
+
+                break;
+
+            case PLAYER_SELECTED:
+
+                ObservableList<String> sub3 = FXCollections.observableArrayList(facade.getTestJouerValid());
+
+                cbListadversaire.setItems(sub3);
+      
 
                 break;
         }

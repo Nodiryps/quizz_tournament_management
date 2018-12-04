@@ -10,23 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author Spy
  */
 public class TournamentFacade extends Observable {
-    
+
     public enum TypeNotif {
-        INIT, TOURNAMENT_SELECTED, LINE_UNSELECTED, LINE_UPDATED, LINE_ADDED
+        INIT, TOURNAMENT_SELECTED, PLAYER_SELECTED, LINE_UPDATED, LINE_ADDED
     }
 
     public List<Tournament> tournamentList = new ArrayList<>();
-    
-    
-    Tournament t1=new Tournament("E-Sport");
-    Tournament t2=new Tournament("T2");
-    public int indexValue=0;
+
+    public int indexValue = 0;
 
     Player p1 = new Player("Philippe");
     Player p2 = new Player("Khadija");
@@ -43,13 +41,28 @@ public class TournamentFacade extends Observable {
     public Player p = p1;
 
     public TournamentFacade() {
-        
+        Tournament t1 = new Tournament("E-Sport");
+        Tournament t2 = new Tournament("T2");
+
         addPlayersT1(t1);
         addPlayerst2(t2);
         addMatch1(t1);
         addMatch2(t2);
         tournamentList.add(t1);
         tournamentList.add(t2);
+    }
+
+    public List<Player> getValidPlayerList(Player player) {
+        getTournois().removeOpponentsListWithoutThisPlayer(player);
+
+        System.out.println(this.countObservers() + " Observers");
+        List<Player> list = getTournois().getSubscribersList().stream()
+                .filter(p -> !getTournois().getOpponentInvalidList()
+                .contains(p)).collect(toList());
+
+        notif(TypeNotif.PLAYER_SELECTED);
+        return list;
+
     }
 
     public void add(Tournament tournois) {
@@ -75,10 +88,10 @@ public class TournamentFacade extends Observable {
         return tournamentList.get(indexValue);
 
     }
-    
-    public void setIndex(int index){
+
+    public void setIndex(int index) {
         System.out.println("Facade setindex " + this.countObservers());
-        this.indexValue=index;
+        this.indexValue = index;
         notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
@@ -91,11 +104,11 @@ public class TournamentFacade extends Observable {
         tournois.addPlayer(p6);
 
     }
-     public void addPlayerst2(Tournament tournois) {
+
+    public void addPlayerst2(Tournament tournois) {
         tournois.addPlayer(p1);
         tournois.addPlayer(p2);
         tournois.addPlayer(p3);
-       
 
     }
 
@@ -107,20 +120,20 @@ public class TournamentFacade extends Observable {
         tournois.addMatch(m5);
         tournois.addMatch(m6);
     }
-      public void addMatch2(Tournament tournois) {
+
+    public void addMatch2(Tournament tournois) {
         tournois.addMatch(m);
         tournois.addMatch(m2);
         tournois.addMatch(m3);
-      
-    }
 
+    }
 
     public List<Tournament> getTournamentList() {
         return tournamentList;
     }
 
-    public void removeActualPlayer(Player p,Tournament tournois ){
-        tournois.soutOpponentsListWithoutThisPlayer(p);
+    public void removeActualPlayer(Player p, Tournament tournois) {
+        tournois.removeOpponentsListWithoutThisPlayer(p);
 
     }
 
@@ -129,35 +142,35 @@ public class TournamentFacade extends Observable {
     }
 
     public List<Player> getSubscrib() {
-        Tournament tournois=getTournois();
+        Tournament tournois = getTournois();
         return tournois.getSubscribersList();
     }
 
     public Set<Match> getMatchList() {
-          Tournament tournois=getTournois();
+        Tournament tournois = getTournois();
         return tournois.getMatchList();
 
     }
 
-    public Set<String> getopponentInvalidList(Tournament tournois) {
+    public Set<String> getopponentInvalidList() {
+        Tournament tournois = getTournois();
         return tournois.getOpponentInvalidList();
 
     }
 
-//    public Set<String> getopponentValidList() {
-//        return tournois.getopponentsValidList();
-//
-//    }
-//
-//    public Set<String> getTestJouerValid() {
-//        return tournois.getTestJouerValide();
-//
-//    }
+    public Set<String> getopponentValidList() {
+        return getTournois().getopponentsValidList();
+
+    }
+
+    public Set<String> getTestJouerValid() {
+        return getTournois().getTestJouerValide();
+
+    }
 //
 //    public List<String> getPlayerList() {
 //        return tournois.getPlayerList();
 //    }
-
     public Player createPlayer(String name) {
         return new Player(name);
     }
@@ -170,7 +183,7 @@ public class TournamentFacade extends Observable {
         return new Tournament(name);
 
     }
-    
+
     public void notif(TypeNotif typeNotif) {
         setChanged();// cette methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
         notifyObservers(typeNotif);
@@ -216,5 +229,4 @@ public class TournamentFacade extends Observable {
 //      
 //
 //    }
-
 }
