@@ -27,6 +27,7 @@ import model.*;
 public class TestView extends Application {
 
     private Controller ctrl = new Controller();
+    private TournamentFacade facade=new TournamentFacade("game of throne");
     private testList ts = new testList();
     private RESULTS r;
     private static final int MAX_WORD_LENGTH = 15;
@@ -38,10 +39,10 @@ public class TestView extends Application {
     private final VBox rightZone = new VBox();
     private final HBox topZone = new HBox();
     private final HBox bottomZone = new HBox();
-    private ObservableList<String> SubscribsView = FXCollections.observableList(ctrl.getOpponentList());
-    private ObservableList<Tournament> TournamentView = FXCollections.observableList(ctrl.getTournois());
-    private ObservableList<String> MatchView = FXCollections.observableList(ctrl.getConvertMAtchList());
-    private ObservableList<String> ComboOneView = FXCollections.observableList(ctrl.getOpponentList());
+    private ObservableList<String> SubscribsView = FXCollections.observableList(facade.getOpponentList());
+    private ObservableList<Tournament> TournamentView = FXCollections.observableList(facade.getTournois());
+    private ObservableList<String> MatchView = FXCollections.observableList(facade.getConvertMAtchList());
+    private ObservableList<String> ComboOneView = FXCollections.observableList(facade.getOpponentList());
     //private ObservableList<Enum> Res = FXCollections.observableList();
  
     private final ListView<String> listInscrit = new ListView<String>(SubscribsView);

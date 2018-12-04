@@ -18,12 +18,12 @@ import java.util.TreeSet;
 public class Tournament {
 
     private final String name;
-    private List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
+    private  List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
     private Set<Match> matchList = new HashSet<>();
     private List<String> playersList = new ArrayList<>();// a peut etre virer.
     private List<String> opponentsList = new ArrayList<>();//liste des adversaire valide.
     private Set<String> opponentInvalidList = new HashSet<>();// liste des jouer a jarter de l'affochage de comboBox.
-    private List<Match> matchPlayed = new ArrayList<>();// match deja jouer par le player
+    private Set<Match> matchPlayed = new TreeSet<>();// match deja jouer par le player
     private Set<String> opponentsValidList = new TreeSet<>();
     private Set<String> testJouerValide = new HashSet<>();//liste  teste de jouer qui sont encore valide 
    private List<String> ListMatchString = new ArrayList<>();
@@ -43,7 +43,7 @@ public class Tournament {
         return testJouerValide;
     }
 
-    public List<Player> getSubscribersList() {
+     public List<Player> getSubscribersList() {
         return subscribersList;
     }
 
@@ -71,7 +71,7 @@ public class Tournament {
         this.matchList.add(m);
     }
 
-    public List<Match> getMatchPlayed() {
+    public Set<Match> getMatchPlayed() {
         return matchPlayed;
     }
 
@@ -120,7 +120,7 @@ public class Tournament {
     }
 
     // ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
-    public void addOpponentInvalidList(Player p, List<Match> li) {
+    public void addOpponentInvalidList(Player p, Set<Match> li) {
         for (Match m : li) {
             if (!m.getPlayer1().getFirstName().equals(p.getFirstName())) {
                 opponentInvalidList.add(m.getPlayer1().getFirstName());
@@ -149,7 +149,7 @@ public class Tournament {
 
     @Override
     public String toString() {
-        return getName();
+        return "le tournois :"+getName();
     }
 
 }
