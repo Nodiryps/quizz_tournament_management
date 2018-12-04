@@ -27,21 +27,19 @@ public final class Controller {
     private String name;
     TournamentFacade facade;
 
-    public Controller() {
-       this.facade=addTournois();
+    public Controller(TournamentFacade facade) {
+      this.facade=facade;
     }
     
     
    
  
-    
-    public TournamentFacade addTournois(){
-   
-          return new TournamentFacade();
-    }
+ 
      
-    public static void main(String[] args) {
-        new Controller();
-    }
+   
  
+    
+    public void setIndex(int index){
+       facade.setIndex(index);
+    }
 }

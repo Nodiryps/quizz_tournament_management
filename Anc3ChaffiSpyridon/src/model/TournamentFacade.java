@@ -26,7 +26,7 @@ public class TournamentFacade extends Observable {
     
     Tournament t1=new Tournament("E-Sport");
     Tournament t2=new Tournament("T2");
-    public int index=0;
+    public int indexValue=0;
 
     Player p1 = new Player("Philippe");
     Player p2 = new Player("Khadija");
@@ -72,12 +72,13 @@ public class TournamentFacade extends Observable {
     }
 
     public Tournament getTournois() {
-        return tournamentList.get(index);
+        return tournamentList.get(indexValue);
 
     }
     
-    public void setIndex(int indes){
-        this.index=indes;
+    public void setIndex(int index){
+        System.out.println("Facade setindex " + this.countObservers());
+        this.indexValue=index;
         notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
@@ -127,12 +128,13 @@ public class TournamentFacade extends Observable {
         return tournois.getListMatchString();
     }
 
-    public List<Player> getSubscrib(Tournament tournois) {
+    public List<Player> getSubscrib() {
+        Tournament tournois=getTournois();
         return tournois.getSubscribersList();
     }
 
-    public Set<Match> getMatchList(Tournament tournois) {
-
+    public Set<Match> getMatchList() {
+          Tournament tournois=getTournois();
         return tournois.getMatchList();
 
     }
@@ -170,7 +172,7 @@ public class TournamentFacade extends Observable {
     }
     
     public void notif(TypeNotif typeNotif) {
-        setChanged();// cet methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
+        setChanged();// cette methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
         notifyObservers(typeNotif);
     }
 
@@ -194,25 +196,25 @@ public class TournamentFacade extends Observable {
 //    public List<Player> getAdvertList(Player p) {
 //        return tournois.advertList(p);
 //    }
-
-    public static void main(String[] args) {
-        int index = 0;
-        Tournament c = new Tournament("test");
-        Tournament c2 = new Tournament("tournois2");
-        Tournament c3 = new Tournament("tournois3");
-        Tournament c4 = new Tournament("tournois3");
-
-        TournamentFacade facade = new TournamentFacade();
-        facade.add(c);
-        facade.add(c2);
-        facade.add(c3);
-        facade.add(c4);
-        Tournament t=facade.getTournois();
-        System.out.println(facade.t1.getName());
-       
-        
-      
-
-    }
+//
+//    public static void main(String[] args) {
+//        int index = 0;
+//        Tournament c = new Tournament("test");
+//        Tournament c2 = new Tournament("tournois2");
+//        Tournament c3 = new Tournament("tournois3");
+//        Tournament c4 = new Tournament("tournois3");
+//
+//        TournamentFacade facade = new TournamentFacade();
+//        facade.add(c);
+//        facade.add(c2);
+//        facade.add(c3);
+//        facade.add(c4);
+//        Tournament t=facade.getTournois();
+//        System.out.println(facade.t1.getName());
+//       
+//        
+//      
+//
+//    }
 
 }

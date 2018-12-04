@@ -33,27 +33,24 @@ import view.testList;
 import view.testList;
 import model.*;
 
-public class View extends HBox implements Observer {
+public class View extends VBox implements Observer {
 
     private Stage stage;
-    private Controller ctrl = new Controller();
+    
     private TournamentFacade facade = new TournamentFacade();
+    private Controller ctrl = new Controller(facade);
     private testList ts = new testList();
     private RESULTS r;
     private static final int MAX_WORD_LENGTH = 15;
     private static final int TEXTSIZE = 400, SPACING = 10;
 
-    // Composants graphiques
+
     private final VBox displayZone = new VBox();
     private final VBox leftZone = new VBox();
     private final VBox rightZone = new VBox();
     private final HBox topZone = new HBox();
     private final HBox bottomZone = new HBox();
-    //private ObservableList<String> SubscribsView = FXCollections.observableList(facade.getOpponentList());
-    // private ObservableList<Tournament> TournamentView = FXCollections.observableList(facade.getTournois());
-//  private ObservableList<String> MatchView = FXCollections.observableList(facade.getConvertMAtchList());
-    //private ObservableList<String> ComboOneView = FXCollections.observableList(facade.getOpponentList());
-    //private ObservableList<Enum> Res = FXCollections.observableList();
+
 
     private final ListView<Player> listInscrit = new ListView<>();
     private final TableView<Match> listMatch = new TableView<>();
@@ -71,8 +68,9 @@ public class View extends HBox implements Observer {
     private final GridPane bottomGrid = new GridPane();
     private final GridPane bottomRightGrid = new GridPane();
 
-    // ObservableList<String> tableData = FXCollections.observableList(ts.getListe());
-    public View(Stage primaryStage) {
+    
+    public View(Stage primaryStage,Controller ctrl) {
+        this.ctrl=ctrl;
         initData();
         Scene scene = new Scene(displayZone, 1125, 500);
         primaryStage.setTitle("Gestion de  Tournois");
@@ -86,11 +84,10 @@ public class View extends HBox implements Observer {
         addElemComboBox();
         addElemListView();
         tableViewColumnConfig();
-        // addActionEvent();
         configFocusListener();
         addListernerComboBox();
         topZone.getChildren().addAll(listTournoi, titreTournois);
-        //bottomZone.getChildren().addAll(listInscrit, getMatch, listJouer, listadversaire);
+       
     }
 
     public void decor() {
@@ -200,22 +197,18 @@ public class View extends HBox implements Observer {
 //    }
     // ajoute un listener sur differents elements.
     private void configFocusListener() {
+        listTournoi.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+                    int index = listTournoi.getSelectionModel().getSelectedIndex();
+                   ctrl.setIndex(index);
+                    System.out.println(index);
+                });
         listInscrit.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     System.out.println(listInscrit.getSelectionModel().getSelectedItem());// ne retourne qu'une seul valeur a la fois (pas bon)
 
                 });
-//        listTournoi.getSelectionModel().selectedIndexProperty()
-//                .addListener((Observable o) -> {
-//                    int index = listTournoi.getSelectionModel().getSelectedIndex();
-//                    facade.setIndex(index);
-//                    System.out.println(index);
-//                });
 
-//        listMatch.getSelectionModel().selectedIndexProperty()
-//                .addListener((Observable o) -> {
-//                    System.out.println(listMatch.getSelectionModel().getSelectedItem());
-//                });
         listMatch.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -231,7 +224,7 @@ public class View extends HBox implements Observer {
 
         listJouer.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                  
+
                 });
 
         listadversaire.getSelectionModel().selectedIndexProperty()
@@ -253,30 +246,40 @@ public class View extends HBox implements Observer {
     public void update(java.util.Observable o, Object o1) {
         TournamentFacade facade = (TournamentFacade) o;
         TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
+       
         switch (typeNotif) {
             case INIT:
+                System.out.println("update INIT");
+                listTournoi.getItems().clear();
+                listInscrit.getItems().clear();
+                listMatch.getItems().clear();
+
                 for (Tournament t : facade.getTournamentList()) {
                     listTournoi.getItems().add(t);
                 }
-                for(Player p:facade.getSubscrib(facade.getTournois())){
-                  listInscrit.getItems().add(p);
+                for (Player p : facade.getSubscrib()) {
+                    listInscrit.getItems().add(p);
                 }
-                
-                 for(Match m:facade.getMatchList(facade.getTournois())){
-                  listMatch.getItems().add(m);
-                }
-                break;
-            case TOURNAMENT_SELECTED:
-                listInscrit.getItems().clear();
-                listMatch.getItems().clear();
-                
-                Tournament t = facade.getTournois();
-                for (Player p : facade.getSubscrib(t)) {
-                    listInscrit.getItems().add((p));
-                }
-                for (Match m : facade.getMatchList(t)) {
+
+                for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
+                break;
+
+            case TOURNAMENT_SELECTED:
+             
+                listInscrit.getItems().clear();
+                listMatch.getItems().clear();
+
+                Tournament t = facade.getTournois();
+                listInscrit.getItems().addAll(facade.getSubscrib());
+                for (Match m : facade.getMatchList()) {
+                    listMatch.getItems().add(m);
+                }
+                break;
+            case LINE_ADDED:
+                System.out.println("coucou");
+
                 break;
         }
     }
