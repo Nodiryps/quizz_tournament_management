@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package anc3test;
+package model;
 
 import java.util.Objects;
 
@@ -13,13 +13,11 @@ import java.util.Objects;
  */
 public class Match implements Comparable<Match> {
 
-    protected enum RESULTS {
-        WINNER_P1, WINNER_P2, DRAW;
-    }
+  
 
     private final Player player1, player2;
     private final RESULTS results;
-    private static int index;
+    //private static int index;
 
     public Match(Player p1, Player p2, RESULTS res) {
         player1 = p1;
