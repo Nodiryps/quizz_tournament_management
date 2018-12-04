@@ -8,6 +8,9 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import model.Match;
 import model.Player;
 import model.Tournament;
@@ -25,17 +28,18 @@ public final class Controller {
     TournamentFacade facade;
 
     public Controller() {
-       this.facade=addTournois(name);
+       this.facade=addTournois();
     }
     
     
+   
  
     
-    public TournamentFacade addTournois(String name){
+    public TournamentFacade addTournois(){
    
-          return new TournamentFacade(name);
+          return new TournamentFacade();
     }
-    
+     
     public static void main(String[] args) {
         new Controller();
     }

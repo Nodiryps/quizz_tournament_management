@@ -19,7 +19,7 @@ public class Tournament {
 
     private final String name;
     private  List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
-    private Set<Match> matchList = new HashSet<>();
+    private Set<Match> matchList = new TreeSet<>();
     private List<String> playersList = new ArrayList<>();// a peut etre virer.
     private List<String> opponentsList = new ArrayList<>();//liste des adversaire valide.
     private Set<String> opponentInvalidList = new HashSet<>();// liste des jouer a jarter de l'affochage de comboBox.
@@ -27,6 +27,9 @@ public class Tournament {
     private Set<String> opponentsValidList = new TreeSet<>();
     private Set<String> testJouerValide = new HashSet<>();//liste  teste de jouer qui sont encore valide 
    private List<String> ListMatchString = new ArrayList<>();
+   private List<RESULTS> result=new ArrayList<>();
+   
+   private List<Player> testAdvert=new ArrayList<>();
     public Tournament(String s) {
         name = s;
     }
@@ -146,10 +149,44 @@ public class Tournament {
             }
         }
     }
+    
+    public  List<Player> advertList(Player p){
+        List<Player> list=new ArrayList<>();
+     for(Player s:subscribersList){
+         if(!s.equals(p)){
+           list.add(s);
+         }
+     }
+     return list;
+    
+    }
 
+    
     @Override
     public String toString() {
-        return "le tournois :"+getName();
+        return getName();
+    }
+    
+    public void AddAdvert(Player p){
+      for(Player s:subscribersList){
+        if(!s.equals(p)){
+           testAdvert.add(s);
+        }
+      }
+    
+    }
+    public static void main(String[] args) {
+        Tournament t=new Tournament("jeux"); 
+        Player p=new Player("jean");
+         Player p1=new Player("fil");
+          Player p2=new Player("marc");
+        
+        t.addPlayer(p);
+         t.addPlayer(p1);
+          t.addPlayer(p2);
+          
+        t.AddAdvert(p2); 
+        System.out.println(t.getSubscribersList());
     }
 
 }
