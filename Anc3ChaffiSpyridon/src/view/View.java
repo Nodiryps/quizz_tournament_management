@@ -36,7 +36,7 @@ import model.*;
 public class View extends VBox implements Observer {
 
     private Stage stage;
-    
+
     private TournamentFacade facade = new TournamentFacade();
     private Controller ctrl = new Controller(facade);
     private testList ts = new testList();
@@ -44,14 +44,14 @@ public class View extends VBox implements Observer {
     private static final int MAX_WORD_LENGTH = 15;
     private static final int TEXTSIZE = 400, SPACING = 10;
 
-
     private final VBox displayZone = new VBox();
     private final VBox leftZone = new VBox();
     private final VBox rightZone = new VBox();
     private final HBox topZone = new HBox();
     private final HBox bottomZone = new HBox();
 
-
+    
+    
     private final ListView<Player> listInscrit = new ListView<>();
     private final TableView<Match> listMatch = new TableView<>();
     private final ListView<Tournament> listTournoi = new ListView<>();
@@ -68,9 +68,8 @@ public class View extends VBox implements Observer {
     private final GridPane bottomGrid = new GridPane();
     private final GridPane bottomRightGrid = new GridPane();
 
-    
-    public View(Stage primaryStage,Controller ctrl) {
-        this.ctrl=ctrl;
+    public View(Stage primaryStage, Controller ctrl) {
+        this.ctrl = ctrl;
         initData();
         Scene scene = new Scene(displayZone, 1125, 500);
         primaryStage.setTitle("Gestion de  Tournois");
@@ -87,7 +86,7 @@ public class View extends VBox implements Observer {
         configFocusListener();
         addListernerComboBox();
         topZone.getChildren().addAll(listTournoi, titreTournois);
-       
+
     }
 
     public void decor() {
@@ -155,22 +154,6 @@ public class View extends VBox implements Observer {
 
     }
 
-    //a supprimer aussi.
-//    public void fillMatchView(TableColumn<Match, String> player1, TableColumn<Match, String> player2, TableColumn<Match, String> results) {
-//        List<Match> listmatch2 = new ArrayList<>();
-//        for (Match m : facade.getMatchList()) {
-//            player1.setCellValueFactory(new PropertyValueFactory<>("test"));
-//            player2.setCellValueFactory(new PropertyValueFactory<>("test"));
-//            results.setCellValueFactory(new PropertyValueFactory<>("test"));
-//        }
-//        for (Match ms : facade.getMatchList()) {
-//            listmatch2.add(ms);
-//        }
-//
-//        ObservableList<Match> list = FXCollections.observableArrayList(listmatch2);
-//        listMatch.setItems(list);
-//
-//    }
     public void tableViewColumnConfig() {
         TableColumn<Match, String> player1 = new TableColumn<>("player One");
         player1.setMinWidth(133);
@@ -188,19 +171,12 @@ public class View extends VBox implements Observer {
 
     }
 
-    // ajoute un listener sur les listes.methode reprise dans configFocusListerner();
-//    public void addActionEvent() {
-//        listTournoi.getSelectionModel().selectedIndexProperty()
-//                .addListener((Observable o) -> {
-//                    System.out.println(listTournoi.getSelectionModel().getSelectedItem());
-//                });
-//    }
     // ajoute un listener sur differents elements.
     private void configFocusListener() {
         listTournoi.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = listTournoi.getSelectionModel().getSelectedIndex();
-                   ctrl.setIndex(index);
+                    ctrl.setIndex(index);
                     System.out.println(index);
                 });
         listInscrit.getSelectionModel().selectedIndexProperty()
@@ -246,28 +222,38 @@ public class View extends VBox implements Observer {
     public void update(java.util.Observable o, Object o1) {
         TournamentFacade facade = (TournamentFacade) o;
         TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
-       
+
         switch (typeNotif) {
             case INIT:
+                 ObservableList<Player> sub1=FXCollections.observableArrayList(facade.getSubscrib());
+               
                 System.out.println("update INIT");
                 listTournoi.getItems().clear();
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
+                
 
                 for (Tournament t : facade.getTournamentList()) {
                     listTournoi.getItems().add(t);
                 }
                 for (Player p : facade.getSubscrib()) {
                     listInscrit.getItems().add(p);
+
                 }
+               
 
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
+                
+                 listJouer.setItems(sub1);
+               listadversaire.setItems(sub1);
+              
+
                 break;
 
             case TOURNAMENT_SELECTED:
-             
+               ObservableList<Player> sub=FXCollections.observableArrayList(facade.getSubscrib());
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
 
@@ -276,6 +262,9 @@ public class View extends VBox implements Observer {
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
+                
+                listJouer.setItems(sub);
+               listadversaire.setItems(sub);
                 break;
             case LINE_ADDED:
                 System.out.println("coucou");
