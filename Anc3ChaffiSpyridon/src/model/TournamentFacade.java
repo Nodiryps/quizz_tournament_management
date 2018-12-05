@@ -39,6 +39,7 @@ public class TournamentFacade extends Observable {
     Match m5 = new Match(p6, p2, RESULTS.DRAW);
     Match m6 = new Match(p3, p6, RESULTS.DRAW);
     public Player p = p1;
+    public Player actual;
 
     public TournamentFacade() {
         Tournament t1 = new Tournament("E-Sport");
@@ -52,17 +53,76 @@ public class TournamentFacade extends Observable {
         tournamentList.add(t2);
     }
 
-    public List<Player> getValidPlayerList(Player player) {
-        getTournois().removeOpponentsListWithoutThisPlayer(player);
+    public Tournament getTournois() {
+        return tournamentList.get(indexValue);
 
-        System.out.println(this.countObservers() + " Observers");
-        List<Player> list = getTournois().getSubscribersList().stream()
-                .filter(p -> !getTournois().getOpponentInvalidList()
+    }
+
+    public void setIndex(int index) {
+        this.indexValue = index;
+        notif(TypeNotif.TOURNAMENT_SELECTED);
+    }
+
+    public void SetPLayer(Player player) {
+        this.actual = player;
+        System.out.println(addOppponentValidList());
+        System.out.println(addOpponentInvalidList());
+        notif(TypeNotif.PLAYER_SELECTED);
+    }
+
+    public List<Player> createPlayerMatch(int index) {
+        List<Player> list = new ArrayList<>();
+        for (int i = 1; i <= index; i++) {
+            list.add(new Player("p" + i));
+        }
+        return list;
+    }
+
+    public List<Player> getValidPlayerList() {
+        List<Player> inscrit = getTournois().getSubscribersList();
+        List<Player> list = inscrit.stream()
+                .filter(p -> !addOpponentInvalidList()
                 .contains(p)).collect(toList());
 
-        notif(TypeNotif.PLAYER_SELECTED);
         return list;
 
+    }
+
+    // ajouter les match deja jouer par le player p dans matchPlayed.
+    public List<Match> addMatchPlayed() {
+        List<Match> matchPlayed = new ArrayList<>();
+        for (Match m : getTournois().getMatchList()) {
+            if (m.getPlayer1() == actual || m.getPlayer2() == actual) {
+                matchPlayed.add(m);
+            }
+        }
+
+        return matchPlayed;
+    }
+
+    // ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
+    public List<Player> addOpponentInvalidList() {
+        List<Player> playerInvalid = new ArrayList<>();
+        for (Match m : addMatchPlayed()) {
+            if (!m.getPlayer1().equals(actual)) {
+                playerInvalid.add(m.getPlayer1());
+            }
+            if (!m.getPlayer2().equals(actual)) {
+                playerInvalid.add(m.getPlayer2());
+
+            }
+        }
+        return playerInvalid;
+    }
+
+    public List<Player> addOppponentValidList() {
+        List<Player> playerValid = new ArrayList<>();
+        for (Player s : getTournois().getSubscribersList()) {
+            if (!addOpponentInvalidList().contains(s) && !s.equals(actual)) {
+                playerValid.add(s);
+            }
+        }
+        return playerValid;
     }
 
     public void add(Tournament tournois) {
@@ -82,17 +142,6 @@ public class TournamentFacade extends Observable {
 //        }
 //        return null;
 
-    }
-
-    public Tournament getTournois() {
-        return tournamentList.get(indexValue);
-
-    }
-
-    public void setIndex(int index) {
-        System.out.println("Facade setindex " + this.countObservers());
-        this.indexValue = index;
-        notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
     public void addPlayersT1(Tournament tournois) {
@@ -171,6 +220,7 @@ public class TournamentFacade extends Observable {
 //    public List<String> getPlayerList() {
 //        return tournois.getPlayerList();
 //    }
+
     public Player createPlayer(String name) {
         return new Player(name);
     }

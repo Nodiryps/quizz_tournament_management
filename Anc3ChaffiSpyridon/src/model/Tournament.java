@@ -107,47 +107,12 @@ public class Tournament {
 
             }
         }
-        addMatchPlayed(p);
+        //addMatchPlayed(p);
     }
 
-// ajouter les match deja jouer par le player p dans matchPlayed.
-    public void addMatchPlayed(Player p) {
-        for (Match m : matchList) {
-            if (m.getPlayer1() == p || m.getPlayer2() == p) {
-                matchPlayed.add(m);
-            }
-        }
-        addOpponentInvalidList(p);// vas cree directement la liste jouer qui ont deja jouer contre player p ont lui pasant les matchs qu'il a jouer 
-        ConvertMatchList();
-    }
 
-    // ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
-    public void addOpponentInvalidList(Player p) {
-        for (Match m : matchPlayed) {
-            if (!m.getPlayer1().getFirstName().equals(p.getFirstName())) {
-                opponentInvalidList.add(m.getPlayer1().getFirstName());
 
-            }
-            if (!m.getPlayer2().getFirstName().equals(p.getFirstName())) {
-                opponentInvalidList.add(m.getPlayer2().getFirstName());
-
-            }
-        }
-        addOppponentValidList(p);// vas cree directement la liste jouer qui ont pas encore  jouer contre player p. 
-    }
-
-    public void addOppponentValidList(Player selected) {
-        for (Player s : subscribersList) {
-            if (!opponentInvalidList.contains(s.getFirstName())) {
-                //soutOpponentsListWithoutThisPlayer(s);
-                // System.out.println(s.getName());
-                testJouerValide.add(s.getFirstName());
-            }
-            
-            
-            
-        }
-    }
+  
     
     public  List<Player> advertList(Player p){
         List<Player> list=new ArrayList<>();

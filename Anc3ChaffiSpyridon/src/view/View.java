@@ -1,45 +1,36 @@
 package view;
 
 import controller.Controller;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observer;
-import javafx.application.Application;
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import view.testList;
-import view.testList;
+
 import model.*;
 
 public class View extends VBox implements Observer {
 
     private Stage stage;
-    private Controller ctrl;
-    private TournamentFacade facade;
+    private final Controller ctrl;
+    private final TournamentFacade facade;
 
-    private testList ts = new testList();
+    private final testList ts = new testList();
     private RESULTS r;
     private static final int MAX_WORD_LENGTH = 15;
     private static final int TEXTSIZE = 400, SPACING = 10;
@@ -176,7 +167,7 @@ public class View extends VBox implements Observer {
                 .addListener((Observable o) -> {
                     int index = listTournoi.getSelectionModel().getSelectedIndex();
                     ctrl.setIndex(index);
-                    System.out.println(index);
+                   
                 });
         listInscrit.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -200,8 +191,7 @@ public class View extends VBox implements Observer {
         cbListJoueur.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
-                    System.out.println("Appel de facade.getValidPlayerList(p)");
-                    facade.getValidPlayerList(p);
+                    facade.SetPLayer(p);
                 });
 
         cbListadversaire.getSelectionModel().selectedIndexProperty()
@@ -248,9 +238,12 @@ public class View extends VBox implements Observer {
                 break;
 
             case TOURNAMENT_SELECTED:
+                
                 ObservableList<Player> sub = FXCollections.observableArrayList(facade.getSubscrib());
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
+                cbListJoueur.getItems().clear();
+                cbListadversaire.getItems().clear();
 
                 Tournament t = facade.getTournois();
                 listInscrit.getItems().addAll(facade.getSubscrib());
@@ -268,7 +261,7 @@ public class View extends VBox implements Observer {
 
             case PLAYER_SELECTED:
 
-                ObservableList<String> sub3 = FXCollections.observableArrayList(facade.getTestJouerValid());
+                ObservableList<Player> sub3 = FXCollections.observableArrayList(facade.addOppponentValidList());
 
                 cbListadversaire.setItems(sub3);
       
