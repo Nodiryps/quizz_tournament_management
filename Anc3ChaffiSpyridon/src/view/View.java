@@ -47,14 +47,14 @@ public class View extends VBox implements Observer {
     private final ListView<Player> listInscrit = new ListView<>();
     private final TableView<Match> listMatch = new TableView<>();
     private final ListView<Tournament> listTournoi = new ListView<>();
-    private final Label lbNbLines = new Label();
+   
     private final ComboBox cbListJoueur = new ComboBox();
     private final ComboBox cbListadversaire = new ComboBox();
     private final ComboBox cbResult = new ComboBox();
     private final Button valider = new Button();
     private final Label titreTournois = new Label();
     private final Label titreInscrit = new Label();
-    private final Label titrematch = new Label();
+    
     private final GridPane boutonGrid = new GridPane();//gere les boutons
     private final GridPane topGrid = new GridPane();
     private final GridPane bottomGrid = new GridPane();

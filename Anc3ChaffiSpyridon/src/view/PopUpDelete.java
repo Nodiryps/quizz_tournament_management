@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import javafx.event.ActionEvent;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,6 +45,7 @@ public class PopUpDelete extends Popup {
         PopUpDelete.ctrl = ctrl;
         PopUpDelete.match = m;
         Stage popUpWindow = new Stage();
+        popUpWindow.setResizable(false);
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
         popUpWindow.setTitle("Confirmation Suppression");
 
@@ -63,24 +65,31 @@ public class PopUpDelete extends Popup {
         btnCancel.setOnAction(e -> popUpWindow.close());
 
         VBox layout = new VBox();
-        HBox hbMatch = new HBox();
+        HBox hbTop = new HBox();
         HBox hbBottom = new HBox();
         HBox btns = new HBox();
+        HBox hbImage = new HBox();
         GridPane gp = new GridPane();
+        GridPane gp2= new GridPane();
 
         hbBottom.setPadding(new Insets(20.0));
-        hbMatch.setPadding(new Insets(20.0));
+        hbTop.setPadding(new Insets(20.0));
 
         gp.add(question, 0, 0);
         gp.add(btns, 2, 1);
+        gp2.add(displayMatch, 0, 0);
+        gp2.add(hbImage, 1, 0);
         Paint backgroundPaint = Color.LIGHTGRAY;
         Paint backgroundPaint2 = Color.LIGHTGREY;
 
-        hbMatch.setBackground(new Background(new BackgroundFill(backgroundPaint, CornerRadii.EMPTY, Insets.EMPTY)));
-        hbMatch.setBackground(new Background(new BackgroundFill(backgroundPaint2, CornerRadii.EMPTY, Insets.EMPTY)));
+        hbTop.setBackground(new Background(new BackgroundFill(backgroundPaint, CornerRadii.EMPTY, Insets.EMPTY)));
+        hbTop.setBackground(new Background(new BackgroundFill(backgroundPaint2, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        layout.getChildren().addAll(hbMatch, hbBottom);
-        hbMatch.getChildren().addAll(displayMatch, imgV);
+        layout.getChildren().addAll(hbTop, hbBottom);
+        hbImage.getChildren().add(imgV);
+        imgV.setOpacity(150);
+        imgV.setLayoutX(75);
+        hbTop.getChildren().add(gp2);
         btns.getChildren().addAll(btnDel, btnCancel);
         hbBottom.getChildren().add(gp);
 
@@ -90,7 +99,8 @@ public class PopUpDelete extends Popup {
                      
         });
 
-        Scene scene = new Scene(layout, 400, 200);
+        Scene scene = new Scene(layout, 370, 200);
+       
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
     }
