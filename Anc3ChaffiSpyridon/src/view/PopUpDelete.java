@@ -37,14 +37,14 @@ import model.Match;
  * @author 2707chshyaka
  */
 public class PopUpDelete extends Popup {
-
+     private static Stage popUpWindow;
     private static Controller ctrl;
     private static Match match;
 
     public static void display(Match m, Controller ctrl) throws FileNotFoundException {
         PopUpDelete.ctrl = ctrl;
         PopUpDelete.match = m;
-        Stage popUpWindow = new Stage();
+        popUpWindow = new Stage();
         popUpWindow.setResizable(false);
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
         popUpWindow.setTitle("Confirmation Suppression");
@@ -96,7 +96,6 @@ public class PopUpDelete extends Popup {
         btnDel.setOnAction((ActionEvent event) -> {
             ctrl.DelMatch(m);
             popUpWindow.close();
-                     
         });
 
         Scene scene = new Scene(layout, 370, 200);
@@ -104,5 +103,7 @@ public class PopUpDelete extends Popup {
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
     }
+    
+    
 
 }

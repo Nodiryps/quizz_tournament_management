@@ -25,7 +25,8 @@ public class TournamentFacade extends Observable {
     public List<Tournament> tournamentList = new ArrayList<>();
 
     public int indexValue = 0;
-
+    public Player actual;
+    public Match selectedMatch;
     Player p1 = new Player("Philippe");
     Player p2 = new Player("Khadija");
     Player p3 = new Player("spyridon");
@@ -39,7 +40,6 @@ public class TournamentFacade extends Observable {
     Match m5 = new Match(p6, p2, RESULTS.DRAW);
     Match m6 = new Match(p3, p6, RESULTS.DRAW);
     public Player p = p1;
-    public Player actual;
 
     public TournamentFacade() {
         Tournament t1 = new Tournament("E-Sport");
@@ -68,10 +68,14 @@ public class TournamentFacade extends Observable {
         notif(TypeNotif.PLAYER_ONE_SELECTED);
 
     }
+    public void setSelectedMatch(Match m){
+         this.selectedMatch=m;
+          notif(TypeNotif.REMOVE_MATCH);
+    }
     
-    public void createNewMatch(Player p1, Player p2, RESULTS res){
+  
+    public void createNewMatch(Player p1, Player p2, RESULTS res) {
         Match m = new Match(p1, p2, res);
-        System.out.println(m);
         getTournois().addMatch(m);
         notif(TypeNotif.ADD_MATCH);
     }
@@ -86,10 +90,12 @@ public class TournamentFacade extends Observable {
 
     }
     
-    public void removeMatch(Match m){
-    getTournois().getMatchList().remove(m);
-    notif(TypeNotif.REMOVE_MATCH);
-   
+    public Match getSelectedMatch(){
+      return selectedMatch;
+    }
+
+    public void removeMatch() {
+        getTournois().getMatchList().remove(selectedMatch);
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.

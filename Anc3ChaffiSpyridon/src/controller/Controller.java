@@ -43,9 +43,15 @@ public final class Controller {
     }
 
     public void DelMatch(Match m) {
-        if (facade.getTournois().getMatchList().contains(m)) {
-            facade.removeMatch(m);
-        }
+        facade.removeMatch();
+    }
 
+    public void setMatchSelected(Match m) {
+        facade.setSelectedMatch(m);
+
+    }
+
+    public Match getSelectedMatch() {
+        return facade.getSelectedMatch();
     }
 }

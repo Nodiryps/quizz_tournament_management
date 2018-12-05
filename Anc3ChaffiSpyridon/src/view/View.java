@@ -47,14 +47,14 @@ public class View extends VBox implements Observer {
     private final ListView<Player> listInscrit = new ListView<>();
     private final TableView<Match> listMatch = new TableView<>();
     private final ListView<Tournament> listTournoi = new ListView<>();
-   
+
     private final ComboBox cbListJoueur = new ComboBox();
     private final ComboBox cbListadversaire = new ComboBox();
     private final ComboBox cbResult = new ComboBox();
     private final Button valider = new Button();
     private final Label titreTournois = new Label();
     private final Label titreInscrit = new Label();
-    
+
     private final GridPane boutonGrid = new GridPane();//gere les boutons
     private final GridPane topGrid = new GridPane();
     private final GridPane bottomGrid = new GridPane();
@@ -184,12 +184,8 @@ public class View extends VBox implements Observer {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 2) {
                         Match m = (Match) listMatch.getSelectionModel().getSelectedItem();
-                        try{
-                            PopUpDelete.display(m, ctrl);
-                        }
-                        catch(FileNotFoundException e){
-                        
-                        }
+                        ctrl.setMatchSelected(m);
+
                     }
                 }
             }
@@ -279,12 +275,6 @@ public class View extends VBox implements Observer {
 
                 break;
 
-//            case PLAYER_TWO_SELECTED:
-//
-//                ObservableList<Player> sub4 = FXCollections.observableArrayList(facade.addOppponentValidList());
-//                cbListJoueur.setItems(sub4);
-//
-//                break;
             case ADD_MATCH:
                 listMatch.getItems().clear();
                 for (Match m : facade.getMatchList()) {
@@ -297,7 +287,16 @@ public class View extends VBox implements Observer {
                 break;
 
             case REMOVE_MATCH:
+
+                try {
+                    Match m = ctrl.getSelectedMatch();
+                    PopUpDelete.display(m, ctrl);
+                } catch (FileNotFoundException e) {
+
+                }
+                
                 listMatch.getItems().clear();
+
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
