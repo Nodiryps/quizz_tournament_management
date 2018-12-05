@@ -71,7 +71,7 @@ public class Match implements Comparable<Match> {
 
     @Override
     public String toString() {
-        return "Match\n" + "\tplayer1: " + player1 + "\n\tplayer2: " + player2 + "\n\tresults: " + results;
+        return player1 + "  VERSUS  " + player2 + " => " + results;
     }
 
 }

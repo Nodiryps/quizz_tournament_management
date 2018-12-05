@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import java.io.FileNotFoundException;
 import java.util.Observer;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -16,6 +17,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -61,10 +63,11 @@ public class View extends VBox implements Observer {
     public View(Stage primaryStage, Controller ctrl) {
         this.ctrl = ctrl;
         this.facade = ctrl.getFacade();
+        this.stage = primaryStage;
         initData();
         Scene scene = new Scene(displayZone, 1125, 500);
-        primaryStage.setTitle("Gestion de  Tournois");
-        primaryStage.setScene(scene);
+        stage.setTitle("Gestion de  Tournois");
+        stage.setScene(scene);
     }
 
     public void initData() {
@@ -175,20 +178,27 @@ public class View extends VBox implements Observer {
                     System.out.println(listInscrit.getSelectionModel().getSelectedItem());// ne retourne qu'une seul valeur a la fois (pas bon)
 
                 });
-
         listMatch.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                System.out.println(listMatch.getSelectionModel().getSelectedItem());
+            public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    if (mouseEvent.getClickCount() == 2) {
+                        Match m = (Match) listMatch.getSelectionModel().getSelectedItem();
+                        try{
+                            PopUpDelete.display(m, ctrl);
+                        }
+                        catch(FileNotFoundException e){
+                        
+                        }
+                    }
+                }
             }
-        }
-        );
+        });
 
     }
     // ajoute un listener sur les combobox.
 
     public void addListernerComboBox() {
-
         cbListJoueur.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
 
@@ -214,6 +224,7 @@ public class View extends VBox implements Observer {
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
             ctrl.createMatch(p1, p2, res);
         });
+
     }
 
     @Override
@@ -246,7 +257,6 @@ public class View extends VBox implements Observer {
                 break;
 
             case TOURNAMENT_SELECTED:
-
                 ObservableList<Player> sub = FXCollections.observableArrayList(facade.getSubscrib());
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
@@ -264,7 +274,6 @@ public class View extends VBox implements Observer {
                 break;
 
             case PLAYER_ONE_SELECTED:
-
                 ObservableList<Player> sub3 = FXCollections.observableArrayList(facade.addOppponentValidList());
                 cbListadversaire.setItems(sub3);
 
@@ -285,6 +294,13 @@ public class View extends VBox implements Observer {
                 cbListadversaire.getSelectionModel().clearSelection();
                 cbResult.getSelectionModel().clearSelection();
 
+                break;
+
+            case REMOVE_MATCH:
+                listMatch.getItems().clear();
+                for (Match m : facade.getMatchList()) {
+                    listMatch.getItems().add(m);
+                }
                 break;
 
         }

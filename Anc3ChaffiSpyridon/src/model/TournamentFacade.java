@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class TournamentFacade extends Observable {
 
     public enum TypeNotif {
-        INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, LINE_ADDED
+        INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, REMOVE_MATCH
     }
 
     public List<Tournament> tournamentList = new ArrayList<>();
@@ -84,6 +84,12 @@ public class TournamentFacade extends Observable {
 
         return list;
 
+    }
+    
+    public void removeMatch(Match m){
+    getTournois().getMatchList().remove(m);
+    notif(TypeNotif.REMOVE_MATCH);
+   
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.

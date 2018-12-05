@@ -23,24 +23,29 @@ import model.RESULTS;
  */
 public final class Controller {
 
-    
     private String name;
     TournamentFacade facade;
 
     public Controller(TournamentFacade facade) {
-      this.facade=facade;
-    }
-    
-    
-    public TournamentFacade getFacade(){
-       return facade;
+        this.facade = facade;
     }
 
-    public void createMatch(Player p1, Player p2, RESULTS res){
+    public TournamentFacade getFacade() {
+        return facade;
+    }
+
+    public void createMatch(Player p1, Player p2, RESULTS res) {
         facade.createNewMatch(p1, p2, res);
     }
-    
-    public void setIndex(int index){
-       facade.setIndex(index);
+
+    public void setIndex(int index) {
+        facade.setIndex(index);
+    }
+
+    public void DelMatch(Match m) {
+        if (facade.getTournois().getMatchList().contains(m)) {
+            facade.removeMatch(m);
+        }
+
     }
 }
