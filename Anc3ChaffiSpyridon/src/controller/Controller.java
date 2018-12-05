@@ -35,13 +35,10 @@ public final class Controller {
     public TournamentFacade getFacade(){
        return facade;
     }
-    
-   
- 
- 
-     
-   
- 
+
+    public void createMatch(Player p1, Player p2, RESULTS res){
+        facade.createNewMatch(p1, p2, res);
+    }
     
     public void setIndex(int index){
        facade.setIndex(index);

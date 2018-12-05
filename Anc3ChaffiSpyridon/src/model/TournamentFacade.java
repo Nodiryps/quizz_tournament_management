@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class TournamentFacade extends Observable {
 
     public enum TypeNotif {
-        INIT, TOURNAMENT_SELECTED, PLAYER_SELECTED, LINE_UPDATED, LINE_ADDED
+        INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, LINE_ADDED
     }
 
     public List<Tournament> tournamentList = new ArrayList<>();
@@ -63,19 +63,17 @@ public class TournamentFacade extends Observable {
         notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
-    public void SetPLayer(Player player) {
+    public void SetPlayer(Player player) {
         this.actual = player;
-        System.out.println(addOppponentValidList());
-        System.out.println(addOpponentInvalidList());
-        notif(TypeNotif.PLAYER_SELECTED);
-    }
+        notif(TypeNotif.PLAYER_ONE_SELECTED);
 
-    public List<Player> createPlayerMatch(int index) {
-        List<Player> list = new ArrayList<>();
-        for (int i = 1; i <= index; i++) {
-            list.add(new Player("p" + i));
-        }
-        return list;
+    }
+    
+    public void createNewMatch(Player p1, Player p2, RESULTS res){
+        Match m = new Match(p1, p2, res);
+        System.out.println(m);
+        getTournois().addMatch(m);
+        notif(TypeNotif.ADD_MATCH);
     }
 
     public List<Player> getValidPlayerList() {
@@ -181,15 +179,6 @@ public class TournamentFacade extends Observable {
         return tournamentList;
     }
 
-    public void removeActualPlayer(Player p, Tournament tournois) {
-        tournois.removeOpponentsListWithoutThisPlayer(p);
-
-    }
-
-    public List<String> getConvertMAtchList(Tournament tournois) {
-        return tournois.getListMatchString();
-    }
-
     public List<Player> getSubscrib() {
         Tournament tournois = getTournois();
         return tournois.getSubscribersList();
@@ -201,32 +190,8 @@ public class TournamentFacade extends Observable {
 
     }
 
-    public Set<String> getopponentInvalidList() {
-        Tournament tournois = getTournois();
-        return tournois.getOpponentInvalidList();
-
-    }
-
-    public Set<String> getopponentValidList() {
-        return getTournois().getopponentsValidList();
-
-    }
-
-    public Set<String> getTestJouerValid() {
-        return getTournois().getTestJouerValide();
-
-    }
-//
-//    public List<String> getPlayerList() {
-//        return tournois.getPlayerList();
-//    }
-
     public Player createPlayer(String name) {
         return new Player(name);
-    }
-
-    public Match createMatch(Player p, Player p1, RESULTS res) {
-        return new Match(p, p1, res);
     }
 
     public Tournament createTournament(String name) {
@@ -239,44 +204,4 @@ public class TournamentFacade extends Observable {
         notifyObservers(typeNotif);
     }
 
-//
-//    public List<String> getConvertMatchList() {
-//        return tournois.getListMatchString();
-//    }
-//
-//    public String getTournamentName() {
-//        return tournois.getName();
-//    }
-//
-//    public List<Tournament> getTournois() {
-//        return tournamentList;
-//    }
-//
-//    public List<String> getOpponentList() {
-//        return tournois.getOpponentsList();
-//    }
-//
-//    public List<Player> getAdvertList(Player p) {
-//        return tournois.advertList(p);
-//    }
-//
-//    public static void main(String[] args) {
-//        int index = 0;
-//        Tournament c = new Tournament("test");
-//        Tournament c2 = new Tournament("tournois2");
-//        Tournament c3 = new Tournament("tournois3");
-//        Tournament c4 = new Tournament("tournois3");
-//
-//        TournamentFacade facade = new TournamentFacade();
-//        facade.add(c);
-//        facade.add(c2);
-//        facade.add(c3);
-//        facade.add(c4);
-//        Tournament t=facade.getTournois();
-//        System.out.println(facade.t1.getName());
-//       
-//        
-//      
-//
-//    }
 }

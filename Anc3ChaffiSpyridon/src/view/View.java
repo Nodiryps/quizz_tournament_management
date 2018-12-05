@@ -29,6 +29,7 @@ public class View extends VBox implements Observer {
     private Stage stage;
     private final Controller ctrl;
     private final TournamentFacade facade;
+    private Boolean playerOneSelected = true;
 
     private final testList ts = new testList();
     private RESULTS r;
@@ -167,7 +168,7 @@ public class View extends VBox implements Observer {
                 .addListener((Observable o) -> {
                     int index = listTournoi.getSelectionModel().getSelectedIndex();
                     ctrl.setIndex(index);
-                   
+
                 });
         listInscrit.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -190,22 +191,28 @@ public class View extends VBox implements Observer {
 
         cbListJoueur.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
+
                     Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
-                    facade.SetPLayer(p);
+                    facade.SetPlayer(p);
                 });
 
         cbListadversaire.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    System.out.println(cbListadversaire.getSelectionModel().getSelectedItem());
+
+//                    Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
+//                    facade.SetPlayer(p, !playerOneSelected);
                 });
 
         cbResult.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    System.out.println(cbResult.getSelectionModel().getSelectedItem());
+
                 });
 
         valider.setOnAction((ActionEvent event) -> {
-            //return new PopUpview(stage);
+            Player p1 = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
+            Player p2 = (Player) cbListadversaire.getSelectionModel().getSelectedItem();
+            RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
+            ctrl.createMatch(p1, p2, res);
         });
     }
 
@@ -239,12 +246,13 @@ public class View extends VBox implements Observer {
                 break;
 
             case TOURNAMENT_SELECTED:
-                
+
                 ObservableList<Player> sub = FXCollections.observableArrayList(facade.getSubscrib());
                 listInscrit.getItems().clear();
                 listMatch.getItems().clear();
                 cbListJoueur.getItems().clear();
                 cbListadversaire.getItems().clear();
+                cbResult.getSelectionModel().clearSelection();
 
                 Tournament t = facade.getTournois();
                 listInscrit.getItems().addAll(facade.getSubscrib());
@@ -255,19 +263,30 @@ public class View extends VBox implements Observer {
                 cbListadversaire.setItems(sub);
                 break;
 
-            case LINE_ADDED:
-                System.out.println("coucou");
-
-                break;
-
-            case PLAYER_SELECTED:
+            case PLAYER_ONE_SELECTED:
 
                 ObservableList<Player> sub3 = FXCollections.observableArrayList(facade.addOppponentValidList());
-
                 cbListadversaire.setItems(sub3);
-      
 
                 break;
+
+//            case PLAYER_TWO_SELECTED:
+//
+//                ObservableList<Player> sub4 = FXCollections.observableArrayList(facade.addOppponentValidList());
+//                cbListJoueur.setItems(sub4);
+//
+//                break;
+            case ADD_MATCH:
+                listMatch.getItems().clear();
+                for (Match m : facade.getMatchList()) {
+                    listMatch.getItems().add(m);
+                }
+                cbListJoueur.getSelectionModel().clearSelection();
+                cbListadversaire.getSelectionModel().clearSelection();
+                cbResult.getSelectionModel().clearSelection();
+
+                break;
+
         }
     }
 }

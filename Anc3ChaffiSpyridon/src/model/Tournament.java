@@ -20,32 +20,21 @@ public class Tournament {
     private final String name;
     private  List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
     private Set<Match> matchList = new TreeSet<>();
-    private List<String> playersList = new ArrayList<>();// a peut etre virer.
-    private List<String> opponentsList = new ArrayList<>();//liste des adversaire valide.
-    private Set<String> opponentInvalidList = new HashSet<>();// liste des jouer a jarter de l'affochage de comboBox.
-    private Set<Match> matchPlayed = new TreeSet<>();// match deja jouer par le player
-    private Set<String> opponentsValidList = new TreeSet<>();
-    private Set<String> testJouerValide = new HashSet<>();//liste  teste de jouer qui sont encore valide 
-   private List<String> ListMatchString = new ArrayList<>();
-   private List<RESULTS> result=new ArrayList<>();
+    
+
+   
    
    private List<Player> testAdvert=new ArrayList<>();
     public Tournament(String s) {
         name = s;
     }
 
-    public Set<String> getopponentsValidList() {
-        return opponentsValidList;
-    }
-
+   
     public String getName() {
         return name;
     }
 
-    public Set<String> getTestJouerValide() {
-        return testJouerValide;
-    }
-
+    
      public List<Player> getSubscribersList() {
         return subscribersList;
     }
@@ -54,18 +43,7 @@ public class Tournament {
         return matchList;
     }
 
-    public Set<String> getOpponentInvalidList() {
-        return opponentInvalidList;
-    }
-
-    public List<String> getPlayerList() {
-        return playersList;
-    }
-
-    public List<String> getOpponentsList() {
-        return opponentsList;
-    }
-
+    
     public boolean existMatch(Match t) {
         return matchList.contains(t);
     }
@@ -74,83 +52,16 @@ public class Tournament {
         this.matchList.add(m);
     }
 
-    public Set<Match> getMatchPlayed() {
-        return matchPlayed;
-    }
-
     public void addPlayer(Player p) {
         this.subscribersList.add(p);
-        this.opponentsList.add(p.getFirstName());
+       
     }
-
-    public void soutPlayer(Player p) {
-        this.playersList.add(p.getFirstName());
-    }
-
-    public List<String> getListMatchString() {
-        return ListMatchString;
-    }
-    
-//    return la liste des adversaire sauf Player p
-
-    public void ConvertMatchList(){
-       for(Match m:matchList){
-           String res= m.getPlayer1()+ "->"+m.getPlayer1()+"="+ m.getResults();
-         ListMatchString.add(res);
-       }
-    }
-    public void removeOpponentsListWithoutThisPlayer(Player p) {
-        for (int i = 0; i < this.opponentsList.size(); ++i) {
-            if (!opponentsList.get(i).equals(p.getFirstName())) {
-                //System.out.println(opponentsList.get(i));
-                opponentsValidList.add(opponentsList.get(i));
-
-            }
-        }
-        //addMatchPlayed(p);
-    }
-
-
 
   
-    
-    public  List<Player> advertList(Player p){
-        List<Player> list=new ArrayList<>();
-     for(Player s:subscribersList){
-         if(!s.equals(p)){
-           list.add(s);
-         }
-     }
-     return list;
-    
-    }
-
-    
     @Override
     public String toString() {
         return getName();
     }
-    
-    public void AddAdvert(Player p){
-      for(Player s:subscribersList){
-        if(!s.equals(p)){
-           testAdvert.add(s);
-        }
-      }
-    
-    }
-    public static void main(String[] args) {
-        Tournament t=new Tournament("jeux"); 
-        Player p=new Player("jean");
-         Player p1=new Player("fil");
-          Player p2=new Player("marc");
-        
-        t.addPlayer(p);
-         t.addPlayer(p1);
-          t.addPlayer(p2);
-          
-        t.AddAdvert(p2); 
-        System.out.println(t.getSubscribersList());
-    }
+
 
 }
