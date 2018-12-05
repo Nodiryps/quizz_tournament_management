@@ -232,6 +232,7 @@ public class View extends VBox implements Observer {
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
+                listTournoi.getSelectionModel().select(facade.getTournois());
                 cbListJoueur.setItems(sub1);
                 cbListadversaire.setItems(sub1);
 
