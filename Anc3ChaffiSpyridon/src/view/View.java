@@ -184,9 +184,9 @@ public class View extends VBox implements Observer {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 2) {
                         Match m = (Match) listMatch.getSelectionModel().getSelectedItem();
-                        int index= listMatch.getSelectionModel().getSelectedIndex();
-                        if(!ctrl.getAllMAtch().isEmpty()){
-                        ctrl.setMatchSelected(m,index);
+                        int index = listMatch.getSelectionModel().getSelectedIndex();
+                        if (!ctrl.getAllMAtch().isEmpty()) {
+                            ctrl.setMatchSelected(m, index);
                         }
                     }
                 }
@@ -202,18 +202,30 @@ public class View extends VBox implements Observer {
 
                     Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
                     facade.SetPlayer(p);
+                    if (cbListJoueur.getSelectionModel().isEmpty() || cbListadversaire.getSelectionModel().isEmpty() ||cbResult.getSelectionModel().isEmpty()) {
+                        setButtonDisable(true);
+                    }
                 });
 
         cbListadversaire.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
 
-//                    Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
-//                    facade.SetPlayer(p, !playerOneSelected);
+                    Player p = (Player) cbListJoueur.getSelectionModel().getSelectedItem();
+                    facade.SetPlayer(p);
+                    if (cbListJoueur.getSelectionModel().isEmpty() || cbListadversaire.getSelectionModel().isEmpty() ||cbResult.getSelectionModel().isEmpty()) {
+                        setButtonDisable(true);
+                    }else{
+                        setButtonDisable(false);
+                    }
                 });
 
         cbResult.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-
+                    if (cbListJoueur.getSelectionModel().isEmpty() || cbListadversaire.getSelectionModel().isEmpty() ||cbResult.getSelectionModel().isEmpty()) {
+                        setButtonDisable(true);
+                    }else{
+                        setButtonDisable(false);
+                    }
                 });
 
         valider.setOnAction((ActionEvent event) -> {
@@ -223,6 +235,10 @@ public class View extends VBox implements Observer {
             ctrl.createMatch(p1, p2, res);
         });
 
+    }
+
+    private void setButtonDisable(boolean b) {
+        valider.setDisable(b);
     }
 
     @Override
@@ -251,6 +267,7 @@ public class View extends VBox implements Observer {
                 listTournoi.getSelectionModel().select(facade.getTournois());
                 cbListJoueur.setItems(sub1);
                 cbListadversaire.setItems(sub1);
+                setButtonDisable(true);
 
                 break;
 
@@ -272,6 +289,7 @@ public class View extends VBox implements Observer {
                 break;
 
             case PLAYER_ONE_SELECTED:
+
                 ObservableList<Player> sub3 = FXCollections.observableArrayList(facade.addOppponentValidList());
                 cbListadversaire.setItems(sub3);
 
@@ -296,7 +314,7 @@ public class View extends VBox implements Observer {
                 } catch (FileNotFoundException e) {
 
                 }
-                
+
                 listMatch.getItems().clear();
 
                 for (Match m : facade.getMatchList()) {
