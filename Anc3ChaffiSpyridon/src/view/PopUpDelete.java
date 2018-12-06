@@ -57,7 +57,7 @@ public class PopUpDelete extends Popup {
         imgV.setFitWidth(50);
 
         Label question = new Label("Souhaitez-vous supprimer ce match?");
-        Label displayMatch = new Label("Suppression du match entre: " + m.getPlayer1().getFirstName() + " et " + m.getPlayer2().getFirstName());
+        Label displayMatch = new Label("Suppression du match entre: " + match.getPlayer1().getFirstName() + " et " + match.getPlayer2().getFirstName());
         VBox images = new VBox();
 
         Button btnDel = new Button("Supprimer");
@@ -94,7 +94,7 @@ public class PopUpDelete extends Popup {
         hbBottom.getChildren().add(gp);
 
         btnDel.setOnAction((ActionEvent event) -> {
-            ctrl.DelMatch(m);
+            ctrl.DelMatch(match);
             popUpWindow.close();
         });
 
