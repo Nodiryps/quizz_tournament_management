@@ -70,7 +70,7 @@ public class TournamentFacade extends Observable {
 
     }
     public void setSelectedMatch(Match m,int index){
-        if(index ==0)
+         this.index=index;
          this.selectedMatch=m;
           notif(TypeNotif.REMOVE_MATCH);
     }
