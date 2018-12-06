@@ -184,8 +184,10 @@ public class View extends VBox implements Observer {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 2) {
                         Match m = (Match) listMatch.getSelectionModel().getSelectedItem();
-                        ctrl.setMatchSelected(m);
-
+                        int index= listMatch.getSelectionModel().getSelectedIndex();
+                        if(!ctrl.getAllMAtch().isEmpty()){
+                        ctrl.setMatchSelected(m,index);
+                        }
                     }
                 }
             }

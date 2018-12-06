@@ -27,6 +27,7 @@ public class TournamentFacade extends Observable {
     public int indexValue = 0;
     public Player actual;
     public Match selectedMatch;
+    public int index;
     Player p1 = new Player("Philippe");
     Player p2 = new Player("Khadija");
     Player p3 = new Player("spyridon");
@@ -68,7 +69,8 @@ public class TournamentFacade extends Observable {
         notif(TypeNotif.PLAYER_ONE_SELECTED);
 
     }
-    public void setSelectedMatch(Match m){
+    public void setSelectedMatch(Match m,int index){
+        if(index ==0)
          this.selectedMatch=m;
           notif(TypeNotif.REMOVE_MATCH);
     }
@@ -95,7 +97,11 @@ public class TournamentFacade extends Observable {
     }
 
     public void removeMatch() {
-        getTournois().getMatchList().remove(selectedMatch);
+        if(index==0){
+        getTournois().pollFirstMatchList();
+        }else{
+           getTournois().getMatchList().remove(selectedMatch); 
+        }
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.
@@ -214,6 +220,41 @@ public class TournamentFacade extends Observable {
     public void notif(TypeNotif typeNotif) {
         setChanged();// cette methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
         notifyObservers(typeNotif);
+    }
+    
+    public static void main(String[] args) {
+        
+        Tournament t1=new  Tournament("spy");
+    Player p1 = new Player("Philippe");
+    Player p2 = new Player("Khadija");
+    Player p3 = new Player("spyridon");
+    Player p4 = new Player("chaffi");
+    Player p5 = new Player("lindsay");
+    Player p6 = new Player("rodolphe");
+    Match m = new Match(p1, p2, RESULTS.DRAW);
+    Match m2 = new Match(p2, p1, RESULTS.DRAW);
+    Match m3 = new Match(p1, p4, RESULTS.DRAW);
+    Match m4 = new Match(p4, p1, RESULTS.DRAW);
+    Match m5 = new Match(p6, p2, RESULTS.DRAW);
+    Match m6 = new Match(p3, p6, RESULTS.DRAW);
+    
+    t1.addPlayer(p1);
+    t1.addPlayer(p2);
+    t1.addPlayer(p3);
+    t1.addPlayer(p4);
+    t1.addPlayer(p5);
+    t1.addPlayer(p6);
+    t1.addMatch(m);
+    t1.addMatch(m2);
+    t1.addMatch(m3);
+    t1.addMatch(m4);
+    t1.addMatch(m5);
+    t1.addMatch(m6);
+    
+        System.out.println(t1.getSubscribersList());
+        System.out.println(t1.getMatchList().size());
+        t1.getMatchList().remove(m6);
+        System.out.println(t1.getMatchList());
     }
 
 }

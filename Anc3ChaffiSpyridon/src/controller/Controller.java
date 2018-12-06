@@ -46,12 +46,15 @@ public final class Controller {
         facade.removeMatch();
     }
 
-    public void setMatchSelected(Match m) {
-        facade.setSelectedMatch(m);
+    public void setMatchSelected(Match m,int index) {
+        facade.setSelectedMatch(m,index);
 
     }
 
     public Match getSelectedMatch() {
         return facade.getSelectedMatch();
+    }
+    public Set<Match> getAllMAtch(){
+       return  facade.getTournois().getMatchList();
     }
 }

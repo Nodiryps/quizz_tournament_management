@@ -19,7 +19,7 @@ public class Tournament {
 
     private final String name;
     private  List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
-    private Set<Match> matchList = new TreeSet<>();
+    private TreeSet<Match> matchList = new TreeSet<>();
     
 
    
@@ -41,7 +41,13 @@ public class Tournament {
 
     public Set<Match> getMatchList() {
         return matchList;
+        
     }
+    
+   public Match pollFirstMatchList() {
+        return matchList.pollFirst();
+   }
+    
 
     
     public boolean existMatch(Match t) {
