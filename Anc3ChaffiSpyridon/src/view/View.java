@@ -244,7 +244,7 @@ public class View extends VBox implements Observer {
 
     @Override
     public void update(java.util.Observable o, Object o1) {
-        TournamentFacade facade = (TournamentFacade) o;
+        TournamentFacade facade = ctrl.getFacade();
         TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
 
         switch (typeNotif) {
@@ -265,7 +265,7 @@ public class View extends VBox implements Observer {
                 for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
-                listTournoi.getSelectionModel().select(facade.getTournois());
+                listTournoi.getSelectionModel().select(ctrl.getTournament());
                 cbListJoueur.setItems(sub1);
                 cbListadversaire.setItems(sub1);
                 setButtonDisable(true);
@@ -280,9 +280,9 @@ public class View extends VBox implements Observer {
                 cbListadversaire.getItems().clear();
                 cbResult.getSelectionModel().clearSelection();
 
-                Tournament t = facade.getTournois();
+                Tournament t = ctrl.getTournament();
                 listInscrit.getItems().addAll(facade.getSubscrib());
-                for (Match m : facade.getMatchList()) {
+                for (Match m :facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
                 cbListJoueur.setItems(sub);
@@ -298,7 +298,7 @@ public class View extends VBox implements Observer {
 
             case ADD_MATCH:
                 listMatch.getItems().clear();
-                for (Match m : facade.getMatchList()) {
+                for (Match m :facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
                 cbListJoueur.getSelectionModel().clearSelection();
@@ -317,7 +317,7 @@ public class View extends VBox implements Observer {
                     System.out.println("Fichier introuvable");
                 }
                 listMatch.getItems().clear();
-                for (Match m : facade.getMatchList()) {
+                for (Match m :facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
                 break;

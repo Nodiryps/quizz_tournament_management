@@ -24,13 +24,15 @@ public class TournamentFacade extends Observable {
 
     public List<Tournament> tournamentList = new ArrayList<>();
 
-    public int indexValue = 0;
+    public int indexValue;
     public Player actual;
     public Match selectedMatch;
+    public Tournament tournois;
     public int index;
 
     public TournamentFacade() {
         initData();
+        this.tournois = getTournois();
     }
 
     public Tournament getTournois() {
@@ -52,42 +54,41 @@ public class TournamentFacade extends Observable {
     public void setSelectedMatch(Match m, int index) {
         this.index = index;
         this.selectedMatch = m;
-        System.out.println("facade"+ this.selectedMatch +"index: "+this.index);
+        System.out.println("facade" + this.selectedMatch + "index: " + this.index);
         notif(TypeNotif.REMOVE_MATCH);
     }
 
     public void createNewMatch(Player p1, Player p2, RESULTS res) {
         Match m = new Match(p1, p2, res);
-        getTournois().addMatch(m);
+        this.tournois.addMatch(m);
         notif(TypeNotif.ADD_MATCH);
     }
 
-    public List<Player> getValidPlayerList() {
-        List<Player> inscrit = getTournois().getSubscribersList();
-        List<Player> list = inscrit.stream()
-                .filter(p -> !addOpponentInvalidList()
-                .contains(p)).collect(toList());
-
-        return list;
-
-    }
-
+//    public List<Player> getValidPlayerList() {
+//        List<Player> inscrit = getTournois().getSubscribersList();
+//        List<Player> list = inscrit.stream()
+//                .filter(p -> !addOpponentInvalidList()
+//                .contains(p)).collect(toList());
+//
+//        return list;
+//
+//    }
     public Match getSelectedMatch() {
         return selectedMatch;
     }
 
     public void removeMatch() {
         if (index == 0) {
-            getTournois().pollFirstMatchList();
+            this.tournois.pollFirstMatchList();
         } else {
-            getTournois().getMatchList().remove(selectedMatch);
+            this.tournois.getMatchList().remove(selectedMatch);
         }
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.
     public List<Match> addMatchPlayed() {
         List<Match> matchPlayed = new ArrayList<>();
-        for (Match m : getTournois().getMatchList()) {
+        for (Match m : this.tournois.getMatchList()) {
             if (m.getPlayer1() == actual || m.getPlayer2() == actual) {
                 matchPlayed.add(m);
             }
@@ -113,7 +114,7 @@ public class TournamentFacade extends Observable {
 
     public List<Player> addOppponentValidList() {
         List<Player> playerValid = new ArrayList<>();
-        for (Player s : getTournois().getSubscribersList()) {
+        for (Player s : this.tournois.getSubscribersList()) {
             if (!addOpponentInvalidList().contains(s) && !s.equals(actual)) {
                 playerValid.add(s);
             }
@@ -126,54 +127,19 @@ public class TournamentFacade extends Observable {
     }
 
     public List<Player> getSubscrib() {
-        Tournament tournois = getTournois();
-        return tournois.getSubscribersList();
+
+        return this.tournois.getSubscribersList();
     }
 
     public Set<Match> getMatchList() {
-        Tournament tournois = getTournois();
-        return tournois.getMatchList();
+
+        return this.tournois.getMatchList();
 
     }
 
     public void notif(TypeNotif typeNotif) {
         setChanged();// cette methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
         notifyObservers(typeNotif);
-    }
-
-    public static void main(String[] args) {
-
-        Tournament t1 = new Tournament("spy");
-        Player p1 = new Player("Philippe");
-        Player p2 = new Player("Khadija");
-        Player p3 = new Player("spyridon");
-        Player p4 = new Player("chaffi");
-        Player p5 = new Player("lindsay");
-        Player p6 = new Player("rodolphe");
-        Match m = new Match(p1, p2, RESULTS.DRAW);
-        Match m2 = new Match(p2, p1, RESULTS.DRAW);
-        Match m3 = new Match(p1, p4, RESULTS.DRAW);
-        Match m4 = new Match(p4, p1, RESULTS.DRAW);
-        Match m5 = new Match(p6, p2, RESULTS.DRAW);
-        Match m6 = new Match(p3, p6, RESULTS.DRAW);
-
-        t1.addPlayer(p1);
-        t1.addPlayer(p2);
-        t1.addPlayer(p3);
-        t1.addPlayer(p4);
-        t1.addPlayer(p5);
-        t1.addPlayer(p6);
-        t1.addMatch(m);
-        t1.addMatch(m2);
-        t1.addMatch(m3);
-        t1.addMatch(m4);
-        t1.addMatch(m5);
-        t1.addMatch(m6);
-
-        System.out.println(t1.getSubscribersList());
-        System.out.println(t1.getMatchList().size());
-        t1.getMatchList().remove(m6);
-        System.out.println(t1.getMatchList());
     }
 
     public void initData() {
