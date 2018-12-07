@@ -52,6 +52,7 @@ public class TournamentFacade extends Observable {
     public void setSelectedMatch(Match m, int index) {
         this.index = index;
         this.selectedMatch = m;
+        System.out.println("facade"+ this.selectedMatch +"index: "+this.index);
         notif(TypeNotif.REMOVE_MATCH);
     }
 
@@ -120,25 +121,6 @@ public class TournamentFacade extends Observable {
         return playerValid;
     }
 
-    public void add(Tournament tournois) {
-        tournamentList.add(tournois);
-    }
-
-    public Tournament getTournamantList(String name) {
-        Tournament value = null;
-        for (int i = 0; i <= tournamentList.size() - 1; ++i) {
-            if (tournamentList.get(i).equals(name)) {
-                value = tournamentList.get(i);
-            }
-        }
-        return value;
-//        if (tournamentList.contains(t)) {
-//            return t;
-//        }
-//        return null;
-
-    }
-
     public List<Tournament> getTournamentList() {
         return tournamentList;
     }
@@ -151,15 +133,6 @@ public class TournamentFacade extends Observable {
     public Set<Match> getMatchList() {
         Tournament tournois = getTournois();
         return tournois.getMatchList();
-
-    }
-
-    public Player createPlayer(String name) {
-        return new Player(name);
-    }
-
-    public Tournament createTournament(String name) {
-        return new Tournament(name);
 
     }
 
@@ -228,7 +201,6 @@ public class TournamentFacade extends Observable {
         Match m4 = new Match(p4, p1, RESULTS.DRAW);
         Match m5 = new Match(p6, p2, RESULTS.DRAW);
         Match m6 = new Match(p3, p6, RESULTS.DRAW);
-        
 
         t1.addMatch(m);
         t1.addMatch(m2);

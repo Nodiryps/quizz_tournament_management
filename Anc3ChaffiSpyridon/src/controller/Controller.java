@@ -47,6 +47,7 @@ public final class Controller {
     }
 
     public void setMatchSelected(Match m,int index) {
+        System.out.println("controller"+m);
         facade.setSelectedMatch(m,index);
 
     }
