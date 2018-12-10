@@ -40,6 +40,14 @@ public class TournamentFacade extends Observable {
 
     }
 
+    public int getIndexValue() {
+        return indexValue;
+    }
+
+    public Player getActual() {
+        return actual;
+    }
+
     public void setIndex(int index) {
         this.indexValue = index;
         notif(TypeNotif.TOURNAMENT_SELECTED);

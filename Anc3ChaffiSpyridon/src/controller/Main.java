@@ -29,7 +29,7 @@ public class Main extends Application {
         facade.addObserver(view);
         facade.notif(TournamentFacade.TypeNotif.INIT);
         primaryStage.show();
-        //new PopUpview(primaryStage);
+        
     }
 
     /**
