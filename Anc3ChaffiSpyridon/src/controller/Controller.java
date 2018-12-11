@@ -58,4 +58,8 @@ public final class Controller {
     public Set<Match> getAllMAtch(){
        return  facade.getTournois().getMatchList();
     }
+
+    public void setPlayer(Player p) {
+        facade.setPlayer(p);
+    }
 }

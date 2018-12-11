@@ -54,7 +54,7 @@ public class TournamentFacade extends Observable {
         notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
-    public void SetPlayer(Player player) {
+    public void setPlayer(Player player) {
         this.actual = player;
         notif(TypeNotif.PLAYER_ONE_SELECTED);
 
