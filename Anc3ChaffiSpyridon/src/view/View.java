@@ -64,6 +64,7 @@ public class View extends VBox implements Observer {
         this.ctrl = ctrl;
         this.facade = ctrl.getFacade();
         this.stage = primaryStage;
+        
         initData();
         Scene scene = new Scene(displayZone, 1125, 500);
         stage.setTitle("Gestion de  Tournois");
@@ -79,12 +80,12 @@ public class View extends VBox implements Observer {
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
-        topZone.getChildren().addAll(listTournoi, titreTournois);
+        
 
     }
 
     public void decor() {
-
+        
         topZone.setSpacing(SPACING);
         bottomZone.setSpacing(SPACING);
         listTournoi.setMinHeight(50);
@@ -95,6 +96,7 @@ public class View extends VBox implements Observer {
     }
 
     private void configDisplay() {
+        stage.setResizable(false);
         displayZone.setPadding(new Insets(SPACING));
         displayZone.setSpacing(10);
         topGrid.setPadding(new Insets(10, 0, 0, 10));
@@ -106,7 +108,7 @@ public class View extends VBox implements Observer {
         bottomRightGrid.add(new Label("les Matchs"), 0, 0);
         bottomRightGrid.add(listMatch, 0, 1);// column lines
         bottomGrid.add(bottomZone, 0, 1);
-
+        topZone.getChildren().addAll(listTournoi, titreTournois);
         displayZone.getChildren().addAll(topGrid, bottomGrid);
     }
 
