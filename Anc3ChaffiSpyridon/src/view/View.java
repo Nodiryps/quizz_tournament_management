@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -21,6 +22,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -31,43 +33,28 @@ public class View extends VBox implements Observer {
     private Stage stage;
     private final Controller ctrl;
     private final TournamentFacade facade;
-    private Boolean playerOneSelected = true;
-
-    private final testList ts = new testList();
-    private RESULTS r;
-    private static final int MAX_WORD_LENGTH = 15;
     private static final int TEXTSIZE = 400, SPACING = 10;
-
-    private final VBox displayZone = new VBox();
-    private final VBox leftZone = new VBox();
-    private final VBox rightZone = new VBox();
-    private final HBox topZone = new HBox();
-    private final HBox bottomZone = new HBox();
-
     private final ListView<Player> listInscrit = new ListView<>();
     private final TableView<Match> listMatch = new TableView<>();
     private final ListView<Tournament> listTournoi = new ListView<>();
-
+    private final HBox displayZone = new HBox();
+    private final GridPane left = new GridPane();
+    private final GridPane right = new GridPane();
     private final ComboBox cbListJoueur = new ComboBox();
     private final ComboBox cbListadversaire = new ComboBox();
     private final ComboBox cbResult = new ComboBox();
     private final Button valider = new Button();
-    private final Label titreTournois = new Label();
-    private final Label titreInscrit = new Label();
-
     private final GridPane boutonGrid = new GridPane();//gere les boutons
-    private final GridPane topGrid = new GridPane();
-    private final GridPane bottomGrid = new GridPane();
-    private final GridPane bottomRightGrid = new GridPane();
-    private  PopUpDelete popup;
+    private PopUpDelete popup;
 
     public View(Stage primaryStage, Controller ctrl) {
         this.ctrl = ctrl;
         this.facade = ctrl.getFacade();
         this.stage = primaryStage;
-        
+
         initData();
-        Scene scene = new Scene(displayZone, 1125, 500);
+        Scene scene = new Scene(displayZone, 1180, 500);
+        stage.setResizable(false);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
     }
@@ -81,61 +68,42 @@ public class View extends VBox implements Observer {
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
-        
-
     }
 
     public void decor() {
-        
-        topZone.setSpacing(SPACING);
-        bottomZone.setSpacing(SPACING);
         listTournoi.setMinHeight(50);
         listInscrit.getSelectionModel().select(-1);
-        listInscrit.setPrefWidth(TEXTSIZE);
         listTournoi.setPrefWidth(TEXTSIZE);
         listMatch.setPrefWidth(TEXTSIZE);
     }
 
     private void configDisplay() {
-        stage.setResizable(false);
         displayZone.setPadding(new Insets(SPACING));
-        displayZone.setSpacing(10);
-        topGrid.setPadding(new Insets(10, 0, 0, 10));
-        topGrid.add(new Label("les tournois: "), 0, 0);
-        topGrid.add(topZone, 0, 1);
-        bottomGrid.setPadding(new Insets(10, 0, 0, 10));
-        bottomGrid.add(new Label("les inscrits: "), 0, 0);
-        bottomRightGrid.setPadding(new Insets(10, 0, 0, 10));
-        bottomRightGrid.add(new Label("les Matchs"), 0, 0);
-        bottomRightGrid.add(listMatch, 0, 1);// column lines
-        bottomGrid.add(bottomZone, 0, 1);
-        topZone.getChildren().addAll(listTournoi, titreTournois);
-        displayZone.getChildren().addAll(topGrid, bottomGrid);
+        left.setPadding(new Insets(20, 10, 20, 20));
+        right.setPadding(new Insets(20, 20, 20, 10));
+        right.setHgap(10);
+        left.add(new Label("les tournois"), 0, 0);
+        left.add(new Label("les inscrits"), 0, 2);
+        right.add(new Label("les matchs"), 0, 0);
+        left.add(listTournoi, 0, 1);
+        left.add(listInscrit, 0, 3);
+        right.add(listMatch, 0, 1);
+        right.add(boutonGrid, 0, 2);
+        displayZone.getChildren().addAll(left, right);
     }
 
-    // a supprimmer peut etre .
-//    private void setTexteLabel() {
-//        titreInscrit.setText("Inscrit");
-//        titreTournois.setText("Tournois");
-//        titrematch.setText("match");
-//
-//    }
     private void configBottomZone() {
         boutonGrid.setVgap(4);
         boutonGrid.setHgap(30);
         boutonGrid.setPadding(new Insets(20, 0, 0, 20));
-        boutonGrid.add(new Label("jouer 1: "), 0, 0);
+        boutonGrid.add(new Label("joueur 1: "), 0, 0);
         boutonGrid.add(cbListJoueur, 1, 0);
-        boutonGrid.add(new Label("jouer 2: "), 2, 0);
+        boutonGrid.add(new Label("joueur 2: "), 2, 0);
         boutonGrid.add(cbListadversaire, 3, 0);
         boutonGrid.add(new Label("Resultat "), 4, 0);
         boutonGrid.add(cbResult, 5, 0);
         valider.setText("valider");
         boutonGrid.add(valider, 6, 0);
-
-        leftZone.getChildren().add(listInscrit);
-        rightZone.getChildren().addAll(bottomRightGrid, boutonGrid);
-        bottomZone.getChildren().addAll(leftZone, rightZone);
     }
 
     public void addElemComboBox() {
@@ -152,15 +120,15 @@ public class View extends VBox implements Observer {
     }
 
     public void tableViewColumnConfig() {
-        TableColumn<Match, String> player1 = new TableColumn<>("player One");
+        TableColumn<Match, String> player1 = new TableColumn<>("Joueur 1");
         player1.setMinWidth(133);
         player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
 
-        TableColumn<Match, String> player2 = new TableColumn("player Two");
+        TableColumn<Match, String> player2 = new TableColumn("Joueur 2");
         player2.setMinWidth(133);
         player2.setCellValueFactory(new PropertyValueFactory<>("player2"));
 
-        TableColumn<Match, String> results = new TableColumn<>("results");
+        TableColumn<Match, String> results = new TableColumn<>("Resultats");
         results.setMinWidth(133);
         results.setCellValueFactory(new PropertyValueFactory<>("results"));
 
@@ -173,7 +141,7 @@ public class View extends VBox implements Observer {
         listTournoi.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = listTournoi.getSelectionModel().getSelectedIndex();
-                  
+
                     ctrl.setIndex(index);
 
                 });
@@ -189,7 +157,7 @@ public class View extends VBox implements Observer {
                     if (mouseEvent.getClickCount() == 2) {
                         Match m = (Match) listMatch.getSelectionModel().getSelectedItem();
                         int index = listMatch.getSelectionModel().getSelectedIndex();
-                        System.out.println("view"+m);
+                        System.out.println("view" + m);
                         if (!ctrl.getAllMAtch().isEmpty()) {
                             ctrl.setMatchSelected(m, index);
                         }
@@ -286,7 +254,7 @@ public class View extends VBox implements Observer {
 
                 Tournament t = ctrl.getTournament();
                 listInscrit.getItems().addAll(facade.getSubscrib());
-                for (Match m :facade.getMatchList()) {
+                for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
                 cbListJoueur.setItems(sub);
@@ -302,7 +270,7 @@ public class View extends VBox implements Observer {
 
             case ADD_MATCH:
                 listMatch.getItems().clear();
-                for (Match m :facade.getMatchList()) {
+                for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
                 cbListJoueur.getSelectionModel().clearSelection();
@@ -314,14 +282,14 @@ public class View extends VBox implements Observer {
             case REMOVE_MATCH:
                 try {
                     Match m = ctrl.getSelectedMatch();
-                    System.out.println("NOTIFY"+m);
-                    popup=new PopUpDelete(m, ctrl);
-                    
+                    System.out.println("NOTIFY" + m);
+                    popup = new PopUpDelete(m, ctrl);
+
                 } catch (FileNotFoundException e) {
                     System.out.println("Fichier introuvable");
                 }
                 listMatch.getItems().clear();
-                for (Match m :facade.getMatchList()) {
+                for (Match m : facade.getMatchList()) {
                     listMatch.getItems().add(m);
                 }
                 break;
