@@ -24,32 +24,33 @@ public class TournamentFacade extends Observable {
 
     public List<Tournament> tournamentList = new ArrayList<>();
 
-    public int indexValue;
+    public int indexTournament;
     public Player actual;
     public Match selectedMatch;
     public Tournament tournois;
-    public int index;
+    public int indexMatch;
 
     public TournamentFacade() {
         initData();
-        this.tournois = getTournois();
+        
+        
     }
 
     public Tournament getTournois() {
-        return tournamentList.get(indexValue);
+        return tournamentList.get(indexTournament);
 
     }
 
-    public int getIndexValue() {
-        return indexValue;
+    public int getIndexTournament() {
+        return indexTournament;
     }
 
     public Player getActual() {
         return actual;
     }
 
-    public void setIndex(int index) {
-        this.indexValue = index;
+    public void setIndexTournament(int indexMatch) {
+        this.indexTournament = indexMatch;
         notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
@@ -59,16 +60,16 @@ public class TournamentFacade extends Observable {
 
     }
 
-    public void setSelectedMatch(Match m, int index) {
-        this.index = index;
+    public void setIndexSelectedMatch(Match m, int index) {
+        this.indexMatch = index;
         this.selectedMatch = m;
-        System.out.println("facade" + this.selectedMatch + "index: " + this.index);
+        System.out.println("facade" + this.selectedMatch + "index: " + this.indexMatch);
         notif(TypeNotif.REMOVE_MATCH);
     }
 
     public void createNewMatch(Player p1, Player p2, RESULTS res) {
         Match m = new Match(p1, p2, res);
-        this.tournois.addMatch(m);
+        this.getTournois().addMatch(m);
         notif(TypeNotif.ADD_MATCH);
     }
 
@@ -86,17 +87,17 @@ public class TournamentFacade extends Observable {
     }
 
     public void removeMatch() {
-        if (index == 0) {
-            this.tournois.pollFirstMatchList();
+        if (indexMatch == 0) {
+            this.getTournois().pollFirstMatchList();
         } else {
-            this.tournois.getMatchList().remove(selectedMatch);
+            this.getTournois().getMatchList().remove(selectedMatch);
         }
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.
     public List<Match> addMatchPlayed() {
         List<Match> matchPlayed = new ArrayList<>();
-        for (Match m : this.tournois.getMatchList()) {
+        for (Match m : this.getTournois().getMatchList()) {
             if (m.getPlayer1() == actual || m.getPlayer2() == actual) {
                 matchPlayed.add(m);
             }
@@ -122,7 +123,7 @@ public class TournamentFacade extends Observable {
 
     public List<Player> addOppponentValidList() {
         List<Player> playerValid = new ArrayList<>();
-        for (Player s : this.tournois.getSubscribersList()) {
+        for (Player s : this.getTournois().getSubscribersList()) {
             if (!addOpponentInvalidList().contains(s) && !s.equals(actual)) {
                 playerValid.add(s);
             }
@@ -135,13 +136,13 @@ public class TournamentFacade extends Observable {
     }
 
     public List<Player> getSubscrib() {
-
-        return this.tournois.getSubscribersList();
+       
+        return this.getTournois().getSubscribersList();
     }
 
     public Set<Match> getMatchList() {
 
-        return this.tournois.getMatchList();
+        return this.getTournois().getMatchList();
 
     }
 

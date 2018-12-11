@@ -170,6 +170,7 @@ public class View extends VBox implements Observer {
         listTournoi.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = listTournoi.getSelectionModel().getSelectedIndex();
+                  
                     ctrl.setIndex(index);
 
                 });

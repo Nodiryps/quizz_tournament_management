@@ -42,7 +42,7 @@ public final class Controller {
     }
 
     public void setIndex(int index) {
-        facade.setIndex(index);
+        facade.setIndexTournament(index);
     }
 
     public void DelMatch(Match m) {
@@ -51,7 +51,7 @@ public final class Controller {
 
     public void setMatchSelected(Match m,int index) {
         System.out.println("controller"+m);
-        facade.setSelectedMatch(m,index);
+        facade.setIndexSelectedMatch(m,index);
 
     }
 
