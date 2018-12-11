@@ -59,6 +59,7 @@ public class View extends VBox implements Observer {
     private final GridPane topGrid = new GridPane();
     private final GridPane bottomGrid = new GridPane();
     private final GridPane bottomRightGrid = new GridPane();
+    private  PopUpDelete popup;
 
     public View(Stage primaryStage, Controller ctrl) {
         this.ctrl = ctrl;
@@ -314,7 +315,7 @@ public class View extends VBox implements Observer {
                 try {
                     Match m = ctrl.getSelectedMatch();
                     System.out.println("NOTIFY"+m);
-                    PopUpDelete.display(m, ctrl);
+                    popup=new PopUpDelete(m, ctrl);
                     
                 } catch (FileNotFoundException e) {
                     System.out.println("Fichier introuvable");
