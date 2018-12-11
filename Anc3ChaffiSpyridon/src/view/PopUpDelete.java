@@ -178,7 +178,7 @@ public class PopUpDelete extends Popup {
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
         popUpWindow.setTitle("Confirmation Suppression");
 
-        FileInputStream input = new FileInputStream("src/view/img.png");
+        FileInputStream input = new FileInputStream("src/img/img.png");
 
         Image img = new Image(input);
         ImageView imgV = new ImageView(img);
