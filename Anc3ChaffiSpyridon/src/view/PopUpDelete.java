@@ -57,7 +57,6 @@ public class PopUpDelete extends Popup {
     public PopUpDelete(Match m, Controller ctrl) throws FileNotFoundException {
         this.ctrl = ctrl;
         this.match = m;
-        System.out.println();
         initData();
         popUpWindow = new Stage();
         popUpWindow.setResizable(false);
@@ -72,7 +71,6 @@ public class PopUpDelete extends Popup {
     public void initData() throws FileNotFoundException {
         configImage();
         configLabel();
-        System.out.println("popup" + match);
         paint();
         configPop();
         boutonListerner(match);

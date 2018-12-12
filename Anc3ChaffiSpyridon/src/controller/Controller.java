@@ -1,4 +1,3 @@
-
 package controller;
 
 import java.util.ArrayList;
@@ -29,7 +28,8 @@ public final class Controller {
     public TournamentFacade getFacade() {
         return facade;
     }
-    public Tournament getTournament(){
+
+    public Tournament getTournament() {
         return facade.getTournois();
     }
 
@@ -45,18 +45,16 @@ public final class Controller {
         facade.removeMatch();
     }
 
-    public void setMatchSelected(Match m,int index) {
-        System.out.println("controller"+m);
-        facade.setIndexSelectedMatch(m,index);
-
+    public void setMatchSelected(Match m, int index) {
+        facade.setIndexSelectedMatch(m, index);
     }
 
     public Match getSelectedMatch() {
         return facade.getSelectedMatch();
     }
-    
-    public Set<Match> getAllMAtch(){
-       return  facade.getTournois().getMatchList();
+
+    public Set<Match> getAllMAtch() {
+        return facade.getTournois().getMatchList();
     }
 
     public void setPlayer(Player p) {

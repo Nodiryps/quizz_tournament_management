@@ -63,7 +63,6 @@ public class TournamentFacade extends Observable {
     public void setIndexSelectedMatch(Match m, int index) {
         this.indexMatch = index;
         this.selectedMatch = m;
-        System.out.println("facade" + this.selectedMatch + "index: " + this.indexMatch);
         notif(TypeNotif.REMOVE_MATCH);
     }
 

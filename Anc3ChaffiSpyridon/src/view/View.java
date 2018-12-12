@@ -145,7 +145,6 @@ public class View extends VBox implements Observer {
                 });
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    System.out.println(subsList.getSelectionModel().getSelectedItem());// ne retourne qu'une seul valeur a la fois (pas bon)
 
                 });
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -155,7 +154,7 @@ public class View extends VBox implements Observer {
                     if (mouseEvent.getClickCount() == 2) {
                         Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
                         int index = matchesList.getSelectionModel().getSelectedIndex();
-                        System.out.println("view" + m);
+
                         if (!ctrl.getAllMAtch().isEmpty()) {
                             ctrl.setMatchSelected(m, index);
                         }
@@ -278,7 +277,7 @@ public class View extends VBox implements Observer {
             case REMOVE_MATCH:
                 try {
                     Match m = ctrl.getSelectedMatch();
-                    System.out.println("NOTIFY" + m);
+
                     popup = new PopUpDelete(m, ctrl);
 
                 } catch (FileNotFoundException e) {

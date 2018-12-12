@@ -25,7 +25,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         facade = new TournamentFacade();
         ctrl = new Controller(facade);
-        System.out.println(facade.getSubscrib());
         view = new View(primaryStage,ctrl);
         facade.addObserver(view);
         facade.notif(TournamentFacade.TypeNotif.INIT);
