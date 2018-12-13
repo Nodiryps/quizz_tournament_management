@@ -156,7 +156,7 @@ public class View extends VBox implements Observer {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2) {
+                    if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem()!= null) {
                         Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
                         int index = matchesList.getSelectionModel().getSelectedIndex();
 
