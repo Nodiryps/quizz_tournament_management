@@ -25,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import model.*;
 
@@ -43,7 +44,8 @@ public class View extends VBox implements Observer {
     private final ComboBox cbOppList = new ComboBox();
     private final ComboBox cbResult = new ComboBox();
     private final Button btnValidate = new Button();
-    private final GridPane btnGrid = new GridPane();//gere les boutons
+    private final Button btnClear = new Button();
+    private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
 
     public View(Stage primaryStage, Controller ctrl) {
@@ -51,8 +53,9 @@ public class View extends VBox implements Observer {
         this.stage = primaryStage;
 
         initData();
-        Scene scene = new Scene(displayZone, 1180, 500);
+        Scene scene = new Scene(displayZone, 1226, 500);
         stage.setResizable(false);
+        stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
     }
@@ -77,8 +80,8 @@ public class View extends VBox implements Observer {
 
     private void configDisplay() {
         displayZone.setPadding(new Insets(SPACING));
-        left.setPadding(new Insets(20, 10, 20, 20));
-        right.setPadding(new Insets(20, 20, 20, 10));
+        left.setPadding(new Insets(10, 5, 10, 10));
+        right.setPadding(new Insets(10, 10, 10, 5));
         right.setHgap(10);
         left.add(new Label("les tournois"), 0, 0);
         left.add(new Label("les inscrits"), 0, 2);
@@ -86,22 +89,24 @@ public class View extends VBox implements Observer {
         left.add(tournamentsList, 0, 1);
         left.add(subsList, 0, 3);
         right.add(matchesList, 0, 1);
-        right.add(btnGrid, 0, 2);
+        right.add(gpButtons, 0, 2);
         displayZone.getChildren().addAll(left, right);
     }
 
     private void configBottomZone() {
-        btnGrid.setVgap(4);
-        btnGrid.setHgap(30);
-        btnGrid.setPadding(new Insets(20, 0, 0, 20));
-        btnGrid.add(new Label("joueur 1: "), 0, 0);
-        btnGrid.add(cbPlayersList, 1, 0);
-        btnGrid.add(new Label("joueur 2: "), 2, 0);
-        btnGrid.add(cbOppList, 3, 0);
-        btnGrid.add(new Label("Resultat "), 4, 0);
-        btnGrid.add(cbResult, 5, 0);
+        gpButtons.setVgap(4);
+        gpButtons.setHgap(30);
+        gpButtons.setPadding(new Insets(20, 0, 0, 20));
+        gpButtons.add(new Label("joueur 1: "), 0, 0);
+        gpButtons.add(cbPlayersList, 1, 0);
+        gpButtons.add(new Label("joueur 2: "), 2, 0);
+        gpButtons.add(cbOppList, 3, 0);
+        gpButtons.add(new Label("Resultat "), 4, 0);
+        gpButtons.add(cbResult, 5, 0);
         btnValidate.setText("valider");
-        btnGrid.add(btnValidate, 6, 0);
+        btnClear.setText("annuler");
+        gpButtons.add(btnValidate, 6, 0);
+        gpButtons.add(btnClear, 7, 0);
     }
 
     public void addElemComboBox() {
@@ -172,7 +177,7 @@ public class View extends VBox implements Observer {
 
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
                     ctrl.setPlayer(p);
-                    if (cbPlayersList.getSelectionModel().isEmpty() || cbOppList.getSelectionModel().isEmpty() || cbResult.getSelectionModel().isEmpty()) {
+                    if (cbEmpty()) {
                         setButtonDisable(true);
                     }
                 });
@@ -182,7 +187,7 @@ public class View extends VBox implements Observer {
 
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
                     ctrl.setPlayer(p);
-                    if (cbPlayersList.getSelectionModel().isEmpty() || cbOppList.getSelectionModel().isEmpty() || cbResult.getSelectionModel().isEmpty()) {
+                    if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
                         setButtonDisable(false);
@@ -191,7 +196,7 @@ public class View extends VBox implements Observer {
 
         cbResult.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    if (cbPlayersList.getSelectionModel().isEmpty() || cbOppList.getSelectionModel().isEmpty() || cbResult.getSelectionModel().isEmpty()) {
+                    if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
                         setButtonDisable(false);
@@ -204,11 +209,23 @@ public class View extends VBox implements Observer {
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
             ctrl.createMatch(p1, p2, res);
         });
+        
+        btnClear.setOnAction((ActionEvent event) -> {
+            cbOppList.getSelectionModel().clearSelection();
+            cbPlayersList.getSelectionModel().clearSelection();
+            cbResult.getSelectionModel().clearSelection();
+        });
 
     }
 
     private void setButtonDisable(boolean b) {
         btnValidate.setDisable(b);
+    }
+    
+    private boolean cbEmpty(){
+        return cbPlayersList.getSelectionModel().isEmpty() 
+                || cbOppList.getSelectionModel().isEmpty() 
+                || cbResult.getSelectionModel().isEmpty();
     }
 
     @Override
