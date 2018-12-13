@@ -53,7 +53,7 @@ public class View extends VBox implements Observer {
         this.stage = primaryStage;
 
         initData();
-        Scene scene = new Scene(displayZone, 1226, 500);
+        Scene scene = new Scene(displayZone, 1230, 500);
         stage.setResizable(false);
         stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
