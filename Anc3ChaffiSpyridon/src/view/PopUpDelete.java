@@ -58,7 +58,7 @@ public class PopUpDelete extends Popup {
     }
 
     private void popUpWindowSettings() {
-        Scene scene = new Scene(layout, 370, 200);
+        Scene scene = new Scene(layout, 325, 200);
         popUpWindow = new Stage();
         popUpWindow.setResizable(false);
         popUpWindow.initStyle(StageStyle.UNDECORATED);
@@ -101,26 +101,29 @@ public class PopUpDelete extends Popup {
     }
 
     private void configPop() {
-        Label labelTop = new Label("Suppression du match entre: "
+        Label labelTop = new Label("Suppression du match entre: \n"
                 + match.getPlayer1().getFirstName()
                 + " et " + match.getPlayer2().getFirstName());
-        labelTop.setFont(Font.font("Arial",  FontWeight.BOLD, 10));
-        Label labelBottom = new Label("Souhaitez-vous supprimer ce match?");
-        labelBottom.setFont(Font.font("Arial",  FontWeight.SEMI_BOLD, 15));
-        
+        labelTop.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        Label labelBottom = new Label("Souhaitez-vous supprimer ce match");
+        labelBottom.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
+
         layout.getChildren().addAll(gpTop, gpBottom);
         layout.setStyle("-fx-border-color: #bfbfbf; -fx-border-width: 1; -fx-border-style: solid;");
-        
-        gpTop.setPadding(new Insets(10, 10, 10, 10));
+        gpTop.setPadding(new Insets(10));
+        gpTop.setVgap(20);
+        gpBottom.setPadding(new Insets(10));
+        gpButtons.setHgap(20);
+        gpBottom.setVgap(20);
+        gpButtons.add(btnDel, 0, 0);
+        gpButtons.add(btnCancel, 1, 0);
+
         gpTop.add(labelTop, 0, 0);
-        gpTop.add(imgV, 1, 0);
-        gpTop.setHgap(50);
-        
-        gpBottom.setPadding(new Insets(10, 10, 10, 10));
+
         gpBottom.add(labelBottom, 0, 0);
-        gpBottom.setVgap(30);
-        gpBottom.setHgap(-100);
-        gpBottom.add(btnDel, 0, 1);
-        gpBottom.add(btnCancel, 1, 1);
+        gpBottom.add(imgV, 2, 0);
+        gpBottom.add(gpButtons, 0, 1);
+
     }
+
 }
