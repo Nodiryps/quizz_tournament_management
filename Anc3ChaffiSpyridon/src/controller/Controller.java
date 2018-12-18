@@ -1,11 +1,6 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import model.Match;
 import model.Player;
 import model.Tournament;
@@ -18,7 +13,6 @@ import model.RESULTS;
  */
 public final class Controller {
 
-    private String name;
     TournamentFacade facade;
 
     public Controller(TournamentFacade facade) {
@@ -30,7 +24,7 @@ public final class Controller {
     }
 
     public Tournament getTournament() {
-        return facade.getTournois();
+        return facade.getTournament();
     }
 
     public void createMatch(Player p1, Player p2, RESULTS res) {
@@ -53,8 +47,8 @@ public final class Controller {
         return facade.getSelectedMatch();
     }
 
-    public Set<Match> getAllMAtch() {
-        return facade.getTournois().getMatchList();
+    public Set<Match> getAllMatch() {
+        return facade.getTournament().getMatchList();
     }
 
     public void setPlayer(Player p) {

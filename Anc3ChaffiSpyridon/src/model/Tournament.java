@@ -6,7 +6,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,38 +17,30 @@ import java.util.TreeSet;
 public class Tournament {
 
     private final String name;
-    private  List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
+    private List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
     private TreeSet<Match> matchList = new TreeSet<>();
-    
 
-   
-   
-   private List<Player> testAdvert=new ArrayList<>();
     public Tournament(String s) {
         name = s;
     }
 
-   
     public String getName() {
         return name;
     }
 
-    
-     public List<Player> getSubscribersList() {
+    public List<Player> getSubscribersList() {
         return subscribersList;
     }
 
     public Set<Match> getMatchList() {
         return matchList;
-        
-    }
-    
-   public Match pollFirstMatchList() {
-        return matchList.pollFirst();
-   }
-    
 
-    
+    }
+
+    public Match pollFirstMatchList() {
+        return matchList.pollFirst();
+    }
+
     public boolean existMatch(Match t) {
         return matchList.contains(t);
     }
@@ -60,14 +51,11 @@ public class Tournament {
 
     public void addPlayer(Player p) {
         this.subscribersList.add(p);
-       
+
     }
 
-  
     @Override
     public String toString() {
         return getName();
     }
-
-
 }

@@ -5,12 +5,10 @@
  */
 package model;
 
-import controller.Controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -32,13 +30,10 @@ public class TournamentFacade extends Observable {
 
     public TournamentFacade() {
         initData();
-        
-        
     }
 
-    public Tournament getTournois() {
+    public Tournament getTournament() {
         return tournamentList.get(indexTournament);
-
     }
 
     public int getIndexTournament() {
@@ -57,7 +52,6 @@ public class TournamentFacade extends Observable {
     public void setPlayer(Player player) {
         this.actual = player;
         notif(TypeNotif.PLAYER_ONE_SELECTED);
-
     }
 
     public void setIndexSelectedMatch(Match m, int index) {
@@ -68,40 +62,30 @@ public class TournamentFacade extends Observable {
 
     public void createNewMatch(Player p1, Player p2, RESULTS res) {
         Match m = new Match(p1, p2, res);
-        this.getTournois().addMatch(m);
+        this.getTournament().addMatch(m);
         notif(TypeNotif.ADD_MATCH);
     }
 
-//    public List<Player> getValidPlayerList() {
-//        List<Player> inscrit = getTournois().getSubscribersList();
-//        List<Player> list = inscrit.stream()
-//                .filter(p -> !addOpponentInvalidList()
-//                .contains(p)).collect(toList());
-//
-//        return list;
-//
-//    }
     public Match getSelectedMatch() {
         return selectedMatch;
     }
 
     public void removeMatch() {
         if (indexMatch == 0) {
-            this.getTournois().pollFirstMatchList();
+            this.getTournament().pollFirstMatchList();
         } else {
-            this.getTournois().getMatchList().remove(selectedMatch);
+            this.getTournament().getMatchList().remove(selectedMatch);
         }
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.
     public List<Match> addMatchPlayed() {
         List<Match> matchPlayed = new ArrayList<>();
-        for (Match m : this.getTournois().getMatchList()) {
+        for (Match m : this.getTournament().getMatchList()) {
             if (m.getPlayer1() == actual || m.getPlayer2() == actual) {
                 matchPlayed.add(m);
             }
         }
-
         return matchPlayed;
     }
 
@@ -114,7 +98,6 @@ public class TournamentFacade extends Observable {
             }
             if (!m.getPlayer2().equals(actual)) {
                 playerInvalid.add(m.getPlayer2());
-
             }
         }
         return playerInvalid;
@@ -122,7 +105,7 @@ public class TournamentFacade extends Observable {
 
     public List<Player> addOppponentValidList() {
         List<Player> playerValid = new ArrayList<>();
-        for (Player s : this.getTournois().getSubscribersList()) {
+        for (Player s : this.getTournament().getSubscribersList()) {
             if (!addOpponentInvalidList().contains(s) && !s.equals(actual)) {
                 playerValid.add(s);
             }
@@ -135,14 +118,11 @@ public class TournamentFacade extends Observable {
     }
 
     public List<Player> getSubscrib() {
-       
-        return this.getTournois().getSubscribersList();
+        return this.getTournament().getSubscribersList();
     }
 
     public Set<Match> getMatchList() {
-
-        return this.getTournois().getMatchList();
-
+        return this.getTournament().getMatchList();
     }
 
     public void notif(TypeNotif typeNotif) {
@@ -188,7 +168,6 @@ public class TournamentFacade extends Observable {
         t2.addMatch(m4);
         tournamentList.add(t1);
         tournamentList.add(t2);
-
     }
 
 }

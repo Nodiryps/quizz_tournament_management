@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -22,7 +21,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -51,7 +49,6 @@ public class View extends VBox implements Observer {
     public View(Stage primaryStage, Controller ctrl) {
         this.ctrl = ctrl;
         this.stage = primaryStage;
-
         initData();
         Scene scene = new Scene(displayZone, 1235, 500);
         stage.setResizable(false);
@@ -65,7 +62,6 @@ public class View extends VBox implements Observer {
         configBottomZone();
         decor();
         addElemComboBox();
-        addElemListView();
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
@@ -110,16 +106,11 @@ public class View extends VBox implements Observer {
     }
 
     public void addElemComboBox() {
-
         cbResult.getItems().addAll(
                 RESULTS.DRAW,
                 RESULTS.WINNER_P1,
                 RESULTS.WINNER_P2
         );
-    }
-
-    public void addElemListView() {
-
     }
 
     public void tableViewColumnConfig() {
@@ -136,7 +127,6 @@ public class View extends VBox implements Observer {
         results.setCellValueFactory(new PropertyValueFactory<>("results"));
 
         this.matchesList.getColumns().addAll(player1, player2, results);
-
     }
 
     // ajoute un listener sur differents elements.
@@ -144,37 +134,34 @@ public class View extends VBox implements Observer {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
-
                     ctrl.setIndex(index);
-
                 });
+        
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-
                 });
+        
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem()!= null) {
+                    if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
                         Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
                         int index = matchesList.getSelectionModel().getSelectedIndex();
 
-                        if (!ctrl.getAllMAtch().isEmpty()) {
+                        if (!ctrl.getAllMatch().isEmpty()) {
                             ctrl.setMatchSelected(m, index);
                         }
                     }
                 }
             }
         });
-
     }
+    
     // ajoute un listener sur les combobox.
-
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
                     ctrl.setPlayer(p);
                     if (cbEmpty()) {
@@ -184,7 +171,6 @@ public class View extends VBox implements Observer {
 
         cbOppList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
                     ctrl.setPlayer(p);
                     if (cbEmpty()) {
@@ -209,7 +195,7 @@ public class View extends VBox implements Observer {
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
             ctrl.createMatch(p1, p2, res);
         });
-        
+
         btnClear.setOnAction((ActionEvent event) -> {
             cbOppList.getSelectionModel().clearSelection();
             cbPlayersList.getSelectionModel().clearSelection();
@@ -221,10 +207,10 @@ public class View extends VBox implements Observer {
     private void setButtonDisable(boolean b) {
         btnValidate.setDisable(b);
     }
-    
-    private boolean cbEmpty(){
-        return cbPlayersList.getSelectionModel().isEmpty() 
-                || cbOppList.getSelectionModel().isEmpty() 
+
+    private boolean cbEmpty() {
+        return cbPlayersList.getSelectionModel().isEmpty()
+                || cbOppList.getSelectionModel().isEmpty()
                 || cbResult.getSelectionModel().isEmpty();
     }
 
@@ -305,7 +291,6 @@ public class View extends VBox implements Observer {
                     matchesList.getItems().add(m);
                 }
                 break;
-
         }
     }
 }

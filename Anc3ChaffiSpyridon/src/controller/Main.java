@@ -19,7 +19,6 @@ public class Main extends Application {
     TournamentFacade facade;
     Controller ctrl;
     View view;
-    private Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

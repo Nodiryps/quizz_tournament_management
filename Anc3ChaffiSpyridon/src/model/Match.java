@@ -13,8 +13,6 @@ import java.util.Objects;
  */
 public class Match implements Comparable<Match> {
 
-  
-
     private final Player player1, player2;
     private final RESULTS results;
     //private static int index;
@@ -23,7 +21,6 @@ public class Match implements Comparable<Match> {
         player1 = p1;
         player2 = p2;
         results = res;
-
     }
 
     public Player getPlayer1() {
@@ -40,7 +37,7 @@ public class Match implements Comparable<Match> {
 
     @Override
     public int compareTo(Match t) {
-        if (    t.getPlayer1().getFirstName().compareTo(this.getPlayer1().getFirstName()) == 0
+        if (t.getPlayer1().getFirstName().compareTo(this.getPlayer1().getFirstName()) == 0
                 && t.getPlayer2().getFirstName().compareTo(this.getPlayer2().getFirstName()) == 0
                 || t.getPlayer1().getFirstName().compareTo(this.getPlayer2().getFirstName()) == 0
                 && t.getPlayer2().getFirstName().compareTo(this.getPlayer1().getFirstName()) == 0) {
@@ -60,18 +57,18 @@ public class Match implements Comparable<Match> {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Match){
+        if (obj instanceof Match) {
             Match m = (Match) obj;
             return m.getPlayer1().getFirstName().equals(this.getPlayer1().getFirstName())
-                   && m.getPlayer2().getFirstName().equals(this.getPlayer2().getFirstName())
-                   || m.getPlayer1().getFirstName().equals(this.getPlayer2().getFirstName())
-                   && m.getPlayer2().getFirstName().equals(this.getPlayer1().getFirstName());
-        }return false;
+                    && m.getPlayer2().getFirstName().equals(this.getPlayer2().getFirstName())
+                    || m.getPlayer1().getFirstName().equals(this.getPlayer2().getFirstName())
+                    && m.getPlayer2().getFirstName().equals(this.getPlayer1().getFirstName());
+        }
+        return false;
     }
 
     @Override
     public String toString() {
         return player1 + "  VS  " + player2 + " => " + results;
     }
-
 }

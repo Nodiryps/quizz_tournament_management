@@ -7,23 +7,23 @@ package model;
 
 import java.util.Objects;
 
-
 /**
  *
  * @author Spy
  */
 public class Player {
+
     private final String firstName;
-    
-    public Player(){
+
+    public Player() {
         this("");
     }
-    
-    public Player(String s){
+
+    public Player(String s) {
         firstName = s;
     }
-    
-    public String getFirstName(){
+
+    public String getFirstName() {
         return firstName;
     }
 
@@ -31,9 +31,6 @@ public class Player {
     public String toString() {
         return firstName;
     }
-    
-  
-    //ajouter un Equals et un hashcode.
 
     @Override
     public int hashCode() {
@@ -44,12 +41,11 @@ public class Player {
 
     @Override
     public boolean equals(Object obj) {
-     if( obj instanceof Player){
-         Player p=(Player)obj;
-         return this.getFirstName().equals(((Player) obj).getFirstName());
-     }
-     return false;
+        if (obj instanceof Player) {
+            Player p = (Player) obj;
+            return this.getFirstName().equals(((Player) obj).getFirstName());
+        }
+        return false;
     }
-    
-    
+
 }
