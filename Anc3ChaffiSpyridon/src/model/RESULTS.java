@@ -10,5 +10,5 @@ package model;
  * @author chaff
  */
  public  enum RESULTS {
-        WINNER_P1, WINNER_P2, DRAW;
+        VAINQUEUR_J1, VAINQUEUR_J2, EX_AEQUO;
     }

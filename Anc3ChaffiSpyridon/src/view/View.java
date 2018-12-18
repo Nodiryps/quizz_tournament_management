@@ -81,7 +81,7 @@ public class View extends VBox implements Observer {
         right.setHgap(10);
         left.add(new Label("les tournois"), 0, 0);
         left.add(new Label("les inscrits"), 0, 2);
-        right.add(new Label("les matchs"), 0, 0);
+        right.add(new Label("les matchs  (Double clic pour supprimer un tournois)"), 0, 0);
         left.add(tournamentsList, 0, 1);
         left.add(subsList, 0, 3);
         right.add(matchesList, 0, 1);
@@ -107,9 +107,9 @@ public class View extends VBox implements Observer {
 
     public void addElemComboBox() {
         cbResult.getItems().addAll(
-                RESULTS.DRAW,
-                RESULTS.WINNER_P1,
-                RESULTS.WINNER_P2
+                RESULTS.EX_AEQUO,
+                RESULTS.VAINQUEUR_J1,
+                RESULTS.VAINQUEUR_J2
         );
     }
 

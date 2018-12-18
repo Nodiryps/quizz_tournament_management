@@ -149,12 +149,12 @@ public class TournamentFacade extends Observable {
         t2.addPlayer(p1);
         t2.addPlayer(p2);
         t2.addPlayer(p3);
-        Match m = new Match(p1, p2, RESULTS.DRAW);
-        Match m2 = new Match(p2, p1, RESULTS.DRAW);
-        Match m3 = new Match(p1, p4, RESULTS.DRAW);
-        Match m4 = new Match(p4, p1, RESULTS.DRAW);
-        Match m5 = new Match(p6, p2, RESULTS.DRAW);
-        Match m6 = new Match(p3, p6, RESULTS.DRAW);
+        Match m = new Match(p1, p2, RESULTS.EX_AEQUO);
+        Match m2 = new Match(p2, p1, RESULTS.EX_AEQUO);
+        Match m3 = new Match(p1, p4, RESULTS.EX_AEQUO);
+        Match m4 = new Match(p4, p1, RESULTS.EX_AEQUO);
+        Match m5 = new Match(p6, p2, RESULTS.EX_AEQUO);
+        Match m6 = new Match(p3, p6, RESULTS.EX_AEQUO);
 
         t1.addMatch(m);
         t1.addMatch(m2);
