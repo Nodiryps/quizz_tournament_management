@@ -16,10 +16,6 @@ import java.util.Set;
  */
 public class TournamentFacade extends Observable {
 
-    public enum TypeNotif {
-        INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, REMOVE_MATCH
-    }
-
     public List<Tournament> tournamentList = new ArrayList<>();
 
     public int indexTournament;
@@ -46,24 +42,20 @@ public class TournamentFacade extends Observable {
 
     public void setIndexTournament(int indexMatch) {
         this.indexTournament = indexMatch;
-        notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
     public void setPlayer(Player player) {
         this.actual = player;
-        notif(TypeNotif.PLAYER_ONE_SELECTED);
     }
 
     public void setIndexSelectedMatch(Match m, int index) {
         this.indexMatch = index;
         this.selectedMatch = m;
-        notif(TypeNotif.REMOVE_MATCH);
     }
 
     public void createNewMatch(Player p1, Player p2, RESULTS res) {
         Match m = new Match(p1, p2, res);
         this.getTournament().addMatch(m);
-        notif(TypeNotif.ADD_MATCH);
     }
 
     public Match getSelectedMatch() {
@@ -125,10 +117,6 @@ public class TournamentFacade extends Observable {
         return this.getTournament().getMatchList();
     }
 
-    public void notif(TypeNotif typeNotif) {
-        setChanged();// cette methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
-        notifyObservers(typeNotif);
-    }
 
     public void initData() {
         Tournament t1 = new Tournament("E-Sport");

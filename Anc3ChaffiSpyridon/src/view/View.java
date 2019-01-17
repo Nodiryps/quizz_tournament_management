@@ -1,8 +1,10 @@
 package view;
 
-import controller.Controller;
+import controller.Presenter;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Observer;
+import java.util.Set;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,10 +29,10 @@ import javafx.stage.StageStyle;
 
 import model.*;
 
-public class View extends VBox implements Observer {
+public class View extends VBox implements ViewInterface {
 
     private Stage stage;
-    private final Controller ctrl;
+    private final Presenter presenter;
     private static final int TEXTSIZE = 400, SPACING = 10;
     private final ListView<Player> subsList = new ListView<>();
     private final TableView<Match> matchesList = new TableView<>();
@@ -46,8 +48,8 @@ public class View extends VBox implements Observer {
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
 
-    public View(Stage primaryStage, Controller ctrl) {
-        this.ctrl = ctrl;
+    public View(Stage primaryStage, Presenter presenter) {
+        this.presenter = presenter;
         this.stage = primaryStage;
         initData();
         Scene scene = new Scene(displayZone, 1235, 500);
@@ -57,7 +59,7 @@ public class View extends VBox implements Observer {
         stage.setScene(scene);
     }
 
-    public void initData() {
+    private void initData() {
         configDisplay();
         configBottomZone();
         decor();
@@ -67,7 +69,7 @@ public class View extends VBox implements Observer {
         addListernerComboBox();
     }
 
-    public void decor() {
+    private void decor() {
         tournamentsList.setMinHeight(50);
         subsList.getSelectionModel().select(-1);
         tournamentsList.setPrefWidth(TEXTSIZE);
@@ -105,11 +107,11 @@ public class View extends VBox implements Observer {
         gpButtons.add(btnClear, 7, 0);
     }
 
-    public void addElemComboBox() {
+    private void addElemComboBox() {// a faire passer par presenteur
         cbResult.getItems().addAll(
-                RESULTS.EX_AEQUO,
-                RESULTS.VAINQUEUR_J1,
-                RESULTS.VAINQUEUR_J2
+                presenter.getresulst().EX_AEQUO,
+                presenter.getresulst().VAINQUEUR_J1,
+               presenter.getresulst().VAINQUEUR_J2
         );
     }
 
@@ -129,18 +131,17 @@ public class View extends VBox implements Observer {
         this.matchesList.getColumns().addAll(player1, player2, results);
     }
 
-    // ajoute un listener sur differents elements.
     private void configFocusListener() {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
-                    ctrl.setIndex(index);
+                    presenter.setIndex(index);
                 });
-        
+
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                 });
-        
+
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -149,21 +150,20 @@ public class View extends VBox implements Observer {
                         Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
                         int index = matchesList.getSelectionModel().getSelectedIndex();
 
-                        if (!ctrl.getAllMatch().isEmpty()) {
-                            ctrl.setMatchSelected(m, index);
+                        if (!presenter.getAllMatch().isEmpty()) {
+                            presenter.setMatchSelected(m, index);
                         }
                     }
                 }
             }
         });
     }
-    
-    // ajoute un listener sur les combobox.
+
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    ctrl.setPlayer(p);
+                    presenter.setPlayer(p);
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -172,7 +172,7 @@ public class View extends VBox implements Observer {
         cbOppList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    ctrl.setPlayer(p);
+                    presenter.setPlayer(p);
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
@@ -193,7 +193,7 @@ public class View extends VBox implements Observer {
             Player p1 = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
             Player p2 = (Player) cbOppList.getSelectionModel().getSelectedItem();
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
-            ctrl.createMatch(p1, p2, res);
+            presenter.createMatch(p1, p2, res);
         });
 
         btnClear.setOnAction((ActionEvent event) -> {
@@ -215,82 +215,78 @@ public class View extends VBox implements Observer {
     }
 
     @Override
-    public void update(java.util.Observable o, Object o1) {
-        TournamentFacade facade = ctrl.getFacade();
-        TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
+    public void initView(Set<Match> match, List<Player> subscribes, List<Tournament> tournament,Tournament tournois) {
+        tournamentsList.getItems().clear();
+        subsList.getItems().clear();
+        matchesList.getItems().clear();
 
-        switch (typeNotif) {
-            case INIT:
-                ObservableList<Player> sub1 = FXCollections.observableArrayList(facade.getSubscrib());
+        ObservableList<Player> sub1 = FXCollections.observableArrayList(subscribes);
+        for (Tournament t : tournament) {
+            tournamentsList.getItems().add(t);
+        }
+        for (Player p : subscribes) {
+            subsList.getItems().add(p);
+        }
+        for (Match m : match) {
+            matchesList.getItems().add(m);
+        }
+        tournamentsList.getSelectionModel().select(tournois);
+        cbPlayersList.setItems(sub1);
+        cbOppList.setItems(sub1);
+        setButtonDisable(true);
+    }
 
-                tournamentsList.getItems().clear();
-                subsList.getItems().clear();
-                matchesList.getItems().clear();
+    @Override
+    public void tournament_selected(Set<Match> match, List<Player> subscribes) {
+        ObservableList<Player> sub = FXCollections.observableArrayList(subscribes);
+        subsList.getItems().clear();
+        matchesList.getItems().clear();
+        cbPlayersList.getItems().clear();
+        cbOppList.getItems().clear();
+        cbResult.getSelectionModel().clearSelection();
 
-                for (Tournament t : facade.getTournamentList()) {
-                    tournamentsList.getItems().add(t);
-                }
-                for (Player p : facade.getSubscrib()) {
-                    subsList.getItems().add(p);
-                }
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                tournamentsList.getSelectionModel().select(ctrl.getTournament());
-                cbPlayersList.setItems(sub1);
-                cbOppList.setItems(sub1);
-                setButtonDisable(true);
+        subsList.getItems().addAll(subscribes);
+        for (Match m : match) {
+            matchesList.getItems().add(m);
+        }
+        cbPlayersList.setItems(sub);
+        cbOppList.setItems(sub);
 
-                break;
+    }
 
-            case TOURNAMENT_SELECTED:
-                ObservableList<Player> sub = FXCollections.observableArrayList(facade.getSubscrib());
-                subsList.getItems().clear();
-                matchesList.getItems().clear();
-                cbPlayersList.getItems().clear();
-                cbOppList.getItems().clear();
-                cbResult.getSelectionModel().clearSelection();
+    @Override
+    public void player_one_selected(List<Player> player_valid) {
+        ObservableList<Player> sub3 = FXCollections.observableArrayList(player_valid);
+        cbOppList.setItems(sub3);
+    }
 
-                subsList.getItems().addAll(facade.getSubscrib());
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                cbPlayersList.setItems(sub);
-                cbOppList.setItems(sub);
-                break;
+    @Override
+    public void add_match(Set<Match> match) {
+        matchesList.getItems().clear();
+        for (Match m : match) {
+            matchesList.getItems().add(m);
+        }
+        cbPlayersList.getSelectionModel().clearSelection();
+        cbOppList.getSelectionModel().clearSelection();
+        cbResult.getSelectionModel().clearSelection();
 
-            case PLAYER_ONE_SELECTED:
+    }
 
-                ObservableList<Player> sub3 = FXCollections.observableArrayList(facade.addOppponentValidList());
-                cbOppList.setItems(sub3);
+    @Override
+    public void remove_match(Set<Match> match) {
+        try {
+            Match m = presenter.getSelectedMatch();
 
-                break;
+            popup = new PopUpDelete(m, presenter);
 
-            case ADD_MATCH:
-                matchesList.getItems().clear();
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                cbPlayersList.getSelectionModel().clearSelection();
-                cbOppList.getSelectionModel().clearSelection();
-                cbResult.getSelectionModel().clearSelection();
-
-                break;
-
-            case REMOVE_MATCH:
-                try {
-                    Match m = ctrl.getSelectedMatch();
-
-                    popup = new PopUpDelete(m, ctrl);
-
-                } catch (FileNotFoundException e) {
-                    System.out.println("Fichier introuvable");
-                }
-                matchesList.getItems().clear();
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                break;
+        } catch (FileNotFoundException e) {
+            System.out.println("PopUp introuvable");
+        }
+        matchesList.getItems().clear();
+        for (Match m : match) {
+            matchesList.getItems().add(m);
         }
     }
 }
+
+    
