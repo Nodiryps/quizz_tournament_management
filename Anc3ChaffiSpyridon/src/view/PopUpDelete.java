@@ -5,7 +5,7 @@
  */
 package view;
 
-import controller.Controller;
+import controller.ViewModel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,7 +39,7 @@ import javafx.scene.text.FontWeight;
 public class PopUpDelete extends Popup {
 
     private Stage popUpWindow;
-    private Controller ctrl;
+    private ViewModel ctrl;
     private Match match;
     protected ImageView imgV;
     private Button btnDel = new Button("Supprimer");
@@ -49,7 +49,7 @@ public class PopUpDelete extends Popup {
     private GridPane gpBottom = new GridPane();
     private GridPane gpButtons = new GridPane();
 
-    public PopUpDelete(Match m, Controller ctrl) throws FileNotFoundException {
+    public PopUpDelete(Match m, ViewModel ctrl) throws FileNotFoundException {
         this.ctrl = ctrl;
         this.match = m;
         initData();

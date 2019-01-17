@@ -7,8 +7,13 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 import java.util.TreeSet;
+import javafx.beans.property.SimpleSetProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -17,8 +22,8 @@ import java.util.TreeSet;
 public class Tournament {
 
     private final String name;
-    private List<Player> subscribersList = new ArrayList<>();// modifier en hashSet peut etre.
-    private TreeSet<Match> matchList = new TreeSet<>();
+    private ObservableList<Player> subscribersList = FXCollections.observableArrayList();// modifier en hashSet peut etre.
+    private ObservableSet<Match> matchList = FXCollections.observableSet();
 
     public Tournament(String s) {
         name = s;
@@ -28,19 +33,16 @@ public class Tournament {
         return name;
     }
 
-    public List<Player> getSubscribersList() {
+    public ObservableList<Player> getSubscribersList() {
         return subscribersList;
     }
 
-    public Set<Match> getMatchList() {
+    public ObservableSet<Match> getMatchList() {
         return matchList;
 
     }
 
-    public Match pollFirstMatchList() {
-        return matchList.pollFirst();
-    }
-
+    
     public boolean existMatch(Match t) {
         return matchList.contains(t);
     }

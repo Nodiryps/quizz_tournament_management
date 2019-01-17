@@ -1,6 +1,6 @@
 package view;
 
-import controller.Controller;
+import controller.ViewModel;
 import java.io.FileNotFoundException;
 import java.util.Observer;
 import javafx.beans.Observable;
@@ -27,10 +27,10 @@ import javafx.stage.StageStyle;
 
 import model.*;
 
-public class View extends VBox implements Observer {
+public class View extends VBox  {
 
     private Stage stage;
-    private final Controller ctrl;
+    private final ViewModel vm;
     private static final int TEXTSIZE = 400, SPACING = 10;
     private final ListView<Player> subsList = new ListView<>();
     private final TableView<Match> matchesList = new TableView<>();
@@ -46,9 +46,12 @@ public class View extends VBox implements Observer {
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
 
-    public View(Stage primaryStage, Controller ctrl) {
-        this.ctrl = ctrl;
+    public View(Stage primaryStage, ViewModel ctrl) {
+        this.vm = ctrl;
         this.stage = primaryStage;
+        subsList.itemsProperty().bind(vm.subscribesProperty());
+        tournamentsList.itemsProperty().bind(vm.tournamentListProperty());
+        matchesList.itemsProperty().bind(vm.matchsProperty());
         initData();
         Scene scene = new Scene(displayZone, 1235, 500);
         stage.setResizable(false);
@@ -134,13 +137,13 @@ public class View extends VBox implements Observer {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
-                    ctrl.setIndex(index);
+                    vm.setIndex(index);
                 });
-        
+
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                 });
-        
+
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -149,21 +152,21 @@ public class View extends VBox implements Observer {
                         Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
                         int index = matchesList.getSelectionModel().getSelectedIndex();
 
-                        if (!ctrl.getAllMatch().isEmpty()) {
-                            ctrl.setMatchSelected(m, index);
+                        if (!vm.getAllMatch().isEmpty()) {
+                            vm.setMatchSelected(m, index);
                         }
                     }
                 }
             }
         });
     }
-    
+
     // ajoute un listener sur les combobox.
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    ctrl.setPlayer(p);
+                    vm.setPlayer(p);
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -172,7 +175,7 @@ public class View extends VBox implements Observer {
         cbOppList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    ctrl.setPlayer(p);
+                    vm.setPlayer(p);
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
@@ -193,7 +196,7 @@ public class View extends VBox implements Observer {
             Player p1 = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
             Player p2 = (Player) cbOppList.getSelectionModel().getSelectedItem();
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
-            ctrl.createMatch(p1, p2, res);
+            vm.createMatch(p1, p2, res);
         });
 
         btnClear.setOnAction((ActionEvent event) -> {
@@ -216,7 +219,7 @@ public class View extends VBox implements Observer {
 
     @Override
     public void update(java.util.Observable o, Object o1) {
-        TournamentFacade facade = ctrl.getFacade();
+        TournamentFacade facade = vm.getFacade();
         TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
 
         switch (typeNotif) {
@@ -236,7 +239,7 @@ public class View extends VBox implements Observer {
                 for (Match m : facade.getMatchList()) {
                     matchesList.getItems().add(m);
                 }
-                tournamentsList.getSelectionModel().select(ctrl.getTournament());
+                tournamentsList.getSelectionModel().select(vm.getTournament());
                 cbPlayersList.setItems(sub1);
                 cbOppList.setItems(sub1);
                 setButtonDisable(true);
@@ -279,9 +282,9 @@ public class View extends VBox implements Observer {
 
             case REMOVE_MATCH:
                 try {
-                    Match m = ctrl.getSelectedMatch();
+                    Match m = vm.getSelectedMatch();
 
-                    popup = new PopUpDelete(m, ctrl);
+                    popup = new PopUpDelete(m, vm);
 
                 } catch (FileNotFoundException e) {
                     System.out.println("Fichier introuvable");
@@ -293,4 +296,11 @@ public class View extends VBox implements Observer {
                 break;
         }
     }
+
+    private void configDataBindings() {
+        tournamentsList.itemsProperty().bind(vm.tournamentListProperty());
+        subsList.itemsProperty().bind(vm.subscribeListProperty());
+       // matchesList.itemsProperty().bind(vm.matchListProperty());
+    }
+
 }

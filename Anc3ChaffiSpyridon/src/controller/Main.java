@@ -17,16 +17,14 @@ import view.*;
 public class Main extends Application {
 
     TournamentFacade facade;
-    Controller ctrl;
+    ViewModel viewmodel;
     View view;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         facade = new TournamentFacade();
-        ctrl = new Controller(facade);
-        view = new View(primaryStage,ctrl);
-        facade.addObserver(view);
-        facade.notif(TournamentFacade.TypeNotif.INIT);
+        viewmodel = new ViewModel(facade);
+        view = new View(primaryStage,viewmodel);
         primaryStage.show();
         
     }

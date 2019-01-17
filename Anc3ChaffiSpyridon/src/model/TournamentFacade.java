@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleSetProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 /**
  *
@@ -19,11 +24,11 @@ public class TournamentFacade extends Observable {
     public enum TypeNotif {
         INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, REMOVE_MATCH
     }
-
-    public List<Tournament> tournamentList = new ArrayList<>();
+    
+    public ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();
 
     public int indexTournament;
-    public Player actual;
+    public Player actualPlayer;
     public Match selectedMatch;
     public Tournament tournois;
     public int indexMatch;
@@ -31,7 +36,8 @@ public class TournamentFacade extends Observable {
     public TournamentFacade() {
         initData();
     }
-
+   
+  
     public Tournament getTournament() {
         return tournamentList.get(indexTournament);
     }
@@ -41,38 +47,46 @@ public class TournamentFacade extends Observable {
     }
 
     public Player getActual() {
-        return actual;
+        return actualPlayer;
     }
 
     public void setIndexTournament(int indexMatch) {
         this.indexTournament = indexMatch;
-        notif(TypeNotif.TOURNAMENT_SELECTED);
     }
 
     public void setPlayer(Player player) {
-        this.actual = player;
-        notif(TypeNotif.PLAYER_ONE_SELECTED);
+        this.actualPlayer = player;
     }
 
     public void setIndexSelectedMatch(Match m, int index) {
         this.indexMatch = index;
         this.selectedMatch = m;
-        notif(TypeNotif.REMOVE_MATCH);
     }
 
     public void createNewMatch(Player p1, Player p2, RESULTS res) {
         Match m = new Match(p1, p2, res);
         this.getTournament().addMatch(m);
-        notif(TypeNotif.ADD_MATCH);
     }
 
     public Match getSelectedMatch() {
         return selectedMatch;
     }
 
+    public Player getActualPlayer() {
+        return actualPlayer;
+    }
+
+    public Tournament getTournois() {
+        return tournois;
+    }
+
+    public int getIndexMatch() {
+        return indexMatch;
+    }
+
     public void removeMatch() {
         if (indexMatch == 0) {
-            this.getTournament().pollFirstMatchList();
+            this.getTournament().getMatchList().remove(selectedMatch);
         } else {
             this.getTournament().getMatchList().remove(selectedMatch);
         }
@@ -82,7 +96,7 @@ public class TournamentFacade extends Observable {
     public List<Match> addMatchPlayed() {
         List<Match> matchPlayed = new ArrayList<>();
         for (Match m : this.getTournament().getMatchList()) {
-            if (m.getPlayer1() == actual || m.getPlayer2() == actual) {
+            if (m.getPlayer1() == actualPlayer || m.getPlayer2() == actualPlayer) {
                 matchPlayed.add(m);
             }
         }
@@ -93,10 +107,10 @@ public class TournamentFacade extends Observable {
     public List<Player> addOpponentInvalidList() {
         List<Player> playerInvalid = new ArrayList<>();
         for (Match m : addMatchPlayed()) {
-            if (!m.getPlayer1().equals(actual)) {
+            if (!m.getPlayer1().equals(actualPlayer)) {
                 playerInvalid.add(m.getPlayer1());
             }
-            if (!m.getPlayer2().equals(actual)) {
+            if (!m.getPlayer2().equals(actualPlayer)) {
                 playerInvalid.add(m.getPlayer2());
             }
         }
@@ -106,29 +120,26 @@ public class TournamentFacade extends Observable {
     public List<Player> addOppponentValidList() {
         List<Player> playerValid = new ArrayList<>();
         for (Player s : this.getTournament().getSubscribersList()) {
-            if (!addOpponentInvalidList().contains(s) && !s.equals(actual)) {
+            if (!addOpponentInvalidList().contains(s) && !s.equals(actualPlayer)) {
                 playerValid.add(s);
             }
         }
         return playerValid;
     }
 
-    public List<Tournament> getTournamentList() {
+    public ObservableList<Tournament> getTournamentList() {
         return tournamentList;
     }
 
-    public List<Player> getSubscrib() {
-        return this.getTournament().getSubscribersList();
+    public ObservableList<Player> getSubscrib() {
+        return  this.getTournament().getSubscribersList();
     }
 
-    public Set<Match> getMatchList() {
-        return this.getTournament().getMatchList();
+    public ObservableSet<Match> getMatchList() {
+        
+        return tournois.getMatchList();
     }
 
-    public void notif(TypeNotif typeNotif) {
-        setChanged();// cette methode renvoi un boullean et permet de faire des notif uniquement quand un changement a eux lieux.
-        notifyObservers(typeNotif);
-    }
 
     public void initData() {
         Tournament t1 = new Tournament("E-Sport");
