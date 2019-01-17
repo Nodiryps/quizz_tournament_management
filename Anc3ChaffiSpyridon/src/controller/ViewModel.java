@@ -40,7 +40,7 @@ public final class ViewModel {
     }
 
     public void testbind() {
-       tournois.bind(facade.tournois);
+      // tournois.bind(facade.tournois);
     }
     
     public SimpleListProperty<Player> subscribesProperty() {
