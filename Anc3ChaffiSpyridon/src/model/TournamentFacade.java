@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,7 +31,7 @@ public class TournamentFacade {
 
     private ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();
 
-    private IntegerProperty indexTournament;
+    private IntegerProperty indexTournament=new SimpleIntegerProperty();
     private Player actualPlayer;
     private Match selectedMatch;
     private Tournament tournois;

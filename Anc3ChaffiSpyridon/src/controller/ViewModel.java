@@ -72,7 +72,7 @@ public final class ViewModel {
     }
 
     public void setIndex(int index) {
-        this.indexTournament.setValue(index);
+        this.indexTournament.set(index);
         System.out.println(indexTournament.getValue());
         facade.setIndexTournament(indexTournament.getValue());
     }

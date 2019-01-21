@@ -50,7 +50,7 @@ public class View extends VBox {
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
     private IntegerProperty indexTournoi = new SimpleIntegerProperty(0);
-    private StringProperty actualPlayer=new SimpleStringProperty();
+    private StringProperty actualPlayer = new SimpleStringProperty();
 
     public View(Stage primaryStage, ViewModel ctrl) {
         this.vm = ctrl;
@@ -128,7 +128,7 @@ public class View extends VBox {
         matchesList.itemsProperty().bind(vm.matchsProperty());
         cbPlayersList.itemsProperty().bind(vm.subscribesProperty());
         cbOppList.itemsProperty().bind(vm.OppValidProperty());
-         this.actualPlayer.bind(vm.actualProperty());
+        this.actualPlayer.bindBidirectional(vm.actualProperty());
     }
 
     public void tableViewColumnConfig() {
@@ -311,7 +311,5 @@ public class View extends VBox {
                 break;
         }
     }
-
-
 
 }
