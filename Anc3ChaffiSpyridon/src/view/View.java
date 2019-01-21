@@ -4,6 +4,10 @@ import controller.ViewModel;
 import java.io.FileNotFoundException;
 import java.util.Observer;
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +31,7 @@ import javafx.stage.StageStyle;
 
 import model.*;
 
-public class View extends VBox  {
+public class View extends VBox {
 
     private Stage stage;
     private final ViewModel vm;
@@ -45,17 +49,19 @@ public class View extends VBox  {
     private final Button btnClear = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
+    private IntegerProperty indexTournoi = new SimpleIntegerProperty(0);
+    private StringProperty actualPlayer=new SimpleStringProperty();
 
     public View(Stage primaryStage, ViewModel ctrl) {
         this.vm = ctrl;
         this.stage = primaryStage;
-        subsList.itemsProperty().bind(vm.subscribesProperty());
-        tournamentsList.itemsProperty().bind(vm.tournamentListProperty());
-        matchesList.itemsProperty().bind(vm.matchsProperty());
         initData();
+        tournamentsList.focusedProperty();
+        configBinding();
+        //configDataBindings();
         Scene scene = new Scene(displayZone, 1235, 500);
-        stage.setResizable(false);
-        stage.initStyle(StageStyle.UTILITY);
+        //stage.setResizable(false);
+        //stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
     }
@@ -116,6 +122,15 @@ public class View extends VBox  {
         );
     }
 
+    public void configBinding() {
+        subsList.itemsProperty().bind(vm.subscribesProperty());
+        tournamentsList.itemsProperty().bind(vm.tournamantProperty());
+        matchesList.itemsProperty().bind(vm.matchsProperty());
+        cbPlayersList.itemsProperty().bind(vm.subscribesProperty());
+        cbOppList.itemsProperty().bind(vm.OppValidProperty());
+         this.actualPlayer.bind(vm.actualProperty());
+    }
+
     public void tableViewColumnConfig() {
         TableColumn<Match, String> player1 = new TableColumn<>("Joueur 1");
         player1.setMinWidth(133);
@@ -137,6 +152,7 @@ public class View extends VBox  {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
+                    this.indexTournoi.set(index);
                     vm.setIndex(index);
                 });
 
@@ -166,7 +182,7 @@ public class View extends VBox  {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    vm.setPlayer(p);
+                    this.actualPlayer.set(p.getFirstName());
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -217,7 +233,6 @@ public class View extends VBox  {
                 || cbResult.getSelectionModel().isEmpty();
     }
 
-    @Override
     public void update(java.util.Observable o, Object o1) {
         TournamentFacade facade = vm.getFacade();
         TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
@@ -239,7 +254,7 @@ public class View extends VBox  {
                 for (Match m : facade.getMatchList()) {
                     matchesList.getItems().add(m);
                 }
-                tournamentsList.getSelectionModel().select(vm.getTournament());
+                tournamentsList.getSelectionModel().select(this.indexTournoi.getValue());
                 cbPlayersList.setItems(sub1);
                 cbOppList.setItems(sub1);
                 setButtonDisable(true);
@@ -297,10 +312,6 @@ public class View extends VBox  {
         }
     }
 
-    private void configDataBindings() {
-        tournamentsList.itemsProperty().bind(vm.tournamentListProperty());
-        subsList.itemsProperty().bind(vm.subscribeListProperty());
-       // matchesList.itemsProperty().bind(vm.matchListProperty());
-    }
+
 
 }

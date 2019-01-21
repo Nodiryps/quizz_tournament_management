@@ -6,6 +6,8 @@
 package model;
 
 import java.util.Objects;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -13,23 +15,23 @@ import java.util.Objects;
  */
 public class Player {
 
-    private final String firstName;
+    private final StringProperty firstName=new SimpleStringProperty();
 
     public Player() {
         this("");
     }
 
     public Player(String s) {
-        firstName = s;
+        firstName.set(s);
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstName.get();
     }
 
     @Override
     public String toString() {
-        return firstName;
+        return firstName.get();
     }
 
     @Override

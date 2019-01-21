@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Spy
  */
 public class Match implements Comparable<Match> {
-
+  
     private final Player player1, player2;
     private final RESULTS results;
     //private static int index;
