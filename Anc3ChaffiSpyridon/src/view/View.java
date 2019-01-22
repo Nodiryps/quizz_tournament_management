@@ -129,6 +129,7 @@ public class View extends VBox {
         actualPlayer.bindBidirectional(vm.actualProperty());
         cbPlayersList.itemsProperty().bind(vm.subscribesListProperty());
         cbOppList.itemsProperty().bind(vm.opponentsListProperty());
+        indexTournoi.bindBidirectional(vm.indexTournamentProperty());
     }
 
     public void tableViewColumnConfig() {
@@ -153,7 +154,9 @@ public class View extends VBox {
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
                     this.indexTournoi.set(index);
-                    vm.setIndex(index);
+//                    subsList.getItems().clear();
+                    configBinding();
+                    //vm.setIndex(index);
                 });
 
         subsList.getSelectionModel().selectedIndexProperty()

@@ -30,7 +30,7 @@ public final class ViewModel {
 //    private SetProperty<Match> matchList;
     private ListProperty<Player> subscribeList;
 //    private ListProperty<Tournament> tournamentList;
-    private IntegerProperty indexTournament=new SimpleIntegerProperty(0);
+    private IntegerProperty indexTournament=new SimpleIntegerProperty(1);
     private StringProperty actualPlayer=new SimpleStringProperty();
 //    private Match selectedMatch;
 //    private Tournament tournois;
@@ -38,6 +38,7 @@ public final class ViewModel {
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
+        configBinding();
     }
 
     public SimpleListProperty<Player> subscribesListProperty() {
@@ -76,10 +77,6 @@ public final class ViewModel {
                 list.add(m);
             }
         }
-        System.out.println("matchbyplayer");
-        for(Match m : list){
-            System.out.println(m.getPlayer2().getFirstName());
-        }
         return list;
     }
 
@@ -92,10 +89,6 @@ public final class ViewModel {
 //            } else {
 //                list.add(m.getPlayer1().getFirstName());
 //            }
-        }
-        System.out.println("pastOppList");
-        for(String m : list){
-            System.out.println(m);
         }
         return list;
     }
@@ -118,12 +111,15 @@ public final class ViewModel {
         facade.createNewMatch(p1, p2, res);
     }
 
-    public void setIndex(int index) {
-        this.indexTournament.set(index);
-        System.out.println(indexTournament.getValue());
-        facade.setIndexTournament(indexTournament.getValue());
-    }
+//    public void setIndex(int index) {
+//        this.indexTournament.set(index);
+//        System.out.println(indexTournament);
+//        facade.setIndexTournament(indexTournament.get());
+//    }
 
+    public void configBinding(){
+     this.indexTournamentProperty().bindBidirectional(facade.getIndexTournament());
+    }
     public void DelMatch(Match m) {
         facade.removeMatch();
     }
@@ -160,4 +156,8 @@ public final class ViewModel {
 //    public ListProperty<Player> subscribeListProperty() {
 //        return subscribeList;
 //    }
+    
+    public IntegerProperty indexTournamentProperty(){
+       return this.indexTournament;
+    }
 }
