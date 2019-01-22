@@ -32,7 +32,7 @@ public class TournamentFacade {
     private ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();
 
     private IntegerProperty indexTournament=new SimpleIntegerProperty();
-    private Player actualPlayer;
+    private StringProperty actualPlayer=new SimpleStringProperty();
     private Match selectedMatch;
     private Tournament tournois;
     private IntegerProperty indexMatch;
@@ -50,7 +50,7 @@ public class TournamentFacade {
         return indexTournament;
     }
 
-    public Player getActual() {
+    public  StringProperty getActual() {
         return actualPlayer;
     }
 
@@ -58,9 +58,9 @@ public class TournamentFacade {
         this.indexTournament.set(indexTournaments);
     }
 
-    public void setPlayer(Player player) {
-        this.actualPlayer = player;
-    }
+//    public void setPlayer(Player player) {
+//        this.actualPlayer = player;
+//    }
 
     public void setIndexSelectedMatch(Match m, int index) {
         this.indexMatch.set(index); 
@@ -78,7 +78,7 @@ public class TournamentFacade {
         return selectedMatch;
     }
 
-    public Player actualPlayerProperty() {
+    public StringProperty actualPlayerProperty() {
         return actualPlayer;
     }
 
@@ -95,39 +95,39 @@ public class TournamentFacade {
     }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.
-    public List<Match> addMatchPlayed() {
-        List<Match> matchPlayed = new ArrayList<>();
-        for (Match m : this.getTournament().getMatchList()) {
-            if (m.getPlayer1() == actualPlayer || m.getPlayer2() == actualPlayer) {
-                matchPlayed.add(m);
-            }
-        }
-        return matchPlayed;
-    }
+//    public List<Match> addMatchPlayed() {
+//        List<Match> matchPlayed = new ArrayList<>();
+//        for (Match m : this.getTournament().getMatchList()) {
+//            if (m.getPlayer1() == actualPlayer || m.getPlayer2() == actualPlayer) {
+//                matchPlayed.add(m);
+//            }
+//        }
+//        return matchPlayed;
+//    }
 
     // ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
-    private List<Player> addOpponentInvalidList() {
-        List<Player> playerInvalid = new ArrayList<>();
-        for (Match m : addMatchPlayed()) {
-            if (!m.getPlayer1().equals(actualPlayer)) {
-                playerInvalid.add(m.getPlayer1());
-            }
-            if (!m.getPlayer2().equals(actualPlayer)) {
-                playerInvalid.add(m.getPlayer2());
-            }
-        }
-        return playerInvalid;
-    }
+//    private List<Player> addOpponentInvalidList() {
+//        List<Player> playerInvalid = new ArrayList<>();
+//        for (Match m : addMatchPlayed()) {
+//            if (!m.getPlayer1().equals(actualPlayer)) {
+//                playerInvalid.add(m.getPlayer1());
+//            }
+//            if (!m.getPlayer2().equals(actualPlayer)) {
+//                playerInvalid.add(m.getPlayer2());
+//            }
+//        }
+//        return playerInvalid;
+//    }
 
-    public ObservableList<Player> addOppponentValidList() {
-        ObservableList<Player> playerValid = FXCollections.observableArrayList();
-        for (Player s : this.getTournament().getSubscribersList()) {
-            if (!addOpponentInvalidList().contains(s) && !s.equals(actualPlayer)) {
-                playerValid.add(s);
-            }
-        }
-        return playerValid;
-    }
+//    public ObservableList<Player> addOppponentValidList() {
+//        ObservableList<Player> playerValid = FXCollections.observableArrayList();
+//        for (Player s : this.getTournament().getSubscribersList()) {
+//            if (!addOpponentInvalidList().contains(s) && !s.equals(actualPlayer)) {
+//                playerValid.add(s);
+//            }
+//        }
+//        return playerValid;
+//    }
 
     public ObservableList<Tournament> getTournamentList() {
         return tournamentList;

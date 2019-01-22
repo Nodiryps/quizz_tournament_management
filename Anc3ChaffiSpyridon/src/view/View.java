@@ -123,10 +123,10 @@ public class View extends VBox {
     }
 
     public void configBinding() {
-        subsList.itemsProperty().bind(vm.subscribesListProperty());
+        subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
-        matchesList.itemsProperty().bind(vm.matchsProperty());
-        actualPlayer.bindBidirectional(vm.actualProperty());
+        matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
+        actualPlayer.bind(vm.actualProperty());
         cbPlayersList.itemsProperty().bind(vm.subscribesListProperty());
         cbOppList.itemsProperty().bind(vm.opponentsListProperty());
         indexTournoi.bindBidirectional(vm.indexTournamentProperty());
@@ -153,7 +153,7 @@ public class View extends VBox {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
-                    this.indexTournoi.set(index);
+                   // this.indexTournoi.set(index);
 //                    subsList.getItems().clear();
                     configBinding();
                     //vm.setIndex(index);
@@ -185,8 +185,8 @@ public class View extends VBox {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    vm.setPlayer(p);
                     configBinding();
+                    this.actualPlayer.setValue(p.getFirstName().get());
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -194,14 +194,15 @@ public class View extends VBox {
 
         cbOppList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
+
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem(); //trie a partir de la premiere cb
-                    vm.setPlayer(p);
-                    configBinding();
+                    this.actualPlayer.set(p.getFirstName().get());
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
                         setButtonDisable(false);
                     }
+                    configBinding();
                 });
 
         cbResult.getSelectionModel().selectedIndexProperty()
@@ -211,6 +212,7 @@ public class View extends VBox {
                     } else {
                         setButtonDisable(false);
                     }
+                    configBinding();
                 });
 
         btnValidate.setOnAction((ActionEvent event) -> {
@@ -218,14 +220,21 @@ public class View extends VBox {
             Player p2 = (Player) cbOppList.getSelectionModel().getSelectedItem();
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
             vm.createMatch(p1, p2, res);
+            configBinding();
+            clearComboBox();
+
         });
 
         btnClear.setOnAction((ActionEvent event) -> {
-            cbOppList.getSelectionModel().clearSelection();
-            cbPlayersList.getSelectionModel().clearSelection();
-            cbResult.getSelectionModel().clearSelection();
+           clearComboBox();
         });
 
+    }
+
+    private void clearComboBox() {
+        cbOppList.getSelectionModel().clearSelection();
+        cbPlayersList.getSelectionModel().clearSelection();
+        cbResult.getSelectionModel().clearSelection();
     }
 
     private void setButtonDisable(boolean b) {
@@ -236,85 +245,6 @@ public class View extends VBox {
         return cbPlayersList.getSelectionModel().isEmpty()
                 || cbOppList.getSelectionModel().isEmpty()
                 || cbResult.getSelectionModel().isEmpty();
-    }
-
-    public void update(java.util.Observable o, Object o1) {
-        TournamentFacade facade = vm.getFacade();
-        TournamentFacade.TypeNotif typeNotif = (TournamentFacade.TypeNotif) o1;
-
-        switch (typeNotif) {
-            case INIT:
-                ObservableList<Player> sub1 = FXCollections.observableArrayList(facade.getSubscrib());
-
-                tournamentsList.getItems().clear();
-                subsList.getItems().clear();
-                matchesList.getItems().clear();
-
-                for (Tournament t : facade.getTournamentList()) {
-                    tournamentsList.getItems().add(t);
-                }
-                for (Player p : facade.getSubscrib()) {
-                    subsList.getItems().add(p);
-                }
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                tournamentsList.getSelectionModel().select(this.indexTournoi.getValue());
-                cbPlayersList.setItems(sub1);
-                cbOppList.setItems(sub1);
-                setButtonDisable(true);
-
-                break;
-
-            case TOURNAMENT_SELECTED:
-                ObservableList<Player> sub = FXCollections.observableArrayList(facade.getSubscrib());
-                subsList.getItems().clear();
-                matchesList.getItems().clear();
-                cbPlayersList.getItems().clear();
-                cbOppList.getItems().clear();
-                cbResult.getSelectionModel().clearSelection();
-
-                subsList.getItems().addAll(facade.getSubscrib());
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                cbPlayersList.setItems(sub);
-                cbOppList.setItems(sub);
-                break;
-
-            case PLAYER_ONE_SELECTED:
-
-                ObservableList<Player> sub3 = FXCollections.observableArrayList(facade.addOppponentValidList());
-                cbOppList.setItems(sub3);
-
-                break;
-
-            case ADD_MATCH:
-                matchesList.getItems().clear();
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                cbPlayersList.getSelectionModel().clearSelection();
-                cbOppList.getSelectionModel().clearSelection();
-                cbResult.getSelectionModel().clearSelection();
-
-                break;
-
-            case REMOVE_MATCH:
-                try {
-                    Match m = vm.getSelectedMatch();
-
-                    popup = new PopUpDelete(m, vm);
-
-                } catch (FileNotFoundException e) {
-                    System.out.println("Fichier introuvable");
-                }
-                matchesList.getItems().clear();
-                for (Match m : facade.getMatchList()) {
-                    matchesList.getItems().add(m);
-                }
-                break;
-        }
     }
 
 }

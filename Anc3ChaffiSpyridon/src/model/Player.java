@@ -25,8 +25,8 @@ public class Player {
         firstName.set(s);
     }
 
-    public String getFirstName() {
-        return firstName.get();
+    public StringProperty getFirstName() {
+        return firstName;
     }
 
     @Override
