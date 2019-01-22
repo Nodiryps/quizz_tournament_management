@@ -121,6 +121,16 @@ public final class ViewModel {
 //        facade.getTournament().addMatch(m);
     }
     
+    public RESULTS test(String res){
+        switch(res)
+        {
+            case res.equals(VAINQUEUR_J1):
+                return RESULTS.VAINQUEUR_J1;
+        }
+            
+      
+    }
+    
 
 //    public void setIndex(int index) {
 //        this.indexTournament.set(index);
