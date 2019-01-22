@@ -123,12 +123,12 @@ public class View extends VBox {
     }
 
     public void configBinding() {
-        subsList.itemsProperty().bind(vm.subscribesProperty());
+        subsList.itemsProperty().bind(vm.subscribesListProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
         matchesList.itemsProperty().bind(vm.matchsProperty());
-        cbPlayersList.itemsProperty().bind(vm.subscribesProperty());
-        cbOppList.itemsProperty().bind(vm.OppValidProperty());
-        this.actualPlayer.bindBidirectional(vm.actualProperty());
+        actualPlayer.bindBidirectional(vm.actualProperty());
+        cbPlayersList.itemsProperty().bind(vm.subscribesListProperty());
+        cbOppList.itemsProperty().bind(vm.opponentsListProperty());
     }
 
     public void tableViewColumnConfig() {
@@ -182,7 +182,8 @@ public class View extends VBox {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    this.actualPlayer.set(p.getFirstName());
+                    vm.setPlayer(p);
+                    configBinding();
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -190,8 +191,9 @@ public class View extends VBox {
 
         cbOppList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
+                    Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem(); //trie a partir de la premiere cb
                     vm.setPlayer(p);
+                    configBinding();
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
