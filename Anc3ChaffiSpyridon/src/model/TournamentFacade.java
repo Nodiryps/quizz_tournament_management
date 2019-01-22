@@ -27,6 +27,8 @@ public class TournamentFacade {
 
     public enum TypeNotif {
         INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, REMOVE_MATCH
+        
+        
     }
 
     private ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();

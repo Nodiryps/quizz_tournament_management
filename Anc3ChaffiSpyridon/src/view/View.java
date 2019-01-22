@@ -51,6 +51,9 @@ public class View extends VBox {
     private PopUpDelete popup;
     private IntegerProperty indexTournoi = new SimpleIntegerProperty(0);
     private StringProperty actualPlayer = new SimpleStringProperty("");
+    private StringProperty cbPlayer = new SimpleStringProperty();
+    private StringProperty cbOpp = new SimpleStringProperty();
+    private StringProperty results = new SimpleStringProperty();
 
     public View(Stage primaryStage, ViewModel ctrl) {
         this.vm = ctrl;
@@ -131,17 +134,20 @@ public class View extends VBox {
         subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
         matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
-      
+
     }
 
     private void configAttributBinding() {
-        vm.actualProperty().bind(actualPlayer); 
+        vm.actualProperty().bind(actualPlayer);
         indexTournoi.bindBidirectional(vm.indexTournamentProperty());
+        cbPlayer.bind(vm.cb1);
+        cbOpp.bind(vm.cb2);
+        results.bind(vm.cb3);
     }
 
     private void configComboBinding() {
         cbPlayersList.itemsProperty().bind(vm.subscribesListProperty());
-          cbOppList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
+        cbOppList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
     }
 
     public void tableViewColumnConfig() {
@@ -198,27 +204,24 @@ public class View extends VBox {
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                if(p !=null){
-                    this.actualPlayer.set(p.getFirstName().get());
-                }
+                    Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
+                    if (p != null) {
+                        this.actualPlayer.set((String) cbPlayersList.getSelectionModel().getSelectedItem().getFirstName().get());
+                    }
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
                 });
-
         cbOppList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
 
-                   
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
                         setButtonDisable(false);
                     }
-                 
-                });
 
+                });
         cbResult.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     if (cbEmpty()) {
@@ -228,28 +231,28 @@ public class View extends VBox {
                     }
                     configListBinding();
                 });
-
         btnValidate.setOnAction((ActionEvent event) -> {
-            Player p1 = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-            Player p2 = (Player) cbOppList.getSelectionModel().getSelectedItem();
+
             RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
-            vm.createMatch(p1, p2, res);
+            cbPlayer.set((String) cbPlayersList.getSelectionModel().getSelectedItem().getFirstName().get());
+            cbOpp.set((String) cbOppList.getSelectionModel().getSelectedItem().getFirstName().get());
+            results.set((String) cbResult.getSelectionModel().getSelectedItem().name());
+//            vm.createMatch(p1, p2, res);
 //            clearComboBox();
             configBinding();
         });
-
         btnClear.setOnAction((ActionEvent event) -> {
             clearComboBox();
             configBinding();
         });
 
     }
-    
-    private void playerCombo(){
-     Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    this.actualPlayer.set(p.getFirstName().get());
-                    System.out.println(actualPlayer);
-                   
+
+    private void playerCombo() {
+        Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
+        this.actualPlayer.set(p.getFirstName().get());
+        System.out.println(actualPlayer);
+
     }
 
     private void clearComboBox() {

@@ -36,6 +36,10 @@ public final class ViewModel {
 //    private Match selectedMatch;
 //    private Tournament tournois;
 //    private int indexMatch;
+    public StringProperty cb1 = new SimpleStringProperty();
+    public StringProperty cb2 = new SimpleStringProperty();
+    public StringProperty cb3 = new SimpleStringProperty();
+    
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -109,10 +113,14 @@ public final class ViewModel {
         return list;
     }
     
-    public void createMatch(Player p1, Player p2, RESULTS res) {
-        Match m = new Match(p1, p2, res);
-        facade.getTournament().addMatch(m);
+    public void createMatch() {
+        Player p=new Player(cb1.get());
+        Player p2= new Player(cb2.get());
+        
+//        Match m = new Match(cb1.get(), cb2.get(), cb3);
+//        facade.getTournament().addMatch(m);
     }
+    
 
 //    public void setIndex(int index) {
 //        this.indexTournament.set(index);
