@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.List;
 import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -65,8 +66,8 @@ public final class ViewModel {
         return facade.getTournament();
     }
 
-    public SimpleListProperty opponentsListProperty() {
-        return new SimpleListProperty<>(this.newOppList());
+    public SimpleListProperty<Player> opponentsListProperty() {
+        return new SimpleListProperty<Player>(facade.oppValidList());
     }
 
     private ObservableList<Match> macthByPlayer() {
