@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -43,24 +44,24 @@ public class View extends VBox {
     private final GridPane left = new GridPane();
     private final GridPane right = new GridPane();
     private final ComboBox<Player> cbPlayersList = new ComboBox<>();
-    private final ComboBox<Player> cbOppList = new ComboBox<>();
-    private final ComboBox<RESULTS> cbResult = new ComboBox<>();
+    private final ComboBox<Player> cbOpponentsList = new ComboBox<>();
+    private final ComboBox<RESULTS> cbResultsList = new ComboBox<>();
     private final Button btnValidate = new Button();
     private final Button btnClear = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
-    private IntegerProperty indexTournoi = new SimpleIntegerProperty(0);
+    private IntegerProperty indexTournament = new SimpleIntegerProperty(0);
     private StringProperty actualPlayer = new SimpleStringProperty("");
-    private StringProperty cbPlayer = new SimpleStringProperty();
-    private StringProperty cbOpp = new SimpleStringProperty();
-    private StringProperty results = new SimpleStringProperty();
+//    private StringProperty cbPlayer = new SimpleStringProperty();
+//    private StringProperty cbOpp = new SimpleStringProperty();
+//    private StringProperty results = new SimpleStringProperty();
 
     public View(Stage primaryStage, ViewModel ctrl) {
         this.vm = ctrl;
         this.stage = primaryStage;
         initData();
         tournamentsList.focusedProperty();
-        configBinding();
+        configBindings();
         Scene scene = new Scene(displayZone, 1235, 500);
         //stage.setResizable(false);
         //stage.initStyle(StageStyle.UTILITY);
@@ -68,11 +69,154 @@ public class View extends VBox {
         stage.setScene(scene);
     }
 
+
+    public void addResultsToCB() {
+        cbResultsList.getItems().addAll(
+                RESULTS.EX_AEQUO,
+                RESULTS.VAINQUEUR_J1,
+                RESULTS.VAINQUEUR_J2
+        );
+    }
+
+    public void configBindings() {
+        configBindingsView();
+        configBindingsViewModel();
+    }
+    
+    public void configBindingsView() {
+        subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
+        tournamentsList.itemsProperty().bind(vm.tournamantProperty());
+        matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
+        indexTournament.bindBidirectional(vm.indexTournamentProperty());
+        cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
+        cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
+        cbResultsList.itemsProperty().bindBidirectional(vm.resultsListProperty());
+    }
+    
+    private void configBindingsViewModel() {
+        vm.actualProperty().bind(actualPlayer);
+        vm.cb1.bind(cbPlayersList.accessibleTextProperty());
+        vm.cb2.bind(cbOpponentsList.accessibleTextProperty());
+        vm.cb3.bind(cbResultsList.accessibleTextProperty());
+    }
+
+    public void tableViewColumnConfig() {
+        TableColumn<Match, String> player1 = new TableColumn<>("Joueur 1");
+        player1.setMinWidth(133);
+        player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
+
+        TableColumn<Match, String> player2 = new TableColumn("Joueur 2");
+        player2.setMinWidth(133);
+        player2.setCellValueFactory(new PropertyValueFactory<>("player2"));
+
+        TableColumn<Match, String> results = new TableColumn<>("Resultats");
+        results.setMinWidth(133);
+        results.setCellValueFactory(new PropertyValueFactory<>("results"));
+
+        this.matchesList.getColumns().addAll(player1, player2, results);
+    }
+
+    // ajoute un listener sur differents elements.
+    private void configFocusListener() {
+        tournamentsList.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+                    int index = tournamentsList.getSelectionModel().getSelectedIndex();
+                    this.indexTournament.set(index);
+                    cbPlayersList.getSelectionModel().clearSelection();
+                    cbOpponentsList.getSelectionModel().clearSelection();
+                    cbResultsList.getSelectionModel().clearSelection();
+                    configBindings();
+                    //vm.setIndex(index);
+                });
+
+        subsList.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+                });
+
+        matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
+                        Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
+                        int index = matchesList.getSelectionModel().getSelectedIndex();
+
+                        if (!vm.getAllMatch().isEmpty()) {
+                            vm.setMatchSelected(m, index);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ajoute un listener sur les combobox.
+    public void addListernerComboBox() {
+        cbPlayersList.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+                    Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
+                    if (p != null) {
+                        this.actualPlayer.set((String) cbPlayersList.getSelectionModel().getSelectedItem().getFirstName());
+                    }
+                    if (cbEmpty()) {
+                        setButtonDisable(true);
+                    }
+                });
+        cbOpponentsList.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+
+                    if (cbEmpty()) {
+                        setButtonDisable(true);
+                    } else {
+                        setButtonDisable(false);
+                    }
+
+                });
+        cbResultsList.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+                    if (cbEmpty()) {
+                        setButtonDisable(true);
+                    } else {
+                        setButtonDisable(false);
+                    }
+                });
+        btnValidate.setOnAction((ActionEvent event) -> {
+            vm.newMatch();
+        });
+        btnClear.setOnAction((ActionEvent event) -> {
+            clearComboBox();
+        });
+
+    }
+
+    private void playerCombo() {
+        Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
+        this.actualPlayer.set(p.getFirstName());
+        System.out.println(actualPlayer);
+
+    }
+
+    private void clearComboBox() {
+        cbPlayersList.getSelectionModel().clearSelection();
+        cbOpponentsList.getSelectionModel().clearSelection();
+        cbResultsList.getSelectionModel().clearSelection();
+    }
+
+    private void setButtonDisable(boolean b) {
+        btnValidate.setDisable(b);
+    }
+
+    private boolean cbEmpty() {
+        return cbPlayersList.getSelectionModel().isEmpty()
+                || cbOpponentsList.getSelectionModel().isEmpty()
+                || cbResultsList.getSelectionModel().isEmpty();
+    }
+    
     public void initData() {
         configDisplay();
         configBottomZone();
         decor();
-        addElemComboBox();
+        addResultsToCB();
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
@@ -107,168 +251,12 @@ public class View extends VBox {
         gpButtons.add(new Label("joueur 1: "), 0, 0);
         gpButtons.add(cbPlayersList, 1, 0);
         gpButtons.add(new Label("joueur 2: "), 2, 0);
-        gpButtons.add(cbOppList, 3, 0);
+        gpButtons.add(cbOpponentsList, 3, 0);
         gpButtons.add(new Label("Resultat "), 4, 0);
-        gpButtons.add(cbResult, 5, 0);
+        gpButtons.add(cbResultsList, 5, 0);
         btnValidate.setText("valider");
         btnClear.setText("annuler");
         gpButtons.add(btnValidate, 6, 0);
         gpButtons.add(btnClear, 7, 0);
     }
-
-    public void addElemComboBox() {
-        cbResult.getItems().addAll(
-                RESULTS.EX_AEQUO,
-                RESULTS.VAINQUEUR_J1,
-                RESULTS.VAINQUEUR_J2
-        );
-    }
-
-    public void configBinding() {
-        configListBinding();
-        configAttributBinding();
-        configComboBinding();
-    }
-
-    public void configListBinding() {
-        subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
-        tournamentsList.itemsProperty().bind(vm.tournamantProperty());
-        matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
-
-    }
-
-    private void configAttributBinding() {
-        vm.actualProperty().bind(actualPlayer);
-        indexTournoi.bindBidirectional(vm.indexTournamentProperty());
-        cbPlayer.bind(vm.cb1);
-        cbOpp.bind(vm.cb2);
-        results.bind(vm.cb3);
-    }
-
-    private void configComboBinding() {
-        cbPlayersList.itemsProperty().bind(vm.subscribesListProperty());
-        cbOppList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
-    }
-
-    public void tableViewColumnConfig() {
-        TableColumn<Match, String> player1 = new TableColumn<>("Joueur 1");
-        player1.setMinWidth(133);
-        player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
-
-        TableColumn<Match, String> player2 = new TableColumn("Joueur 2");
-        player2.setMinWidth(133);
-        player2.setCellValueFactory(new PropertyValueFactory<>("player2"));
-
-        TableColumn<Match, String> results = new TableColumn<>("Resultats");
-        results.setMinWidth(133);
-        results.setCellValueFactory(new PropertyValueFactory<>("results"));
-
-        this.matchesList.getColumns().addAll(player1, player2, results);
-    }
-
-    // ajoute un listener sur differents elements.
-    private void configFocusListener() {
-        tournamentsList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-                    int index = tournamentsList.getSelectionModel().getSelectedIndex();
-                    this.indexTournoi.set(index);
-                    cbPlayersList.getSelectionModel().clearSelection();
-                    cbOppList.getSelectionModel().clearSelection();
-                    cbResult.getSelectionModel().clearSelection();
-                    configBinding();
-                    //vm.setIndex(index);
-                });
-
-        subsList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-                });
-
-        matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
-                        Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
-                        int index = matchesList.getSelectionModel().getSelectedIndex();
-
-                        if (!vm.getAllMatch().isEmpty()) {
-                            vm.setMatchSelected(m, index);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    // ajoute un listener sur les combobox.
-    public void addListernerComboBox() {
-        cbPlayersList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-                    Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                    if (p != null) {
-                        this.actualPlayer.set((String) cbPlayersList.getSelectionModel().getSelectedItem().getFirstName().get());
-                    }
-                    if (cbEmpty()) {
-                        setButtonDisable(true);
-                    }
-                });
-        cbOppList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-
-                    if (cbEmpty()) {
-                        setButtonDisable(true);
-                    } else {
-                        setButtonDisable(false);
-                    }
-
-                });
-        cbResult.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-                    if (cbEmpty()) {
-                        setButtonDisable(true);
-                    } else {
-                        setButtonDisable(false);
-                    }
-                    configListBinding();
-                });
-        btnValidate.setOnAction((ActionEvent event) -> {
-
-            RESULTS res = (RESULTS) cbResult.getSelectionModel().getSelectedItem();
-            cbPlayer.set((String) cbPlayersList.getSelectionModel().getSelectedItem().getFirstName().get());
-            cbOpp.set((String) cbOppList.getSelectionModel().getSelectedItem().getFirstName().get());
-            results.set((String) cbResult.getSelectionModel().getSelectedItem().name());
-//            vm.createMatch(p1, p2, res);
-//            clearComboBox();
-            configBinding();
-        });
-        btnClear.setOnAction((ActionEvent event) -> {
-            clearComboBox();
-            configBinding();
-        });
-
-    }
-
-    private void playerCombo() {
-        Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-        this.actualPlayer.set(p.getFirstName().get());
-        System.out.println(actualPlayer);
-
-    }
-
-    private void clearComboBox() {
-        cbPlayersList.getSelectionModel().clearSelection();
-        cbOppList.getSelectionModel().clearSelection();
-        cbResult.getSelectionModel().clearSelection();
-    }
-
-    private void setButtonDisable(boolean b) {
-        btnValidate.setDisable(b);
-    }
-
-    private boolean cbEmpty() {
-        return cbPlayersList.getSelectionModel().isEmpty()
-                || cbOppList.getSelectionModel().isEmpty()
-                || cbResult.getSelectionModel().isEmpty();
-    }
-
 }

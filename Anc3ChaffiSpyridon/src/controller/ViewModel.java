@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.ObservableSet;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -28,18 +29,13 @@ import model.RESULTS;
 public final class ViewModel {
 
     TournamentFacade facade;
-//    private SetProperty<Match> matchList;
     private ListProperty<Player> subscribeList;
 //    private ListProperty<Tournament> tournamentList;
-    private IntegerProperty indexTournament=new SimpleIntegerProperty(1);
-    private StringProperty actualPlayer=new SimpleStringProperty();
-//    private Match selectedMatch;
-//    private Tournament tournois;
-//    private int indexMatch;
+    private IntegerProperty indexTournament = new SimpleIntegerProperty(1);
+    private StringProperty actualPlayer = new SimpleStringProperty();
     public StringProperty cb1 = new SimpleStringProperty();
     public StringProperty cb2 = new SimpleStringProperty();
     public StringProperty cb3 = new SimpleStringProperty();
-    
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -50,10 +46,14 @@ public final class ViewModel {
         return new SimpleListProperty<>(facade.getSubscrib());
     }
     
-//     public SimpleListProperty<Player> OppValidProperty() {
-//        return new SimpleListProperty<>(facade.addOppponentValidList());
-//    }
-    
+    public SimpleListProperty<Player> opponentsListProperty() {
+        return new SimpleListProperty<>(facade.oppValidList());
+    }
+
+     public SimpleListProperty<RESULTS> resultsListProperty() {
+        return new SimpleListProperty<>(facade.getResults());
+    }
+     
     public SimpleListProperty<Match> matchsProperty() {
         return new SimpleListProperty<>(facade.getMatchList());
     }
@@ -61,17 +61,13 @@ public final class ViewModel {
     public SimpleListProperty tournamantProperty() {
         return new SimpleListProperty<>(facade.getTournamentList());
     }
-    
+
     public TournamentFacade getFacade() {
         return facade;
     }
 
     public Tournament getTournament() {
         return facade.getTournament();
-    }
-
-    public SimpleListProperty<Player> opponentsListProperty() {
-        return new SimpleListProperty<Player>(facade.oppValidList());
     }
 
     private ObservableList<Match> macthByPlayer() {
@@ -88,7 +84,7 @@ public final class ViewModel {
     private ObservableList<String> pastOppList() {
         ObservableList<String> list = FXCollections.observableArrayList();
         for (Match m : this.macthByPlayer()) {
-            list.add(m.getPlayer2().getFirstName().get());
+            list.add(m.getPlayer2().getFirstName());
 //            if (m.getPlayer1().equals(this.actualPlayer.getValue())) {
 //                list.add(m.getPlayer2().getFirstName());
 //            } else {
@@ -100,12 +96,12 @@ public final class ViewModel {
 
     private ObservableList<Player> newOppList() {
         ObservableList<Player> list = FXCollections.observableArrayList();
-         ObservableList<String> list2 = pastOppList();
+        ObservableList<String> list2 = pastOppList();
         if (this.actualPlayer.equals(" ")) {
             list = this.subscribesListProperty();
         } else {
             for (Player p : this.subscribesListProperty()) {
-                if (!list2.contains(p.getFirstName().get()) && !p.getFirstName().get().equals(this.actualPlayer.getValue())) {
+                if (!list2.contains(p.getFirstName()) && !p.getFirstName().equals(this.actualPlayer.getValue())) {
                     list.add(p);
                 }
             }
@@ -113,37 +109,43 @@ public final class ViewModel {
         return list;
     }
     
-    public void createMatch() {
-        Player p=new Player(cb1.get());
-        Player p2= new Player(cb2.get());
-        
-//        Match m = new Match(cb1.get(), cb2.get(), cb3);
-//        facade.getTournament().addMatch(m);
+    public void newMatch() {
+        createMatch();
     }
-    
-    public RESULTS test(String res){
-        switch(res)
-        {
-            case res.equals(VAINQUEUR_J1):
-                return RESULTS.VAINQUEUR_J1;
+
+    private void createMatch() {
+        Match m = new Match(new Player(cb1.get()), 
+                            new Player(cb2.get()), 
+                            resultsToString(cb3.get()));
+        facade.getTournament().addMatch(m);
+    }
+
+    private RESULTS resultsToString(String res) {
+        RESULTS s = null;
+        switch (res) {
+            case "VAINQUEUR_J1":
+                s = RESULTS.VAINQUEUR_J1;
+                break;
+            case "VAINQUEUR_J2":
+                s = RESULTS.VAINQUEUR_J2;
+                break;
+            case "EX_AEQUO":
+                s = RESULTS.EX_AEQUO;
+                break;
         }
-            
-      
+        return s;
     }
-    
 
 //    public void setIndex(int index) {
 //        this.indexTournament.set(index);
 //        System.out.println(indexTournament);
 //        facade.setIndexTournament(indexTournament.get());
 //    }
-
-    public void configBinding(){
-     this.indexTournamentProperty().bindBidirectional(facade.getIndexTournament());
-     this.actualProperty().bind(facade.actualPlayerProperty());
-     
-     
+    public void configBinding() {
+        this.indexTournamentProperty().bindBidirectional(facade.getIndexTournament());
+        this.actualProperty().bind(facade.actualPlayerProperty());
     }
+
     public void DelMatch(Match m) {
         facade.removeMatch();
     }
@@ -155,20 +157,19 @@ public final class ViewModel {
     public Match getSelectedMatch() {
         return facade.selectedMatchProperty();
     }
- public StringProperty actualProperty() {
+
+    public StringProperty actualProperty() {
         return actualPlayer;
     }
+
     public ObservableList<Match> getAllMatch() {
         return facade.getTournament().getMatchList();
     }
-    
-    
 
 //    public void setPlayer(Player p) {
-//        this.actualPlayer=new SimpleStringProperty(p.getFirstName().get());
+//        this.actualPlayer=new SimpleStringProperty(p.getFirstName());
 //        facade.actualPlayerProperty();
 //    }
-
 //    public SetProperty<Match> matchListProperty() {
 //        return matchList;
 //    }
@@ -179,8 +180,8 @@ public final class ViewModel {
 //    public ListProperty<Player> subscribeListProperty() {
 //        return subscribeList;
 //    }
-    
-    public IntegerProperty indexTournamentProperty(){
-       return this.indexTournament;
+    public IntegerProperty indexTournamentProperty() {
+        return this.indexTournament;
     }
+    
 }

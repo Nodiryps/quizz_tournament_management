@@ -25,7 +25,11 @@ public class Player {
         firstName.set(s);
     }
 
-    public StringProperty getFirstName() {
+    public String getFirstName() {
+        return firstName.get();
+    }
+    
+    public StringProperty firstNameProp() {
         return firstName;
     }
 

@@ -6,6 +6,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.List;
@@ -24,19 +25,14 @@ import javafx.collections.ObservableList;
  * @author Spy
  */
 public class TournamentFacade {
-
     public enum TypeNotif {
         INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, REMOVE_MATCH
-        
-        
     }
 
     private ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();
-
     private IntegerProperty indexTournament=new SimpleIntegerProperty();
     private StringProperty actualPlayer=new SimpleStringProperty("Phillipe");
     private Match selectedMatch;
-    private Tournament tournois;
     private IntegerProperty indexMatch;
 
     public TournamentFacade() {
@@ -44,16 +40,37 @@ public class TournamentFacade {
     }
 
     public Tournament getTournament() {
-        
         return tournamentList.get(indexTournament.get());
     }
-
+    
     public IntegerProperty getIndexTournament() {
         return indexTournament;
     }
 
-    public  StringProperty getActual() {
+    public  StringProperty actualPlayerProp() {
         return actualPlayer;
+    }
+    
+    public StringProperty actualPlayerProperty() {
+        return actualPlayer;
+    }
+    
+    public ObservableList<Tournament> getTournamentList() {
+        return tournamentList;
+    }
+
+    public ObservableList<Player> getSubscrib() {
+        return getTournament().getSubscribersList();
+    }
+
+    public ObservableList<Match> getMatchList() {
+        return getTournament().getMatchList();
+    }
+    
+    public ObservableList<RESULTS> getResults() {
+        ObservableList<RESULTS> list = FXCollections.observableArrayList();
+        list.addAll(Arrays.asList(RESULTS.values()));// remplace le foreach
+        return list;
     }
 
     public void setIndexTournament(int indexTournaments) {
@@ -69,19 +86,8 @@ public class TournamentFacade {
         this.selectedMatch = m;
     }
 
-   
-
-    public void createNewMatch(Player p1, Player p2, RESULTS res) {
-        Match m = new Match(p1, p2, res);
-        this.getTournament().addMatch(m);
-    }
-
     public Match selectedMatchProperty() {
         return selectedMatch;
-    }
-
-    public StringProperty actualPlayerProperty() {
-        return actualPlayer;
     }
 
     public int indexMatchProperty() {
@@ -95,13 +101,18 @@ public class TournamentFacade {
             this.getTournament().getMatchList().remove(selectedMatch);
         }
     }
+    
+    public void createNewMatch(Player p1, Player p2, RESULTS res) {
+        Match m = new Match(p1, p2, res);
+        this.getTournament().addMatch(m);
+    }
 
     // ajouter les match deja jouer par le player p dans matchPlayed.
     private ObservableList<Match> addMatchPlayed() {
         ObservableList<Match> matchPlayed = FXCollections.observableArrayList();
         for (Match m : this.getTournament().getMatchList()) {
-            if (m.getPlayer1().getFirstName().get().equals(actualPlayer.get()) 
-                    || m.getPlayer2().getFirstName().get().equals(actualPlayer.get())) {
+            if (m.getPlayer1().getFirstName().equals(actualPlayer.get()) 
+                    || m.getPlayer2().getFirstName().equals(actualPlayer.get())) {
                 matchPlayed.add(m);
             }
         }
@@ -112,10 +123,10 @@ public class TournamentFacade {
     private ObservableList<Player> addOpponentInvalidList() {
         ObservableList<Player> playerInvalid = FXCollections.observableArrayList();
         for (Match m : addMatchPlayed()) {
-            if (!m.getPlayer1().getFirstName().get().equals(actualPlayer.get())) {
+            if (!m.getPlayer1().getFirstName().equals(actualPlayer.get())) {
                 playerInvalid.add(m.getPlayer1());
             }
-            if (!m.getPlayer2().getFirstName().get().equals(actualPlayer.get())) {
+            if (!m.getPlayer2().getFirstName().equals(actualPlayer.get())) {
                 playerInvalid.add(m.getPlayer2());
             }
         }
@@ -126,23 +137,11 @@ public class TournamentFacade {
         ObservableList<Player> playerValid = FXCollections.observableArrayList();
         ObservableList<Player> list2 = addOpponentInvalidList();
         for (Player s : this.getTournament().getSubscribersList()) {
-            if (!list2.contains(s) && !s.getFirstName().get().equals(actualPlayer.get())) {
+            if (!list2.contains(s) && !s.getFirstName().equals(actualPlayer.get())) {
                 playerValid.add(s);
             }
         }
         return playerValid;
-    }
-
-    public ObservableList<Tournament> getTournamentList() {
-        return tournamentList;
-    }
-
-    public ObservableList<Player> getSubscrib() {
-        return this.getTournament().getSubscribersList();
-    }
-
-    public ObservableList<Match> getMatchList() {
-        return getTournament().getMatchList();
     }
 
     public void initData() {

@@ -37,10 +37,10 @@ public class Match implements Comparable<Match> {
 
     @Override
     public int compareTo(Match t) {
-        if (t.getPlayer1().getFirstName().get().compareTo(this.getPlayer1().getFirstName().get()) == 0
-                && t.getPlayer2().getFirstName().get().compareTo(this.getPlayer2().getFirstName().get()) == 0
-                || t.getPlayer1().getFirstName().get().compareTo(this.getPlayer2().getFirstName().get()) == 0
-                && t.getPlayer2().getFirstName().get().compareTo(this.getPlayer1().getFirstName().get()) == 0) {
+        if (t.getPlayer1().getFirstName().compareTo(this.getPlayer1().getFirstName()) == 0
+                && t.getPlayer2().getFirstName().compareTo(this.getPlayer2().getFirstName()) == 0
+                || t.getPlayer1().getFirstName().compareTo(this.getPlayer2().getFirstName()) == 0
+                && t.getPlayer2().getFirstName().compareTo(this.getPlayer1().getFirstName()) == 0) {
             return 0;
         } else {
             return 1;
