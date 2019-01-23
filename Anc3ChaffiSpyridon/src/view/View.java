@@ -105,15 +105,21 @@ public class View extends VBox {
         player1.setMinWidth(133);
         player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
 
-        TableColumn<Match, String> player2 = new TableColumn("Joueur 2");
+        TableColumn<Match, String> player2 = new TableColumn<>("Joueur 2");
         player2.setMinWidth(133);
         player2.setCellValueFactory(new PropertyValueFactory<>("player2"));
 
-        TableColumn<Match, String> results = new TableColumn<>("Resultats");
+        TableColumn<Match, RESULTS> results = new TableColumn<>("Resultats");
         results.setMinWidth(133);
         results.setCellValueFactory(new PropertyValueFactory<>("results"));
 
-        this.matchesList.getColumns().addAll(player1, player2, results);
+        addToTableView(player1, player2, results);
+    }
+    
+    private void addToTableView(TableColumn<Match, String> p1, TableColumn<Match, String> p2, TableColumn<Match, RESULTS> res) {
+        matchesList.getColumns().add(p1);
+        matchesList.getColumns().add(p2);
+        matchesList.getColumns().add(res);
     }
 
     // ajoute un listener sur differents elements.
