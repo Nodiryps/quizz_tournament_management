@@ -70,13 +70,13 @@ public class View extends VBox {
     }
 
 
-    public void addResultsToCB() {
-        cbResultsList.getItems().addAll(
-                RESULTS.EX_AEQUO,
-                RESULTS.VAINQUEUR_J1,
-                RESULTS.VAINQUEUR_J2
-        );
-    }
+//    public void addResultsToCB() {
+//        cbResultsList.getItems().addAll(
+//                RESULTS.EX_AEQUO,
+//                RESULTS.VAINQUEUR_J1,
+//                RESULTS.VAINQUEUR_J2
+//        );
+//    }
 
     public void configBindings() {
         configBindingsView();
@@ -95,9 +95,9 @@ public class View extends VBox {
     
     private void configBindingsViewModel() {
         vm.actualProperty().bind(actualPlayer);
-        vm.cb1.bind(cbPlayersList.accessibleTextProperty());
-        vm.cb2.bind(cbOpponentsList.accessibleTextProperty());
-        vm.cb3.bind(cbResultsList.accessibleTextProperty());
+//        vm.cb1.bind(cbPlayersList);
+//        vm.cb2.bind(cbOpponentsList);
+//        vm.cb3.bind(cbResultsList);
     }
 
     public void tableViewColumnConfig() {
@@ -187,7 +187,10 @@ public class View extends VBox {
                     }
                 });
         btnValidate.setOnAction((ActionEvent event) -> {
-            vm.newMatch();
+            System.out.println("player1: " + vm.cb1);
+            System.out.println("player2: " + vm.cb2);
+            System.out.println("res: " + vm.cb3);
+            vm.createMatch();
         });
         btnClear.setOnAction((ActionEvent event) -> {
             clearComboBox();
@@ -222,7 +225,7 @@ public class View extends VBox {
         configDisplay();
         configBottomZone();
         decor();
-        addResultsToCB();
+//        addResultsToCB();
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();

@@ -43,12 +43,12 @@ public class TournamentFacade {
         return tournamentList.get(indexTournament.get());
     }
     
-    public IntegerProperty getIndexTournament() {
-        return indexTournament;
+    public int getIndexTournament() {
+        return indexTournament.get();
     }
-
-    public  StringProperty actualPlayerProp() {
-        return actualPlayer;
+    
+    public IntegerProperty indexTournamentProperty() {
+        return indexTournament;
     }
     
     public StringProperty actualPlayerProperty() {
@@ -59,7 +59,7 @@ public class TournamentFacade {
         return tournamentList;
     }
 
-    public ObservableList<Player> getSubscrib() {
+    public ObservableList<Player> getTournamentSubsList() {
         return getTournament().getSubscribersList();
     }
 
@@ -69,7 +69,7 @@ public class TournamentFacade {
     
     public ObservableList<RESULTS> getResults() {
         ObservableList<RESULTS> list = FXCollections.observableArrayList();
-        list.addAll(Arrays.asList(RESULTS.values()));// remplace le foreach
+        list.addAll(RESULTS.values());
         return list;
     }
 
@@ -118,15 +118,19 @@ public class TournamentFacade {
         }
         return matchPlayed;
     }
+    
+    private boolean isTheOpponent(String p) {
+        return !p.equals(actualPlayer.get());
+    }
 
      //ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
     private ObservableList<Player> addOpponentInvalidList() {
         ObservableList<Player> playerInvalid = FXCollections.observableArrayList();
         for (Match m : addMatchPlayed()) {
-            if (!m.getPlayer1().getFirstName().equals(actualPlayer.get())) {
+            if (isTheOpponent(m.getPlayer1().getFirstName())) {
                 playerInvalid.add(m.getPlayer1());
             }
-            if (!m.getPlayer2().getFirstName().equals(actualPlayer.get())) {
+            if (isTheOpponent(m.getPlayer2().getFirstName())) {
                 playerInvalid.add(m.getPlayer2());
             }
         }
@@ -136,7 +140,7 @@ public class TournamentFacade {
     public ObservableList<Player> oppValidList() {
         ObservableList<Player> playerValid = FXCollections.observableArrayList();
         ObservableList<Player> list2 = addOpponentInvalidList();
-        for (Player s : this.getTournament().getSubscribersList()) {
+        for (Player s : getTournamentSubsList()) {
             if (!list2.contains(s) && !s.getFirstName().equals(actualPlayer.get())) {
                 playerValid.add(s);
             }

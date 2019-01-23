@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleSetProperty;
@@ -12,6 +13,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -33,17 +35,17 @@ public final class ViewModel {
 //    private ListProperty<Tournament> tournamentList;
     private IntegerProperty indexTournament = new SimpleIntegerProperty(1);
     private StringProperty actualPlayer = new SimpleStringProperty();
-    public StringProperty cb1 = new SimpleStringProperty();
-    public StringProperty cb2 = new SimpleStringProperty();
-    public StringProperty cb3 = new SimpleStringProperty();
+    public ObjectProperty cb1 = new SimpleObjectProperty();
+    public ObjectProperty cb2 = new SimpleObjectProperty();
+    public ObjectProperty cb3 = new SimpleObjectProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         configBinding();
     }
-
+    
     public SimpleListProperty<Player> subscribesListProperty() {
-        return new SimpleListProperty<>(facade.getSubscrib());
+        return new SimpleListProperty<>(facade.getTournamentSubsList());
     }
     
     public SimpleListProperty<Player> opponentsListProperty() {
@@ -109,31 +111,20 @@ public final class ViewModel {
         return list;
     }
     
-    public void newMatch() {
-        createMatch();
-    }
-
-    private void createMatch() {
-        Match m = new Match(new Player(cb1.get()), 
-                            new Player(cb2.get()), 
-                            resultsToString(cb3.get()));
+    public void createMatch() {
+        Match m = new Match(new Player(cb1.getValue().toString()), 
+                            new Player(cb2.getValue().toString()), 
+                            results(cb3.getName()));
         facade.getTournament().addMatch(m);
     }
 
-    private RESULTS resultsToString(String res) {
-        RESULTS s = null;
-        switch (res) {
-            case "VAINQUEUR_J1":
-                s = RESULTS.VAINQUEUR_J1;
-                break;
-            case "VAINQUEUR_J2":
-                s = RESULTS.VAINQUEUR_J2;
-                break;
-            case "EX_AEQUO":
-                s = RESULTS.EX_AEQUO;
-                break;
-        }
-        return s;
+    private RESULTS results(String res) {
+        if(res.equals(RESULTS.VAINQUEUR_J1.name()))
+            return RESULTS.VAINQUEUR_J1;
+        else if(res.equals(RESULTS.VAINQUEUR_J2.name()))
+                return RESULTS.VAINQUEUR_J2;
+        else
+            return RESULTS.EX_AEQUO;
     }
 
 //    public void setIndex(int index) {
@@ -142,7 +133,7 @@ public final class ViewModel {
 //        facade.setIndexTournament(indexTournament.get());
 //    }
     public void configBinding() {
-        this.indexTournamentProperty().bindBidirectional(facade.getIndexTournament());
+        this.indexTournamentProperty().bindBidirectional(facade.indexTournamentProperty());
         this.actualProperty().bind(facade.actualPlayerProperty());
     }
 

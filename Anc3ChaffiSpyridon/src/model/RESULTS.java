@@ -5,10 +5,13 @@
  */
 package model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  *
  * @author chaff
  */
- public  enum RESULTS {
-        VAINQUEUR_J1, VAINQUEUR_J2, EX_AEQUO;
-    }
+public enum RESULTS {
+    VAINQUEUR_J1, VAINQUEUR_J2, EX_AEQUO;
+}
