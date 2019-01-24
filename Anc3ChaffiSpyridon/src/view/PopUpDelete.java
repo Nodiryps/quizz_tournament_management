@@ -9,8 +9,6 @@ import controller.ViewModel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 
 import javafx.geometry.Insets;
@@ -67,6 +65,7 @@ public class PopUpDelete extends Popup {
         popUpWindow.setTitle("Confirmation Suppression");
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
+        
     }
 
     private void initData() throws FileNotFoundException {

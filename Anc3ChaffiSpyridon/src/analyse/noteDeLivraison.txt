@@ -2,8 +2,12 @@ NOTE DE LIVRAISON
 
 tout fonctionne, en somme :)
 
-- pour changer de tournois: séléctionner un tournois dans la liste (en haut, à gauche).
-- pour créer un nouveau match: séléctionner les joueurs dans les combobox prévues à cette effet et cliquer sur "valider". 
+- pour changer de tournois: sï¿½lï¿½ctionner un tournois dans la liste (en haut, ï¿½ gauche).
+- pour crï¿½er un nouveau match: sï¿½lï¿½ctionner les joueurs dans les combobox prï¿½vues ï¿½ cette effet et cliquer sur "valider". 
 	En cas d'erreur, appuyer sur "annuler.
-- pour supprimer un match: double click sur le match désiré => popup.
-- pour modifier: supprimer et recréer un match.
+- pour supprimer un match: double click sur le match dï¿½sirï¿½ => popup.
+- pour modifier: supprimer et recrï¿½er un match.
+
+A faire:
+-L'analyse MVVM et MVP du projet.
+-ProblÃ¨me de getters => indexTournament && matchSelected.

@@ -5,13 +5,7 @@
  */
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.List;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableList;
 
 /**

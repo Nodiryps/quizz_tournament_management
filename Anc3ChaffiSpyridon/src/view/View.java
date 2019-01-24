@@ -2,7 +2,6 @@ package view;
 
 import controller.ViewModel;
 import java.io.FileNotFoundException;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.Observable;
@@ -10,8 +9,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,7 +20,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -36,7 +32,7 @@ import model.*;
 
 public class View extends VBox {
 
-    private Stage stage;
+    private final Stage stage;
     private final ViewModel vm;
     private static final int TEXTSIZE = 400, SPACING = 10;
     private final ListView<Player> subsList = new ListView<>();
@@ -54,17 +50,12 @@ public class View extends VBox {
     private PopUpDelete popup;
     private IntegerProperty indexTournament = new SimpleIntegerProperty();
     private StringProperty actualPlayer = new SimpleStringProperty("");
-    private Boolean action=false;
-//    private StringProperty cbPlayer = new SimpleStringProperty();
-//    private StringProperty cbOpp = new SimpleStringProperty();
-//    private StringProperty results = new SimpleStringProperty();
 
     public View(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
         this.vm = ctrl;
         this.stage = primaryStage;
         initData();
         tournamentsList.focusedProperty();
-        
         Scene scene = new Scene(displayZone, 1235, 500);
         stage.setResizable(false);
         stage.initStyle(StageStyle.UTILITY);
@@ -97,11 +88,11 @@ public class View extends VBox {
 
     private void configBindingAttributes() {
         vm.indexTournament.bind(tournamentsList.getSelectionModel().selectedIndexProperty());
-        vm.actualPlayer.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
-        vm.cb1.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
-        vm.cb2.bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
-        vm.cb3.bind(cbResultsList.getSelectionModel().selectedItemProperty());
-        vm.indexMatch.bind(matchesList.getSelectionModel().selectedIndexProperty());
+        vm.actualProperty().bind(cbPlayersList.getSelectionModel().selectedItemProperty());
+        vm.combobox1Property().bind(cbPlayersList.getSelectionModel().selectedItemProperty());
+        vm.combobox2Property().bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
+        vm.combobox3Property().bind(cbResultsList.getSelectionModel().selectedItemProperty());
+        vm.indexMatchProperty().bind(matchesList.getSelectionModel().selectedIndexProperty());
         vm.matchSelected.bind(matchesList.getSelectionModel().selectedItemProperty());
     }
 
@@ -127,38 +118,29 @@ public class View extends VBox {
         matchesList.getColumns().add(res);
     }
 
-    // ajoute un listener sur differents elements.
     private void configFocusListener() throws FileNotFoundException {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     vm.setTournois();
-                
                     clearComboBox();
-                   
-                   configBindingsView();
-
+                    configBindingsView();
                 });
-
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                 });
-
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
-
                         try {
                             vm.launchPopUp();
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
                         matchesList.getSelectionModel().clearSelection();
                         configBindings();
                         if (!vm.getAllMatch().isEmpty()) {
-                            //vm.setMatchSelected(m, index);
                         }
                     }
                 }
@@ -170,25 +152,14 @@ public class View extends VBox {
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                   
-//                 while(vm.IndexMatchProperty().get()==0){
-//                     vm.oppValidList();
-//                 }
-//                 clearComboBox();
-//                 vm.oppValidList();
-                    
-
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
-                    if(!cbPlayersList.getSelectionModel().isEmpty()) {
+                    if (!cbPlayersList.getSelectionModel().isEmpty()) {
                         vm.oppValidList();
                     } else {
                         clearComboBox();
                     }
-                    
-//                    configBindingAttributes();
-                    
                 });
         cbOpponentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -197,7 +168,6 @@ public class View extends VBox {
                     } else {
                         setButtonDisable(false);
                     }
-
                 });
         cbResultsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -208,12 +178,11 @@ public class View extends VBox {
                     }
                 });
         btnValidate.setOnAction((ActionEvent event) -> {
-            if (cbOpponentsList.getSelectionModel().getSelectedItem() != null ) {
+            if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
                 vm.createMatch();
                 vm.clearOppList();
                 clearComboBox();
-                configBindingAttributes();
-
+                configBindingsView();
             }
         });
         btnClear.setOnAction((ActionEvent event) -> {
@@ -221,20 +190,12 @@ public class View extends VBox {
         });
 
     }
-
-//    private void playerCombo() {
-//        Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-//        this.actualPlayer.set(p.getFirstName());
-//        System.out.println(actualPlayer);
-//        
-//    }
     private void clearComboBox() {
         cbPlayersList.setValue(new Player(""));
         cbOpponentsList.setValue(new Player(""));
         cbResultsList.setValue(null);
     }
-    
-   
+
     private void setButtonDisable(boolean b) {
         btnValidate.setDisable(b);
     }
@@ -249,7 +210,6 @@ public class View extends VBox {
         configDisplay();
         configBottomZone();
         decor();
-//        addResultsToCB();
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
