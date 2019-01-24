@@ -1,21 +1,14 @@
 package controller;
 
-import java.util.List;
-import java.util.Set;
+import java.io.FileNotFoundException;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleSetProperty;
-import javafx.collections.ObservableSet;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Match;
@@ -23,6 +16,7 @@ import model.Player;
 import model.Tournament;
 import model.TournamentFacade;
 import model.RESULTS;
+import view.PopUpDelete;
 
 /**
  *
@@ -34,7 +28,7 @@ public final class ViewModel {
     private ListProperty<Player> subscribeList;
     private ObservableList<Player> oppList = FXCollections.observableArrayList();
 //    private ListProperty<Tournament> tournamentList;
-    private IntegerProperty indexTournament = new SimpleIntegerProperty(1);
+    public SimpleIntegerProperty indexTournament = new SimpleIntegerProperty();
     public ObjectProperty actualPlayer = new SimpleObjectProperty();
     public ObjectProperty cb1 = new SimpleObjectProperty();
     public ObjectProperty cb2 = new SimpleObjectProperty();
@@ -49,6 +43,11 @@ public final class ViewModel {
 
     public ViewModel() {
     }
+    
+     public  void setTournois(){
+      facade.setIndexTournament(this.indexTournament.get());
+    }
+
 
     public SimpleListProperty<Player> subscribesListProperty() {
         return new SimpleListProperty<>(facade.getTournamentSubsList());
@@ -107,6 +106,10 @@ public SimpleObjectProperty<Match> matchSelectedProperty(){
 //            }
         }
         return list;
+    }
+    
+    public void launchPopUp() throws FileNotFoundException{
+      new PopUpDelete(matchSelected.get(), this);
     }
 
     public void newOppList() {
@@ -194,8 +197,11 @@ public SimpleObjectProperty<Match> matchSelectedProperty(){
 //    public ListProperty<Player> subscribeListProperty() {
 //        return subscribeList;
 //    }
-    public IntegerProperty indexTournamentProperty() {
-        return this.indexTournament;
+    public SimpleIntegerProperty indexTournamentProperty() {
+        return new SimpleIntegerProperty(this.indexTournament.get());
+    }
+    public void setTournamant(int index){
+      this.indexTournamentProperty().set(index);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////

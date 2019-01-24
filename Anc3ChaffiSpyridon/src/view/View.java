@@ -52,7 +52,7 @@ public class View extends VBox {
     private final Button btnClear = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
-    private IntegerProperty indexTournament = new SimpleIntegerProperty(0);
+    private IntegerProperty indexTournament = new SimpleIntegerProperty();
     private StringProperty actualPlayer = new SimpleStringProperty("");
 //    private StringProperty cbPlayer = new SimpleStringProperty();
 //    private StringProperty cbOpp = new SimpleStringProperty();
@@ -63,7 +63,7 @@ public class View extends VBox {
         this.stage = primaryStage;
         initData();
         tournamentsList.focusedProperty();
-        configBindings();
+        
         Scene scene = new Scene(displayZone, 1235, 500);
         //stage.setResizable(false);
         stage.initStyle(StageStyle.UTILITY);
@@ -87,14 +87,15 @@ public class View extends VBox {
 
     public void configBindingsView() {
         subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
-        tournamentsList.itemsProperty().bind(vm.tournamantProperty());
+
         matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
-        indexTournament.bindBidirectional(vm.indexTournamentProperty());
+        tournamentsList.itemsProperty().bind(vm.tournamantProperty());
         cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
     }
 
     private void configBindingAttributes() {
+        vm.indexTournament.bind(tournamentsList.getSelectionModel().selectedIndexProperty());
         vm.actualPlayer.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.cb1.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.cb2.bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
@@ -129,30 +130,30 @@ public class View extends VBox {
     private void configFocusListener() throws FileNotFoundException {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    int index = tournamentsList.getSelectionModel().getSelectedIndex();
-                    this.indexTournament.set(index);
-                    cbPlayersList.getSelectionModel().clearSelection();
-                    cbOpponentsList.getSelectionModel().clearSelection();
-                    cbResultsList.getSelectionModel().clearSelection();
-                    configBindings();
+                    vm.setTournois();
+                
+                    clearComboBox();
+                   
+                   configBindingsView();
+
                 });
 
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                 });
 
-        matchesList.setOnMouseClicked(new EventHandler<MouseEvent>()  {
+        matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
-                        System.out.println(vm.matchSelectedProperty().getClass());
+
                         try {
-                            new PopUpDelete(vm.matchSelected.get(), vm);
+                            vm.launchPopUp();
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    
+
                         matchesList.getSelectionModel().clearSelection();
                         configBindings();
                         if (!vm.getAllMatch().isEmpty()) {
@@ -216,7 +217,8 @@ public class View extends VBox {
         cbOpponentsList.setValue(new Player(""));
         cbResultsList.setValue(null);
     }
-
+    
+   
     private void setButtonDisable(boolean b) {
         btnValidate.setDisable(b);
     }
@@ -235,6 +237,7 @@ public class View extends VBox {
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
+        configBindings();
     }
 
     public void decor() {
