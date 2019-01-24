@@ -9,6 +9,8 @@ import controller.ViewModel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 
 import javafx.geometry.Insets;
@@ -39,7 +41,7 @@ import javafx.scene.text.FontWeight;
 public class PopUpDelete extends Popup {
 
     private Stage popUpWindow;
-    private ViewModel ctrl;
+    private ViewModel vm;
     private Match match;
     protected ImageView imgV;
     private Button btnDel = new Button("Supprimer");
@@ -50,7 +52,7 @@ public class PopUpDelete extends Popup {
     private GridPane gpButtons = new GridPane();
 
     public PopUpDelete(Match m, ViewModel ctrl) throws FileNotFoundException {
-        this.ctrl = ctrl;
+        this.vm = ctrl;
         this.match = m;
         initData();
         popUpWindowSettings();
@@ -93,7 +95,7 @@ public class PopUpDelete extends Popup {
 
     private void boutonListerner(Match m) {
         btnDel.setOnAction((ActionEvent event) -> {
-            ctrl.DelMatch(m);
+            vm.removeMatch();
             popUpWindow.close();
         });
         btnCancel.setOnAction(e -> popUpWindow.close());

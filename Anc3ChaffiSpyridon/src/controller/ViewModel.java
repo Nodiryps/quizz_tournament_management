@@ -39,23 +39,30 @@ public final class ViewModel {
     public ObjectProperty cb1 = new SimpleObjectProperty();
     public ObjectProperty cb2 = new SimpleObjectProperty();
     public ObjectProperty cb3 = new SimpleObjectProperty();
+    public IntegerProperty indexMatch = new SimpleIntegerProperty();
+    public ObjectProperty<Match> matchSelected=new SimpleObjectProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         //configBinding();
     }
-    public ViewModel(){
+
+    public ViewModel() {
     }
 
     public SimpleListProperty<Player> subscribesListProperty() {
         return new SimpleListProperty<>(facade.getTournamentSubsList());
     }
 
+    public SimpleIntegerProperty IndexMatchProperty() {
+        return new SimpleIntegerProperty(indexMatch.get());
+    }
+public SimpleObjectProperty<Match> matchSelectedProperty(){
+  return new SimpleObjectProperty(matchSelected);
+}
     public SimpleListProperty<Player> opponentsListProperty() {
         return new SimpleListProperty<>(this.oppList);
     }
-    
-    
 
     public SimpleListProperty<RESULTS> resultsListProperty() {
         return new SimpleListProperty<>(facade.getResults());
@@ -115,7 +122,7 @@ public final class ViewModel {
                 }
             }
         }
-          System.out.println(oppList);
+        System.out.println(oppList);
     }
 
     public void createMatch() {
@@ -124,7 +131,16 @@ public final class ViewModel {
                 new Player(cb2.getValue().toString()),
                 results(cb3.getValue().toString()));
         System.out.println(m);
-        facade.getTournament().addMatch(m);
+        if (!matchsProperty().contains(m)) {
+            facade.getTournament().addMatch(m);
+        }
+    }
+     public void removeMatch() {
+        if (this.indexMatch.get() == 0) {
+            this.getTournament().getMatchList().remove(this.matchSelected.get());
+        } else {
+            this.getTournament().getMatchList().remove(this.matchSelected.get());
+        }
     }
 
     private RESULTS results(String res) {
@@ -145,13 +161,11 @@ public final class ViewModel {
 //        this.indexTournamentProperty().bindBidirectional(facade.indexTournamentProperty());
 //        this.actualProperty().bindBidirectional(facade.actualPlayerProperty());
 //    }
+ 
 
-    public void DelMatch(Match m) {
-        facade.removeMatch();
-    }
-
-    public void setMatchSelected(Match m, int index) {
-        facade.setIndexSelectedMatch(m, index);
+    public void setMatchSelected(int index) {
+       indexMatch.set(index);
+        System.out.println(indexMatch.get());
     }
 
     public Match getSelectedMatch() {
@@ -186,7 +200,7 @@ public final class ViewModel {
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     // ajouter les match deja jouer par le player p dans matchPlayed.
-    public  ObservableList<Match> addMatchPlayed() {
+    public ObservableList<Match> addMatchPlayed() {
         ObservableList<Match> matchPlayed = FXCollections.observableArrayList();
         for (Match m : matchsProperty()) {
             if (m.getPlayer1().getFirstName().equals(actualPlayer.get().toString())
@@ -202,7 +216,7 @@ public final class ViewModel {
     }
 
     //ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
-    public  ObservableList<Player> addOpponentInvalidList() {
+    public ObservableList<Player> addOpponentInvalidList() {
         ObservableList<Player> playerInvalid = FXCollections.observableArrayList();
         for (Match m : addMatchPlayed()) {
             if (isTheOpponent(m.getPlayer1().getFirstName())) {
@@ -223,14 +237,14 @@ public final class ViewModel {
             if (!list2.contains(s) && !s.getFirstName().equals(actualPlayer.getValue().toString())) {
                 this.oppList.add(s);
             }
-          
+
         }
     }
-    
+
     public static void main(String[] args) {
-        TournamentFacade t=new TournamentFacade();
-        ViewModel m=new ViewModel(t);
-        
+        TournamentFacade t = new TournamentFacade();
+        ViewModel m = new ViewModel(t);
+
         m.actualPlayer.set("lindsay");
         System.out.println(m.actualPlayer.get());
         m.oppValidList();

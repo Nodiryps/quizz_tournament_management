@@ -3,6 +3,8 @@ package view;
 import controller.ViewModel;
 import java.io.FileNotFoundException;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -56,7 +58,7 @@ public class View extends VBox {
 //    private StringProperty cbOpp = new SimpleStringProperty();
 //    private StringProperty results = new SimpleStringProperty();
 
-    public View(Stage primaryStage, ViewModel ctrl) {
+    public View(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
         this.vm = ctrl;
         this.stage = primaryStage;
         initData();
@@ -97,6 +99,8 @@ public class View extends VBox {
         vm.cb1.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.cb2.bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
         vm.cb3.bind(cbResultsList.getSelectionModel().selectedItemProperty());
+        vm.indexMatch.bind(matchesList.getSelectionModel().selectedIndexProperty());
+        vm.matchSelected.bind(matchesList.getSelectionModel().selectedItemProperty());
     }
 
     public void tableViewColumnConfig() {
@@ -122,7 +126,7 @@ public class View extends VBox {
     }
 
     // ajoute un listener sur differents elements.
-    private void configFocusListener() {
+    private void configFocusListener() throws FileNotFoundException {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     int index = tournamentsList.getSelectionModel().getSelectedIndex();
@@ -137,16 +141,22 @@ public class View extends VBox {
                 .addListener((Observable o) -> {
                 });
 
-        matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        matchesList.setOnMouseClicked(new EventHandler<MouseEvent>()  {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
-                        Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
-                        int index = matchesList.getSelectionModel().getSelectedIndex();
-
+                        System.out.println(vm.matchSelectedProperty().getClass());
+                        try {
+                            new PopUpDelete(vm.matchSelected.get(), vm);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    
+                        matchesList.getSelectionModel().clearSelection();
+                        configBindings();
                         if (!vm.getAllMatch().isEmpty()) {
-                            vm.setMatchSelected(m, index);
+                            //vm.setMatchSelected(m, index);
                         }
                     }
                 }
@@ -159,10 +169,8 @@ public class View extends VBox {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     cbOpponentsList.getItems().clear();
-                    
                     vm.oppValidList();
-
-                    System.out.println(cbPlayersList.getSelectionModel().selectedItemProperty().getValue().getClass());
+                    configBindingAttributes();
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -219,7 +227,7 @@ public class View extends VBox {
                 || cbResultsList.getSelectionModel().isEmpty();
     }
 
-    public void initData() {
+    public void initData() throws FileNotFoundException {
         configDisplay();
         configBottomZone();
         decor();
