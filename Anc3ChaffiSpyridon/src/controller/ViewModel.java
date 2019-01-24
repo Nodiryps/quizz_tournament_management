@@ -246,6 +246,10 @@ public SimpleObjectProperty<Match> matchSelectedProperty(){
 
         }
     }
+    
+    public void clearOppList(){
+     this.oppList.clear();
+    }
 
     public static void main(String[] args) {
         TournamentFacade t = new TournamentFacade();

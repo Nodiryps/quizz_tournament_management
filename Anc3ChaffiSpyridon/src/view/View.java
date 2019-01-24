@@ -210,7 +210,9 @@ public class View extends VBox {
         btnValidate.setOnAction((ActionEvent event) -> {
             if (cbOpponentsList.getSelectionModel().getSelectedItem() != null ) {
                 vm.createMatch();
+                vm.clearOppList();
                 clearComboBox();
+                configBindingAttributes();
 
             }
         });
