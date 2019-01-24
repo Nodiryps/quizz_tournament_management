@@ -66,7 +66,7 @@ public class View extends VBox {
         tournamentsList.focusedProperty();
         
         Scene scene = new Scene(displayZone, 1235, 500);
-        //stage.setResizable(false);
+        stage.setResizable(false);
         stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
@@ -171,15 +171,24 @@ public class View extends VBox {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                    
-                 while(vm.IndexMatchProperty().get()==0){
-                     vm.oppValidList();
-                 }
-                 clearComboBox();
-                 vm.oppValidList();
-                    configBindingAttributes();
+//                 while(vm.IndexMatchProperty().get()==0){
+//                     vm.oppValidList();
+//                 }
+//                 clearComboBox();
+//                 vm.oppValidList();
+                    
+
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
+                    if(!cbPlayersList.getSelectionModel().isEmpty()) {
+                        vm.oppValidList();
+                    } else {
+                        clearComboBox();
+                    }
+                    
+//                    configBindingAttributes();
+                    
                 });
         cbOpponentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
