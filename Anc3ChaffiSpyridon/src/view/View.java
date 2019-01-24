@@ -54,6 +54,7 @@ public class View extends VBox {
     private PopUpDelete popup;
     private IntegerProperty indexTournament = new SimpleIntegerProperty();
     private StringProperty actualPlayer = new SimpleStringProperty("");
+    private Boolean action=false;
 //    private StringProperty cbPlayer = new SimpleStringProperty();
 //    private StringProperty cbOpp = new SimpleStringProperty();
 //    private StringProperty results = new SimpleStringProperty();
@@ -169,8 +170,12 @@ public class View extends VBox {
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    cbOpponentsList.getItems().clear();
-                    vm.oppValidList();
+                   
+                 while(vm.IndexMatchProperty().get()==0){
+                     vm.oppValidList();
+                 }
+                 clearComboBox();
+                 vm.oppValidList();
                     configBindingAttributes();
                     if (cbEmpty()) {
                         setButtonDisable(true);
@@ -194,7 +199,7 @@ public class View extends VBox {
                     }
                 });
         btnValidate.setOnAction((ActionEvent event) -> {
-            if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
+            if (cbOpponentsList.getSelectionModel().getSelectedItem() != null ) {
                 vm.createMatch();
                 clearComboBox();
 
