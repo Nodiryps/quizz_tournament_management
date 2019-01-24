@@ -35,7 +35,7 @@ public final class ViewModel {
 //    private ListProperty<Tournament> tournamentList;
     private IntegerProperty indexTournament = new SimpleIntegerProperty(1);
     private StringProperty actualPlayer = new SimpleStringProperty();
-    public ObjectProperty cb1 = new SimpleObjectProperty();
+    public StringProperty cb1 = new SimpleStringProperty();
     public ObjectProperty cb2 = new SimpleObjectProperty();
     public ObjectProperty cb3 = new SimpleObjectProperty();
 
@@ -43,19 +43,19 @@ public final class ViewModel {
         this.facade = facade;
         configBinding();
     }
-    
+
     public SimpleListProperty<Player> subscribesListProperty() {
         return new SimpleListProperty<>(facade.getTournamentSubsList());
     }
-    
+
     public SimpleListProperty<Player> opponentsListProperty() {
         return new SimpleListProperty<>(facade.oppValidList());
     }
 
-     public SimpleListProperty<RESULTS> resultsListProperty() {
+    public SimpleListProperty<RESULTS> resultsListProperty() {
         return new SimpleListProperty<>(facade.getResults());
     }
-     
+
     public SimpleListProperty<Match> matchsProperty() {
         return new SimpleListProperty<>(facade.getMatchList());
     }
@@ -110,28 +110,44 @@ public final class ViewModel {
         }
         return list;
     }
-    
+
     public void createMatch() {
-        Match m = new Match(new Player(cb1.getValue().toString()), 
-                            new Player(cb2.getValue().toString()), 
-                            results(cb3.getName()));
-        facade.getTournament().addMatch(m);
+        Match m = new Match(new Player(cb1.getValue().toString()),
+                new Player(cb2.getValue().toString()),
+                results(cb3.getName()));
+        //System.out.println(m);
+        //facade.getTournament().addMatch(m);
+    }
+    
+    public void setPlayer(Player player){
+        //System.out.println("setplayer:"+player.getClass());
+      this.actualPlayer=new SimpleStringProperty(player.getFirstName());
+      facade.actualPlayerProperty();
     }
 
     private RESULTS results(String res) {
-        if(res.equals(RESULTS.VAINQUEUR_J1.name()))
-            return RESULTS.VAINQUEUR_J1;
-        else if(res.equals(RESULTS.VAINQUEUR_J2.name()))
-                return RESULTS.VAINQUEUR_J2;
-        else
-            return RESULTS.EX_AEQUO;
+        System.out.println(res);
+        if (res.equals(RESULTS.VAINQUEUR_J1.name())) {
+           // return RESULTS.VAINQUEUR_J1;
+            System.out.println(res.toString());
+        }
+        if (res.equals(RESULTS.VAINQUEUR_J2.name())) {
+            //return RESULTS.VAINQUEUR_J2;
+             System.out.println(res.toString());
+        }
+        if (res.equals(RESULTS.EX_AEQUO.name())) {
+            //return RESULTS.EX_AEQUO;
+             System.out.println(res.toString());
+        }
+       // System.out.println("test");
+        return null;
     }
+    //    public void setIndex(int index) {
+    //        this.indexTournament.set(index);
+    //        System.out.println(indexTournament);
+    //        facade.setIndexTournament(indexTournament.get());
+    //    }
 
-//    public void setIndex(int index) {
-//        this.indexTournament.set(index);
-//        System.out.println(indexTournament);
-//        facade.setIndexTournament(indexTournament.get());
-//    }
     public void configBinding() {
         this.indexTournamentProperty().bindBidirectional(facade.indexTournamentProperty());
         this.actualProperty().bind(facade.actualPlayerProperty());
@@ -174,5 +190,5 @@ public final class ViewModel {
     public IntegerProperty indexTournamentProperty() {
         return this.indexTournament;
     }
-    
+
 }
