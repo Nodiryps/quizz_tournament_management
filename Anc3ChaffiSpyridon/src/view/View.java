@@ -64,7 +64,7 @@ public class View extends VBox {
         configBindings();
         Scene scene = new Scene(displayZone, 1235, 500);
         //stage.setResizable(false);
-        //stage.initStyle(StageStyle.UTILITY);
+        stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
     }
@@ -94,9 +94,9 @@ public class View extends VBox {
     
     private void configBindingsViewModel() {
         vm.actualProperty().bind(actualPlayer);
-//        cbPlayersList..bind(vm.cb1);
-        vm.cb2.bind(cbOpponentsList.itemsProperty());
-        vm.cb3.bind(cbResultsList.itemsProperty());
+        vm.cb1.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
+        vm.cb2.bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
+        vm.cb3.bind(cbResultsList.getSelectionModel().selectedItemProperty());
     }
     
     public void tableViewColumnConfig() {
@@ -159,16 +159,12 @@ public class View extends VBox {
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
-                  //  System.out.println(p.getClass());
-                    vm.setPlayer(p);
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
                 });
         cbOpponentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     } else {
@@ -185,10 +181,8 @@ public class View extends VBox {
                     }
                 });
         btnValidate.setOnAction((ActionEvent event) -> {
-                 System.out.println(vm.cb1);
-
-           // vm.createMatch();
-            //clearComboBox();
+            vm.createMatch();
+            clearComboBox();
         });
         btnClear.setOnAction((ActionEvent event) -> {
             clearComboBox();

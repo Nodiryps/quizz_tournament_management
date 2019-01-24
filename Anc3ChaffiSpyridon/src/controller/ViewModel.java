@@ -35,7 +35,7 @@ public final class ViewModel {
 //    private ListProperty<Tournament> tournamentList;
     private IntegerProperty indexTournament = new SimpleIntegerProperty(1);
     private StringProperty actualPlayer = new SimpleStringProperty();
-    public StringProperty cb1 = new SimpleStringProperty();
+    public ObjectProperty cb1 = new SimpleObjectProperty();
     public ObjectProperty cb2 = new SimpleObjectProperty();
     public ObjectProperty cb3 = new SimpleObjectProperty();
 
@@ -112,32 +112,29 @@ public final class ViewModel {
     }
 
     public void createMatch() {
+        System.out.println(cb1.getValue().toString());
         Match m = new Match(new Player(cb1.getValue().toString()),
                 new Player(cb2.getValue().toString()),
-                results(cb3.getName()));
-        //System.out.println(m);
-        //facade.getTournament().addMatch(m);
+                results(cb3.getValue().toString()));
+        System.out.println(m);
+        facade.getTournament().addMatch(m);
     }
-    
-    public void setPlayer(Player player){
-        //System.out.println("setplayer:"+player.getClass());
-      this.actualPlayer=new SimpleStringProperty(player.getFirstName());
-      facade.actualPlayerProperty();
-    }
+  
+
 
     private RESULTS results(String res) {
-        System.out.println(res);
+        System.out.println(RESULTS.VAINQUEUR_J1.name());
         if (res.equals(RESULTS.VAINQUEUR_J1.name())) {
-           // return RESULTS.VAINQUEUR_J1;
-            System.out.println(res.toString());
+            return RESULTS.VAINQUEUR_J1;
+            //System.out.println(res.toString());
         }
         if (res.equals(RESULTS.VAINQUEUR_J2.name())) {
-            //return RESULTS.VAINQUEUR_J2;
-             System.out.println(res.toString());
+             return RESULTS.VAINQUEUR_J2;
+             //System.out.println(res.toString());
         }
         if (res.equals(RESULTS.EX_AEQUO.name())) {
-            //return RESULTS.EX_AEQUO;
-             System.out.println(res.toString());
+            return RESULTS.EX_AEQUO;
+      //       System.out.println(res.toString());
         }
        // System.out.println("test");
         return null;
