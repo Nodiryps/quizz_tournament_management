@@ -31,7 +31,7 @@ public class TournamentFacade {
 
     private ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();
     private IntegerProperty indexTournament=new SimpleIntegerProperty();
-    private StringProperty actualPlayer=new SimpleStringProperty("Phillipe");
+    private StringProperty actualPlayer=new SimpleStringProperty();
     private Match selectedMatch;
     private IntegerProperty indexMatch;
 
@@ -187,5 +187,7 @@ public class TournamentFacade {
         tournamentList.add(t1);
         tournamentList.add(t2);
     }
+    
+  
 
 }

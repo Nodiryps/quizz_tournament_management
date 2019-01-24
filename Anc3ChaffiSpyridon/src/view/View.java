@@ -33,7 +33,7 @@ import javafx.stage.StageStyle;
 import model.*;
 
 public class View extends VBox {
-    
+
     private Stage stage;
     private final ViewModel vm;
     private static final int TEXTSIZE = 400, SPACING = 10;
@@ -76,12 +76,13 @@ public class View extends VBox {
                 RESULTS.VAINQUEUR_J2
         );
     }
+
     public void configBindings() {
         configBindingsView();
-        configBindingsViewModel();
+        configBindingAttributes();
         addResultsToCB();
     }
-    
+
     public void configBindingsView() {
         subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
@@ -89,32 +90,31 @@ public class View extends VBox {
         indexTournament.bindBidirectional(vm.indexTournamentProperty());
         cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
-       // cbResultsList.itemsProperty().bindBidirectional(vm.resultsListProperty());
     }
-    
-    private void configBindingsViewModel() {
-        vm.actualProperty().bind(actualPlayer);
+
+    private void configBindingAttributes() {
+        vm.actualPlayer.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.cb1.bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.cb2.bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
         vm.cb3.bind(cbResultsList.getSelectionModel().selectedItemProperty());
     }
-    
+
     public void tableViewColumnConfig() {
         TableColumn<Match, String> player1 = new TableColumn<>("Joueur 1");
         player1.setMinWidth(133);
         player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
-        
+
         TableColumn<Match, String> player2 = new TableColumn<>("Joueur 2");
         player2.setMinWidth(133);
         player2.setCellValueFactory(new PropertyValueFactory<>("player2"));
-        
+
         TableColumn<Match, RESULTS> results = new TableColumn<>("Resultats");
         results.setMinWidth(133);
         results.setCellValueFactory(new PropertyValueFactory<>("results"));
-        
+
         addToTableView(player1, player2, results);
     }
-    
+
     private void addToTableView(TableColumn<Match, String> p1, TableColumn<Match, String> p2, TableColumn<Match, RESULTS> res) {
         matchesList.getColumns().add(p1);
         matchesList.getColumns().add(p2);
@@ -131,13 +131,12 @@ public class View extends VBox {
                     cbOpponentsList.getSelectionModel().clearSelection();
                     cbResultsList.getSelectionModel().clearSelection();
                     configBindings();
-                    //vm.setIndex(index);
                 });
-        
+
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                 });
-        
+
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -145,7 +144,7 @@ public class View extends VBox {
                     if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
                         Match m = (Match) matchesList.getSelectionModel().getSelectedItem();
                         int index = matchesList.getSelectionModel().getSelectedIndex();
-                        
+
                         if (!vm.getAllMatch().isEmpty()) {
                             vm.setMatchSelected(m, index);
                         }
@@ -159,6 +158,11 @@ public class View extends VBox {
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
+                    cbOpponentsList.getItems().clear();
+                    
+                    vm.oppValidList();
+
+                    System.out.println(cbPlayersList.getSelectionModel().selectedItemProperty().getValue().getClass());
                     if (cbEmpty()) {
                         setButtonDisable(true);
                     }
@@ -170,7 +174,7 @@ public class View extends VBox {
                     } else {
                         setButtonDisable(false);
                     }
-                    
+
                 });
         cbResultsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -181,38 +185,40 @@ public class View extends VBox {
                     }
                 });
         btnValidate.setOnAction((ActionEvent event) -> {
-            vm.createMatch();
-            clearComboBox();
+            if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
+                vm.createMatch();
+                clearComboBox();
+
+            }
         });
         btnClear.setOnAction((ActionEvent event) -> {
             clearComboBox();
         });
-        
+
     }
-    
+
 //    private void playerCombo() {
 //        Player p = (Player) cbPlayersList.getSelectionModel().getSelectedItem();
 //        this.actualPlayer.set(p.getFirstName());
 //        System.out.println(actualPlayer);
 //        
 //    }
-    
     private void clearComboBox() {
-        cbPlayersList.getSelectionModel().clearSelection();
-        cbOpponentsList.getSelectionModel().clearSelection();
-        cbResultsList.getSelectionModel().clearSelection();
+        cbPlayersList.setValue(new Player(""));
+        cbOpponentsList.setValue(new Player(""));
+        cbResultsList.setValue(null);
     }
-    
+
     private void setButtonDisable(boolean b) {
         btnValidate.setDisable(b);
     }
-    
+
     private boolean cbEmpty() {
         return cbPlayersList.getSelectionModel().isEmpty()
                 || cbOpponentsList.getSelectionModel().isEmpty()
                 || cbResultsList.getSelectionModel().isEmpty();
     }
-    
+
     public void initData() {
         configDisplay();
         configBottomZone();
@@ -222,14 +228,14 @@ public class View extends VBox {
         configFocusListener();
         addListernerComboBox();
     }
-    
+
     public void decor() {
         tournamentsList.setMinHeight(50);
         subsList.getSelectionModel().select(-1);
         tournamentsList.setPrefWidth(TEXTSIZE);
         matchesList.setPrefWidth(TEXTSIZE);
     }
-    
+
     private void configDisplay() {
         displayZone.setPadding(new Insets(SPACING));
         left.setPadding(new Insets(10, 5, 10, 10));
@@ -244,7 +250,7 @@ public class View extends VBox {
         right.add(gpButtons, 0, 2);
         displayZone.getChildren().addAll(left, right);
     }
-    
+
     private void configBottomZone() {
         gpButtons.setVgap(4);
         gpButtons.setHgap(30);
