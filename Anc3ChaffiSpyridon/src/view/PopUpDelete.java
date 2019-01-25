@@ -5,7 +5,7 @@
  */
 package view;
 
-import controller.Presenter;
+import presenter.Presenter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -71,7 +71,7 @@ public class PopUpDelete extends Popup {
         configImage();
         paint();
         configPop();
-        boutonListerner(match);
+        boutonListerner();
     }
 
     private void configImage() throws FileNotFoundException {
@@ -85,15 +85,13 @@ public class PopUpDelete extends Popup {
     private void paint() {
         Paint backgroundPaint = Color.LIGHTGRAY;
         Paint backgroundPaint2 = Color.LIGHTGREY;
-
         gpTop.setBackground(new Background(new BackgroundFill(backgroundPaint, CornerRadii.EMPTY, Insets.EMPTY)));
         gpTop.setBackground(new Background(new BackgroundFill(backgroundPaint2, CornerRadii.EMPTY, Insets.EMPTY)));
-
     }
 
-    private void boutonListerner(Match m) {
+    private void boutonListerner() {
         btnDel.setOnAction((ActionEvent event) -> {
-            ctrl.DelMatch(m);
+            ctrl.DelMatch();
             popUpWindow.close();
         });
         btnCancel.setOnAction(e -> popUpWindow.close());

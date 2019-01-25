@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package presenter;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -26,7 +26,7 @@ public class Main extends Application {
         presenter = new Presenter(facade);
         view = new View(primaryStage,presenter);
         presenter.setView(view);
-        presenter.init_view();
+        presenter.initView();
         primaryStage.show();
         
     }

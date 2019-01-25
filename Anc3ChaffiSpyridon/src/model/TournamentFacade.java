@@ -8,6 +8,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -16,13 +17,11 @@ import java.util.Set;
  */
 public class TournamentFacade extends Observable {
 
-    public List<Tournament> tournamentList = new ArrayList<>();
-
-    public int indexTournament;
-    public Player actual;
-    public Match selectedMatch;
-    public Tournament tournois;
-    public int indexMatch;
+    private List<Tournament> tournamentList = new ArrayList<>();
+    private int indexTournament;
+    private Player actual;
+    private Match selectedMatch;
+    private int indexMatch;
 
     public TournamentFacade() {
         initData();
@@ -36,7 +35,7 @@ public class TournamentFacade extends Observable {
         return indexTournament;
     }
 
-    public Player getActual() {
+    public Player getActualPlayer() {
         return actual;
     }
 
@@ -117,45 +116,107 @@ public class TournamentFacade extends Observable {
         return this.getTournament().getMatchList();
     }
 
-
     public void initData() {
-        Tournament t1 = new Tournament("E-Sport");
-        Tournament t2 = new Tournament("T2");
+        List<String> listPlayersName = new ArrayList<>();
+        List<Player> listPlayers = new ArrayList<>();
+        List<Match> listMatches = new ArrayList<>();
 
-        Player p1 = new Player("Philippe");
-        Player p2 = new Player("Khadija");
-        Player p3 = new Player("spyridon");
-        Player p4 = new Player("chaffi");
-        Player p5 = new Player("lindsay");
-        Player p6 = new Player("rodolphe");
-        t1.addPlayer(p1);
-        t1.addPlayer(p2);
-        t1.addPlayer(p3);
-        t1.addPlayer(p4);
-        t1.addPlayer(p5);
-        t1.addPlayer(p6);
-        t2.addPlayer(p1);
-        t2.addPlayer(p2);
-        t2.addPlayer(p3);
-        Match m = new Match(p1, p2, RESULTS.EX_AEQUO);
-        Match m2 = new Match(p2, p1, RESULTS.EX_AEQUO);
-        Match m3 = new Match(p1, p4, RESULTS.EX_AEQUO);
-        Match m4 = new Match(p4, p1, RESULTS.EX_AEQUO);
-        Match m5 = new Match(p6, p2, RESULTS.EX_AEQUO);
-        Match m6 = new Match(p3, p6, RESULTS.EX_AEQUO);
+        addPlayersNameTo(listPlayersName);
+        addPlayersTo(listPlayers, listPlayersName);
+        addMatchesTo(listMatches, listPlayers);
 
-        t1.addMatch(m);
-        t1.addMatch(m2);
-        t1.addMatch(m3);
-        t1.addMatch(m4);
-        t1.addMatch(m5);
-        t1.addMatch(m6);
-        t2.addMatch(m);
-        t2.addMatch(m2);
-        t2.addMatch(m3);
-        t2.addMatch(m4);
+        Tournament t1 = new Tournament("EA Sports Cup");
+        Tournament t2 = new Tournament("Quiditch WorldCup");
+
+        addIntoTournament(t1, t2, listPlayers, listMatches);
+        addTournamentToTournList(t1, t2);
+    }
+
+    private void addPlayersNameTo(List<String> list) {
+        list.add("Philippine");
+        list.add("Khadija");
+        list.add("Spyridon");
+        list.add("Chaffi");
+        list.add("Lindsay");
+        list.add("Rodolphe");
+    }
+
+    private void addMatchesTo(List<Match> list, List<Player> listPlayers) {
+        int beg = 0, begg = 0;
+        int end = listPlayers.size() - 1;
+        while (beg < listPlayers.size() - 1) {
+            list.add(new Match(listPlayers.get(beg), listPlayers.get(end), RESULTS.EX_AEQUO));
+            ++beg;
+            --end;
+        }
+        while (begg < listPlayers.size() - 1) {
+            int next = begg + 1;
+            list.add(new Match(listPlayers.get(begg), listPlayers.get(next), RESULTS.EX_AEQUO));
+            ++begg;
+        }
+    }
+
+    private void addPlayersTo(List<Player> listPlayers, List<String> listPlayersName) {
+        for (int i = 0; i < listPlayersName.size(); ++i) {
+            listPlayers.add(new Player(listPlayersName.get(i)));
+        }
+    }
+
+    private void addIntoTournament(Tournament t1, Tournament t2, List<Player> listPlayers, List<Match> listMatches) {
+        addPlayersToTourn(t1, listPlayers, listPlayers.size());
+        addPlayersToTourn(t2, listPlayers, listPlayers.size());
+        addMatchesToTourn(t1, listMatches, listMatches.size());
+        addMatchesToTourn(t2, listMatches, listMatches.size());
+    }
+
+    private void addPlayersToTourn(Tournament t, List<Player> listPlayers, int nbP) {
+        for (int i = 0; i < nbP; ++i) {
+            t.addPlayer(listPlayers.get(i));
+        }
+    }
+
+    private void addMatchesToTourn(Tournament t, List<Match> listMatches, int nbM) {
+        for (int i = 0; i < nbM; ++i) {
+            t.addMatch(listMatches.get(i));
+        }
+    }
+
+    private void addTournamentToTournList(Tournament t1, Tournament t2) {
         tournamentList.add(t1);
         tournamentList.add(t2);
     }
+    
+//    private void addMatchTo(List<Match> list, List<Player> listPlayers) {
+//        for (int i = 0; i < listPlayers.size(); ++i) {
+//            list.add(newMatch(listPlayers));
+//        }
+//    }
+//    private void addMatchTo(List<Match> list, List<Player> listPlayers) {
+//        for (int i = 0; i < listPlayers.size(); ++i) {
+//            List<Player> tmp = listPlayers;
+//            Player p1 = randomPlayer(listPlayers, listPlayers.size());
+//            tmp.remove(p1); //pour éviter les matches contre soi-même
+//            Player p2 = randomPlayer(tmp, tmp.size());
+//            list.add(new Match(p1, p2, RESULTS.EX_AEQUO));
+//        }
+//    }
 
+//    private Match newMatch(List<Player> listPlayers) {
+//        List<Player> tmp = listPlayers; 
+//        Player p1 = randomPlayer(listPlayers, listPlayers.size());
+//        tmp.remove(p1); //pour éviter les matches contre soi-même
+//        Player p2 = randomPlayer(tmp, tmp.size());
+//        return new Match(p1, p2, RESULTS.EX_AEQUO);
+//    }
+//    private Player randomPlayer(List<Player> list, int nbPlayers) {
+//        Random rand = new Random();
+//        int index = rand.nextInt(nbPlayers); //random de 0 à 5
+//        if (index < 0) {
+//            index = 0;
+//        }
+//        if (index >= nbPlayers) {
+//            index = nbPlayers - 1;
+//        }
+//        return list.get(index); //on choppe le player à cet index
+//    }
 }

@@ -19,11 +19,11 @@ public interface ViewInterface {
 
     void initView(Set<Match> match, List<Player> subscribes, List<Tournament> tournament,Tournament tournois);
 
-    void tournament_selected(Set<Match> match, List<Player> subscribes);
+    void selectedTournament(Set<Match> match, List<Player> subscribes);
 
-    void player_one_selected(List<Player> player_valid);
+    void playerOneSelected(List<Player> player_valid);
 
     void add_match(Set<Match> match);
 
-    void remove_match(Set<Match> match);
+    void removeMatch(Set<Match> match);
 }

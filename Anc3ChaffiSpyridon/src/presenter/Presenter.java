@@ -1,4 +1,4 @@
-package controller;
+package presenter;
 
 import java.util.List;
 import java.util.Set;
@@ -15,26 +15,24 @@ import view.View;
  */
 public final class Presenter {
 
-    TournamentFacade facade;
-    View view;
-    RESULTS res;
+    private final TournamentFacade facade;
+    private View view;
+    private RESULTS res;
 
     public Presenter(TournamentFacade facade) {
         this.facade = facade;
-
     }
 
     public void setView(View view) {
         this.view = view;
-
     }
 
-    public void init_view() {
+    public void initView() {
         Set<Match> match = facade.getMatchList();
         List<Player> player = facade.getSubscrib();
-        List<Tournament> tournamant = facade.getTournamentList();
-        Tournament tournois = facade.getTournament();
-        view.initView(match, player, tournamant, tournois);
+        List<Tournament> tournamentList = facade.getTournamentList();
+        Tournament tournament = facade.getTournament();
+        view.initView(match, player, tournamentList, tournament);
     }
 
     public void createMatch(Player p1, Player p2, RESULTS res) {
@@ -47,20 +45,19 @@ public final class Presenter {
         facade.setIndexTournament(index);
         Set<Match> match = facade.getMatchList();
         List<Player> players = facade.getSubscrib();
-        view.tournament_selected(match, players);
+        view.selectedTournament(match, players);
     }
 
     public void setMatchSelected(Match m, int index) {
         facade.setIndexSelectedMatch(m, index);
         Set<Match> match = facade.getMatchList();
-        view.remove_match(match);
-
+        view.removeMatch(match);
     }
 
     public void setPlayer(Player p) {
         facade.setPlayer(p);
-        List<Player> valid_player = facade.addOppponentValidList();
-        view.player_one_selected(valid_player);
+        List<Player> validPlayerList = facade.addOppponentValidList();
+        view.playerOneSelected(validPlayerList);
     }
 
     public Match getSelectedMatch() {
@@ -71,11 +68,11 @@ public final class Presenter {
         return facade.getTournament().getMatchList();
     }
 
-    public void DelMatch(Match m) {
+    public void DelMatch() {
         facade.removeMatch();
     }
 
-    public RESULTS getresulst() {
+    public RESULTS getresults() {
         return this.res;
     }
 }

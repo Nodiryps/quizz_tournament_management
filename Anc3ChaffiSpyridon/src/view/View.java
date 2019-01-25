@@ -1,9 +1,8 @@
 package view;
 
-import controller.Presenter;
+import presenter.Presenter;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Observer;
 import java.util.Set;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -40,9 +39,9 @@ public class View extends VBox implements ViewInterface {
     private final HBox displayZone = new HBox();
     private final GridPane left = new GridPane();
     private final GridPane right = new GridPane();
-    private final ComboBox cbPlayersList = new ComboBox();
-    private final ComboBox cbOppList = new ComboBox();
-    private final ComboBox cbResult = new ComboBox();
+    private final ComboBox<Player> cbPlayersList = new ComboBox<>();
+    private final ComboBox<Player> cbOppList = new ComboBox<>();
+    private final ComboBox<RESULTS> cbResult = new ComboBox<>();
     private final Button btnValidate = new Button();
     private final Button btnClear = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
@@ -63,7 +62,7 @@ public class View extends VBox implements ViewInterface {
         configDisplay();
         configBottomZone();
         decor();
-        addElemComboBox();
+        addResultsToComboBox();
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
@@ -107,12 +106,11 @@ public class View extends VBox implements ViewInterface {
         gpButtons.add(btnClear, 7, 0);
     }
 
-    private void addElemComboBox() {// a faire passer par presenteur
-        cbResult.getItems().addAll(
-                presenter.getresulst().EX_AEQUO,
-                presenter.getresulst().VAINQUEUR_J1,
-               presenter.getresulst().VAINQUEUR_J2
-        );
+    private void addResultsToComboBox() {
+        cbResult.getItems().add(presenter.getresults().EX_AEQUO);
+        cbResult.getItems().add(presenter.getresults().VAINQUEUR_J1);
+        cbResult.getItems().add(presenter.getresults().VAINQUEUR_J2);
+
     }
 
     public void tableViewColumnConfig() {
@@ -120,15 +118,21 @@ public class View extends VBox implements ViewInterface {
         player1.setMinWidth(133);
         player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
 
-        TableColumn<Match, String> player2 = new TableColumn("Joueur 2");
+        TableColumn<Match, String> player2 = new TableColumn<>("Joueur 2");
         player2.setMinWidth(133);
         player2.setCellValueFactory(new PropertyValueFactory<>("player2"));
 
-        TableColumn<Match, String> results = new TableColumn<>("Resultats");
+        TableColumn<Match, RESULTS> results = new TableColumn<>("Resultats");
         results.setMinWidth(133);
         results.setCellValueFactory(new PropertyValueFactory<>("results"));
 
-        this.matchesList.getColumns().addAll(player1, player2, results);
+        addToTableCol(player1, player2, results);
+    }
+
+    private void addToTableCol(TableColumn<Match, String> player1,TableColumn<Match, String> player2,TableColumn<Match, RESULTS> results) {
+        this.matchesList.getColumns().add(player1);
+        this.matchesList.getColumns().add(player2);
+        this.matchesList.getColumns().add(results);
     }
 
     private void configFocusListener() {
@@ -215,7 +219,7 @@ public class View extends VBox implements ViewInterface {
     }
 
     @Override
-    public void initView(Set<Match> match, List<Player> subscribes, List<Tournament> tournament,Tournament tournois) {
+    public void initView(Set<Match> match, List<Player> subscribes, List<Tournament> tournament, Tournament tournois) {
         tournamentsList.getItems().clear();
         subsList.getItems().clear();
         matchesList.getItems().clear();
@@ -237,7 +241,7 @@ public class View extends VBox implements ViewInterface {
     }
 
     @Override
-    public void tournament_selected(Set<Match> match, List<Player> subscribes) {
+    public void selectedTournament(Set<Match> match, List<Player> subscribes) {
         ObservableList<Player> sub = FXCollections.observableArrayList(subscribes);
         subsList.getItems().clear();
         matchesList.getItems().clear();
@@ -255,7 +259,7 @@ public class View extends VBox implements ViewInterface {
     }
 
     @Override
-    public void player_one_selected(List<Player> player_valid) {
+    public void playerOneSelected(List<Player> player_valid) {
         ObservableList<Player> sub3 = FXCollections.observableArrayList(player_valid);
         cbOppList.setItems(sub3);
     }
@@ -273,10 +277,9 @@ public class View extends VBox implements ViewInterface {
     }
 
     @Override
-    public void remove_match(Set<Match> match) {
+    public void removeMatch(Set<Match> match) {
         try {
             Match m = presenter.getSelectedMatch();
-
             popup = new PopUpDelete(m, presenter);
 
         } catch (FileNotFoundException e) {
@@ -288,5 +291,3 @@ public class View extends VBox implements ViewInterface {
         }
     }
 }
-
-    
