@@ -55,6 +55,7 @@ public class View extends VBox {
         this.vm = ctrl;
         this.stage = primaryStage;
         initData();
+        configBindings();
         tournamentsList.focusedProperty();
         Scene scene = new Scene(displayZone, 1235, 500);
         stage.setResizable(false);
@@ -74,12 +75,11 @@ public class View extends VBox {
     public void configBindings() {
         configBindingsView();
         configBindingAttributes();
-        addResultsToCB();
+
     }
 
     public void configBindingsView() {
         subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
-
         matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
         cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
@@ -135,13 +135,15 @@ public class View extends VBox {
                     if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
                         try {
                             vm.launchPopUp();
+                            cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
+                            clearComboBox();
+                            configBindings();
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         matchesList.getSelectionModel().clearSelection();
                         configBindings();
-                        if (!vm.getAllMatch().isEmpty()) {
-                        }
+
                     }
                 }
             }
@@ -181,8 +183,10 @@ public class View extends VBox {
             if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
                 vm.createMatch();
                 vm.clearOppList();
+                vm.oppValidList();
+                cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
                 clearComboBox();
-                configBindingsView();
+                configBindings();
             }
         });
         btnClear.setOnAction((ActionEvent event) -> {
@@ -190,6 +194,7 @@ public class View extends VBox {
         });
 
     }
+
     private void clearComboBox() {
         cbPlayersList.setValue(new Player(""));
         cbOpponentsList.setValue(new Player(""));
@@ -213,7 +218,8 @@ public class View extends VBox {
         tableViewColumnConfig();
         configFocusListener();
         addListernerComboBox();
-        configBindings();
+        addResultsToCB();
+
     }
 
     public void decor() {

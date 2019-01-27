@@ -33,13 +33,15 @@ public class Tournament {
     public ObservableList<Match> getMatchList() {
         return matchList;
     }
-    
+
     public boolean existMatch(Match t) {
         return matchList.contains(t);
     }
 
     public void addMatch(Match m) {
-        this.matchList.add(m);
+        if (!this.matchList.contains(m)) {
+            this.matchList.add(m);
+        }
     }
 
     public void addPlayer(Player p) {
