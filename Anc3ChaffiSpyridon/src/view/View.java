@@ -43,13 +43,13 @@ public class View extends VBox {
     private final GridPane right = new GridPane();
     private final ComboBox<Player> cbPlayersList = new ComboBox<>();
     private final ComboBox<Player> cbOpponentsList = new ComboBox<>();
-    private final ComboBox<RESULTS> cbResultsList = new ComboBox<>();
+    private final ComboBox<String> cbResultsList = new ComboBox<>();
     private final Button btnValidate = new Button();
     private final Button btnClear = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
-    private IntegerProperty indexTournament = new SimpleIntegerProperty();
-    private StringProperty actualPlayer = new SimpleStringProperty("");
+    private final IntegerProperty indexTournament = new SimpleIntegerProperty();
+    private final StringProperty actualPlayer = new SimpleStringProperty("");
 
     public View(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
         this.vm = ctrl;
@@ -66,9 +66,9 @@ public class View extends VBox {
 
     public void addResultsToCB() {
         cbResultsList.getItems().addAll(
-                RESULTS.EX_AEQUO,
-                RESULTS.VAINQUEUR_J1,
-                RESULTS.VAINQUEUR_J2
+                "EX_AEQUO",
+                "VAINQUEUR_J1",
+                "VAINQUEUR_J2"
         );
     }
 
@@ -135,8 +135,10 @@ public class View extends VBox {
                     if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
                         try {
                             vm.launchPopUp();
-                            cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
                             clearComboBox();
+                            vm.oppValidList();
+                            cbPlayersList.itemsProperty().unbindBidirectional(vm.subscribesListProperty());
+                            cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
                             configBindings();
                         } catch (FileNotFoundException ex) {
                             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);

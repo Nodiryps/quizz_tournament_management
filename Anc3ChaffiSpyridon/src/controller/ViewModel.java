@@ -26,12 +26,12 @@ public final class ViewModel {
     private ListProperty<Player> subscribeList;
     private ObservableList<Player> oppList = FXCollections.observableArrayList();
     public IntegerProperty indexTournament = new SimpleIntegerProperty();
-    private ObjectProperty actualPlayer = new SimpleObjectProperty();
-    private ObjectProperty cb1 = new SimpleObjectProperty();
-    private ObjectProperty cb2 = new SimpleObjectProperty();
-    private ObjectProperty cb3 = new SimpleObjectProperty();
+    private ObjectProperty<Player> actualPlayer = new SimpleObjectProperty<Player>();
+    private ObjectProperty<Player> cb1 = new SimpleObjectProperty<>();
+    private ObjectProperty<Player> cb2 = new SimpleObjectProperty<>();
+    private ObjectProperty<String> cb3 = new SimpleObjectProperty<>();
     private IntegerProperty indexMatch = new SimpleIntegerProperty();
-    public ObjectProperty<Match> matchSelected = new SimpleObjectProperty();
+    public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -54,15 +54,15 @@ public final class ViewModel {
         return new SimpleListProperty<>(facade.getTournamentSubsList());
     }
 
-    public ObjectProperty combobox1Property() {
+    public ObjectProperty<Player> combobox1Property() {
         return cb1;
     }
 
-    public ObjectProperty combobox2Property() {
+    public ObjectProperty<Player> combobox2Property() {
         return cb2;
     }
 
-    public ObjectProperty combobox3Property() {
+    public ObjectProperty<String> combobox3Property() {
         return cb3;
     }
 
@@ -71,26 +71,26 @@ public final class ViewModel {
     }
 
     public SimpleObjectProperty<Match> matchSelectedProperty() {
-        return new SimpleObjectProperty(matchSelected.get());
+        return new SimpleObjectProperty<Match>(matchSelected.get());
     }
 
     public SimpleListProperty<Player> opponentsListProperty() {
-        return new SimpleListProperty<>(this.oppList);
+        return new SimpleListProperty<Player>(this.oppList);
     }
 
     public SimpleListProperty<Match> matchsProperty() {
-        return new SimpleListProperty<>(facade.getMatchList());
+        return new SimpleListProperty<Match>(facade.getMatchList());
     }
 
-    public SimpleListProperty tournamantProperty() {
-        return new SimpleListProperty<>(facade.getTournamentList());
+    public SimpleListProperty<Tournament> tournamantProperty() {
+        return new SimpleListProperty<Tournament>(facade.getTournamentList());
     }
 
     public TournamentFacade getFacade() {
         return facade;
     }
 
-    public ObjectProperty actualProperty() {
+    public ObjectProperty<Player> actualProperty() {
         return actualPlayer;
     }
 
