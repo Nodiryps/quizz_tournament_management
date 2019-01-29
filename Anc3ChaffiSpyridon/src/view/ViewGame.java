@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Player;
+import model.Question;
 
 /**
  *
@@ -20,7 +21,7 @@ import model.Player;
  */
 public class ViewGame extends VBox {
 
-       private final ListView<Player> subsList = new ListView<>();
+       private final ListView<Question> subsList = new ListView<>();
        ViewModel vm;
        Stage stage;
        

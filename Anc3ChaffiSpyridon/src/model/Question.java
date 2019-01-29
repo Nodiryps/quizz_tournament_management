@@ -49,6 +49,10 @@ public class Question {
     public ObservableList<String> getResponses() {
         return responses;
     }
+    
+    public String toString(){
+      return this.getName().get()+" "+this.getPoints().get();
+    }
 
    
 }

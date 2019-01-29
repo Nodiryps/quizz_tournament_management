@@ -20,7 +20,7 @@ public class Tournament {
     private final String name;
     private ObservableList<Player> subscribersList = FXCollections.observableArrayList();// modifier en hashList peut etre.
     private ObservableList<Match> matchList = FXCollections.observableArrayList();
-    private ObservableList<Question> questions = FXCollections.observableArrayList();
+    private final ObservableList<Question> questions = FXCollections.observableArrayList();
 
     public ObservableList<Question> getQuestions() {
         return questions;
