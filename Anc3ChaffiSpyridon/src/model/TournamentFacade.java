@@ -39,6 +39,10 @@ public class TournamentFacade {
         return indexTournament.get();
     }
     
+    public ObservableList<Question> getQuestion(){
+      return getTournament().getQuestions();
+    }
+    
     public IntegerProperty indexTournamentProperty() {
         return indexTournament;
     }

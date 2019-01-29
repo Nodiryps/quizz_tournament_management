@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,10 +13,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Match;
 import model.Player;
+import model.Question;
 import model.Tournament;
 import model.TournamentFacade;
 import model.RESULTS;
 import view.PopUpDelete;
+import view.View;
+import view.ViewGame;
 
 /**
  *
@@ -36,6 +41,10 @@ public final class ViewModel {
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         //configBinding();
+    }
+    
+    public SimpleListProperty<Question> QuetionsProperty(){
+      return new SimpleListProperty<>(facade.getQuestion());
     }
 
     public void setTournois() {
@@ -98,8 +107,8 @@ public final class ViewModel {
         return facade.getTournament().getMatchList();
     }
 
-    public SimpleIntegerProperty indexTournamentProperty() {
-        return new SimpleIntegerProperty(this.indexTournament.get());
+    public IntegerProperty indexTournamentProperty() {
+        return this.indexTournament;
     }
 
     public void setTournamant(int index) {
@@ -183,5 +192,9 @@ public final class ViewModel {
             }
 
         }
+    }
+    
+    public static void main(String[] args) {
+       
     }
 }

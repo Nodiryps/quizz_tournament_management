@@ -136,7 +136,8 @@ public class View extends VBox {
                         try {
                             vm.launchPopUp();
                             clearComboBox();
-                            vm.oppValidList();
+                            vm.clearOppList();
+                            vm.oppList();
                             cbPlayersList.itemsProperty().unbindBidirectional(vm.subscribesListProperty());
                             cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
                             configBindings();
@@ -193,6 +194,8 @@ public class View extends VBox {
         });
         btnClear.setOnAction((ActionEvent event) -> {
             clearComboBox();
+            
+            
         });
 
     }

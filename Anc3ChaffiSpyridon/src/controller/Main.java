@@ -9,6 +9,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import model.*;
 import view.*;
+import element.Elements;
+import element.Elem;
+
+import java.util.List;
 
 /**
  *
@@ -18,21 +22,23 @@ public class Main extends Application {
 
     TournamentFacade facade;
     ViewModel viewmodel;
-    View view;
+    ViewGame view;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         facade = new TournamentFacade();
         viewmodel = new ViewModel(facade);
-        view = new View(primaryStage,viewmodel);
+       // view = new View(primaryStage, viewmodel);
+       this.view=new ViewGame(primaryStage,viewmodel);
         primaryStage.show();
-        
+
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
         launch(args);
     }
 
