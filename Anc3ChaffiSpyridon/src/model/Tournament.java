@@ -41,6 +41,8 @@ public class Tournament {
             questions.add(new Question(list));
         }
     }
+    
+    
 
     public ObservableList<Player> getSubscribersList() {
         return subscribersList;

@@ -6,10 +6,16 @@
 package view;
 
 import controller.ViewModel;
+import java.awt.Checkbox;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,6 +23,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -54,8 +62,15 @@ public class ViewGame extends GridPane {
     private Button delQuestion = new Button("<=");
     private Button valider = new Button("valider");
     private Button annuler = new Button("annuler");
+    private final ToggleGroup group = new ToggleGroup();
+    private RadioButton reponse1 = new RadioButton();
+    private RadioButton reponse2 = new RadioButton();
+    private RadioButton reponse3 = new RadioButton();
+    private RadioButton reponse4 = new RadioButton();
     private final GridPane gpButtons = new GridPane();//gere les boutons
-    private ObjectProperty<Question> selectedQuestion=new SimpleObjectProperty<>();
+    private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
+    private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
+    private List<Question> reponses=new ArrayList<Question>();
 
     ViewModel vm;
     Stage stage;
@@ -75,8 +90,12 @@ public class ViewGame extends GridPane {
     }
 
     public void initGrid() {
-//        grid.set(50);
+        configView();
+        configRadioButton();
+        setText();
+    }
 
+    public void configView() {
         borderPane.setLeft(subsList);
         borderPane.setCenter(middleVbox);
         borderPane.setRight(fillQuestion);
@@ -86,7 +105,7 @@ public class ViewGame extends GridPane {
         detailsQuestion.add(attrQName, 0, 0);
         detailsQuestion.add(attrQPoint, 0, 1);
         detailsQuestion.add(response, 0, 2);
-        middleVbox.getChildren().addAll(detailsQuestion, gpButtons);
+        middleVbox.getChildren().addAll(detailsQuestion, gpButtons,reponse1,reponse2,reponse3,reponse4);
         middleVbox.setPadding(new Insets(0, 50, 0, 50));
         middleVbox.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
@@ -94,7 +113,18 @@ public class ViewGame extends GridPane {
         gpButtons.add(delQuestion, 1, 0);
         gpBottom.add(valider, 1, 1);
         gpBottom.add(annuler, 2, 1);
+    }
 
+    public void setText(){
+     
+      
+    }
+    public void configRadioButton() {
+        reponse1.setToggleGroup(group);
+        reponse2.setToggleGroup(group);
+        reponse3.setToggleGroup(group);
+        reponse4.setToggleGroup(group);
+        
     }
 
     public void configBinding() {
@@ -102,7 +132,8 @@ public class ViewGame extends GridPane {
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
         vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
-        vm.getSelectedQuestion().bind(this.selectedQuestion);
+        vm.getSelectedQuestion().bindBidirectional(this.selectedQuestion);
+        vm.getIndexQuestion().bindBidirectional(this.IndexQuestion);
     }
 
     public void configListener() {
@@ -111,13 +142,13 @@ public class ViewGame extends GridPane {
                     vm.setAttributQuetion(subsList.getSelectionModel().getSelectedItem());
                 });
 
-        addQuestion.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                selectedQuestion.set(subsList.getSelectionModel().getSelectedItem());
-                vm.addQuestionforOpp();
-
-            }
+        addQuestion.setOnAction((ActionEvent e) -> {
+                vm.addQuestionforOpp(subsList.getSelectionModel().getSelectedItem());
+            
+        });
+        delQuestion.setOnAction((ActionEvent e) -> {
+                vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedIndex());
+            
         });
     }
 

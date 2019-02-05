@@ -41,6 +41,11 @@ public final class ViewModel {
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
+    private IntegerProperty IndexQuestion=new SimpleIntegerProperty();
+ 
+    public IntegerProperty getIndexQuestion() {
+        return IndexQuestion;
+    }
 
     public ObjectProperty<Question> getSelectedQuestion() {
         return selectedQuestion;
@@ -73,15 +78,18 @@ public final class ViewModel {
         this.questionPoint.set(q.getPoints().getValue().toString());
     }
 
-    public void addQuestionforOpp() {
-        if (!selectedQuestionList.contains(getSelectedQuestion().get())) {
+    public void addQuestionforOpp(Question q) {
+        selectedQuestion.set(q);
+        if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get()!=null) {
             this.selectedQuestionList.add(getSelectedQuestion().get());
         }
     }
     
-    public void deleteQuestionForOpp(){
-    
-    
+    public void deleteQuestionForOpp(int q){
+        IndexQuestion.set(q);
+        if(IndexQuestion.get()!= -1)
+        System.out.println(IndexQuestion.get());
+            this.selectedQuestionList.remove(IndexQuestion.get());
     }
 public SimpleListProperty<Question> quetionsProperty() {
         return new SimpleListProperty<>(facade.getQuestion());
