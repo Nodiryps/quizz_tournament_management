@@ -3,9 +3,11 @@ package controller;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -41,8 +43,8 @@ public final class ViewModel {
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
-    private IntegerProperty IndexQuestion=new SimpleIntegerProperty();
- 
+    private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
+
     public IntegerProperty getIndexQuestion() {
         return IndexQuestion;
     }
@@ -55,6 +57,27 @@ public final class ViewModel {
     private StringProperty questionPoint = new SimpleStringProperty();
     private int totalPoint;
     private IntegerProperty SomPoint = new SimpleIntegerProperty();
+    public  StringProperty res1 = new SimpleStringProperty();
+    public StringProperty res2 = new SimpleStringProperty();
+    public StringProperty res3 = new SimpleStringProperty();
+    public StringProperty res4 = new SimpleStringProperty();
+    private BooleanProperty disable=new SimpleBooleanProperty();
+
+    public StringProperty getRes1() {
+        return res1;
+    }
+
+    public StringProperty getRes2() {
+        return res2;
+    }
+
+    public StringProperty getRes3() {
+        return res3;
+    }
+
+    public StringProperty getRes4() {
+        return res4;
+    }
 
     public StringProperty questionNameProperty() {
         return questionName;
@@ -76,22 +99,33 @@ public final class ViewModel {
     public void setAttributQuetion(Question q) {
         this.questionName.set(q.getName().get());
         this.questionPoint.set(q.getPoints().getValue().toString());
+        setReponse(q);
+    }
+
+    public void setReponse(Question q) {
+        res1.set(q.getResponses().get(0));
+        res2.set(q.getResponses().get(1));
+        res3.set(q.getResponses().get(2));
+        res4.set(q.getResponses().get(3));
     }
 
     public void addQuestionforOpp(Question q) {
         selectedQuestion.set(q);
-        if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get()!=null) {
+        if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
             this.selectedQuestionList.add(getSelectedQuestion().get());
         }
+        setReponse(selectedQuestion.get());
     }
-    
-    public void deleteQuestionForOpp(int q){
+
+    public void deleteQuestionForOpp(int q) {
         IndexQuestion.set(q);
-        if(IndexQuestion.get()!= -1)
-        System.out.println(IndexQuestion.get());
-            this.selectedQuestionList.remove(IndexQuestion.get());
+        if (IndexQuestion.get() != -1) {
+            System.out.println(IndexQuestion.get());
+        }
+        this.selectedQuestionList.remove(IndexQuestion.get());
     }
-public SimpleListProperty<Question> quetionsProperty() {
+
+    public SimpleListProperty<Question> quetionsProperty() {
         return new SimpleListProperty<>(facade.getQuestion());
     }
 
