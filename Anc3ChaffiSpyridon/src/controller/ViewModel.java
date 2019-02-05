@@ -9,6 +9,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Match;
@@ -37,14 +39,44 @@ public final class ViewModel {
     private ObjectProperty<String> cb3 = new SimpleObjectProperty<>();
     private IntegerProperty indexMatch = new SimpleIntegerProperty();
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
+    private ObservableList<Question> selectedQuestion =FXCollections.observableArrayList();
+
+    
+    private StringProperty questionName = new SimpleStringProperty();
+    private StringProperty questionPoint = new SimpleStringProperty();
+    private int totalPoint;
+    private IntegerProperty SomPoint=new SimpleIntegerProperty();
+
+    public StringProperty questionNameProperty() {
+        return questionName;
+    }
+
+    public StringProperty questionPointProperty() {
+        return questionPoint;
+    }
+    public SimpleListProperty<Question> selectedQuestionProperty() {
+        return new SimpleListProperty<>(selectedQuestion);
+    }
+
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         //configBinding();
     }
     
-    public SimpleListProperty<Question> QuetionsProperty(){
-      return new SimpleListProperty<>(facade.getQuestion());
+    public  void setAttributQuetion(Question q){
+        this.questionName.set(q.getName().get());
+        this.questionPoint.set(q.getPoints().getValue().toString());
+    }
+
+    public void addQuestionforOpp(Question q){
+        if(!selectedQuestion.contains(q)){
+             this.selectedQuestion.add(q);
+        }
+       
+    }
+    public SimpleListProperty<Question> quetionsProperty() {
+        return new SimpleListProperty<>(facade.getQuestion());
     }
 
     public void setTournois() {
@@ -79,8 +111,8 @@ public final class ViewModel {
         return new SimpleIntegerProperty(indexMatch.get());
     }
 
-    public SimpleObjectProperty<Match> matchSelectedProperty() {
-        return new SimpleObjectProperty<Match>(matchSelected.get());
+    public ObjectProperty<Match> matchSelectedProperty() {
+        return matchSelected;
     }
 
     public SimpleListProperty<Player> opponentsListProperty() {
@@ -193,8 +225,8 @@ public final class ViewModel {
 
         }
     }
-    
+
     public static void main(String[] args) {
-       
+
     }
 }

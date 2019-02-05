@@ -50,8 +50,9 @@ public class Question {
         return responses;
     }
     
+    @Override
     public String toString(){
-      return this.getName().get()+" "+this.getPoints().get();
+      return this.getName().get();
     }
 
    

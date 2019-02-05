@@ -87,13 +87,13 @@ public class View extends VBox {
     }
 
     private void configBindingAttributes() {
-        vm.indexTournament.bind(tournamentsList.getSelectionModel().selectedIndexProperty());
+        vm.indexTournamentProperty().bind(tournamentsList.getSelectionModel().selectedIndexProperty());
         vm.actualProperty().bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.combobox1Property().bind(cbPlayersList.getSelectionModel().selectedItemProperty());
         vm.combobox2Property().bind(cbOpponentsList.getSelectionModel().selectedItemProperty());
         vm.combobox3Property().bind(cbResultsList.getSelectionModel().selectedItemProperty());
         vm.indexMatchProperty().bind(matchesList.getSelectionModel().selectedIndexProperty());
-        vm.matchSelected.bind(matchesList.getSelectionModel().selectedItemProperty());
+        vm.matchSelectedProperty().bind(matchesList.getSelectionModel().selectedItemProperty());
     }
 
     public void tableViewColumnConfig() {

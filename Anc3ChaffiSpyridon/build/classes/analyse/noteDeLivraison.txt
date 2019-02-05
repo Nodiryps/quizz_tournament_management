@@ -1,0 +1,13 @@
+NOTE DE LIVRAISON
+
+tout fonctionne, en somme :)
+
+- pour changer de tournois: s�l�ctionner un tournois dans la liste (en haut, � gauche).
+- pour cr�er un nouveau match: s�l�ctionner les joueurs dans les combobox pr�vues � cette effet et cliquer sur "valider". 
+	En cas d'erreur, appuyer sur "annuler.
+- pour supprimer un match: double click sur le match d�sir� => popup.
+- pour modifier: supprimer et recr�er un match.
+
+A faire:
+-L'analyse MVVM et MVP du projet.
+-Problème de getters => indexTournament && matchSelected.
