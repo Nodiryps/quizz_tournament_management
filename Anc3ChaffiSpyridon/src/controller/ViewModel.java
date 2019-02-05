@@ -39,13 +39,17 @@ public final class ViewModel {
     private ObjectProperty<String> cb3 = new SimpleObjectProperty<>();
     private IntegerProperty indexMatch = new SimpleIntegerProperty();
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
-    private ObservableList<Question> selectedQuestion =FXCollections.observableArrayList();
+    private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
+    private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
 
-    
+    public ObjectProperty<Question> getSelectedQuestion() {
+        return selectedQuestion;
+    }
+
     private StringProperty questionName = new SimpleStringProperty();
     private StringProperty questionPoint = new SimpleStringProperty();
     private int totalPoint;
-    private IntegerProperty SomPoint=new SimpleIntegerProperty();
+    private IntegerProperty SomPoint = new SimpleIntegerProperty();
 
     public StringProperty questionNameProperty() {
         return questionName;
@@ -54,28 +58,32 @@ public final class ViewModel {
     public StringProperty questionPointProperty() {
         return questionPoint;
     }
-    public SimpleListProperty<Question> selectedQuestionProperty() {
-        return new SimpleListProperty<>(selectedQuestion);
-    }
 
+    public SimpleListProperty<Question> selectedQuestionProperty() {
+        return new SimpleListProperty<>(selectedQuestionList);
+    }
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         //configBinding();
     }
-    
-    public  void setAttributQuetion(Question q){
+
+    public void setAttributQuetion(Question q) {
         this.questionName.set(q.getName().get());
         this.questionPoint.set(q.getPoints().getValue().toString());
     }
 
-    public void addQuestionforOpp(Question q){
-        if(!selectedQuestion.contains(q)){
-             this.selectedQuestion.add(q);
+    public void addQuestionforOpp() {
+        if (!selectedQuestionList.contains(getSelectedQuestion().get())) {
+            this.selectedQuestionList.add(getSelectedQuestion().get());
         }
-       
     }
-    public SimpleListProperty<Question> quetionsProperty() {
+    
+    public void deleteQuestionForOpp(){
+    
+    
+    }
+public SimpleListProperty<Question> quetionsProperty() {
         return new SimpleListProperty<>(facade.getQuestion());
     }
 

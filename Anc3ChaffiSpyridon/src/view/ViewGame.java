@@ -8,6 +8,8 @@ package view;
 import controller.ViewModel;
 import javafx.application.Application;
 import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -53,6 +55,7 @@ public class ViewGame extends GridPane {
     private Button valider = new Button("valider");
     private Button annuler = new Button("annuler");
     private final GridPane gpButtons = new GridPane();//gere les boutons
+    private ObjectProperty<Question> selectedQuestion=new SimpleObjectProperty<>();
 
     ViewModel vm;
     Stage stage;
@@ -99,6 +102,7 @@ public class ViewGame extends GridPane {
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
         vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
+        vm.getSelectedQuestion().bind(this.selectedQuestion);
     }
 
     public void configListener() {
@@ -110,9 +114,8 @@ public class ViewGame extends GridPane {
         addQuestion.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-//                System.out.println(subsList.getSelectionModel().getSelectedItem());
-                vm.addQuestionforOpp(subsList.getSelectionModel().getSelectedItem());
-                System.out.println(vm.selectedQuestionProperty());
+                selectedQuestion.set(subsList.getSelectionModel().getSelectedItem());
+                vm.addQuestionforOpp();
 
             }
         });
