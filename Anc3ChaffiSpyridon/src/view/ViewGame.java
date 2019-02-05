@@ -38,9 +38,11 @@ public class ViewGame extends GridPane {
 
     private final ListView<Question> subsList = new ListView<>();
     private final ListView<Question> fillQuestion = new ListView<>();
-    private final BorderPane grid = new BorderPane();
+    private final BorderPane borderPane = new BorderPane();
     private final VBox middleVbox = new VBox();
     private final GridPane detailsQuestion = new GridPane();
+    private final GridPane gpTop = new GridPane();
+    private final GridPane gpBottom = new GridPane();
     private Text attrQName = new Text("Enoncer de la Questions");
     private Text attrQPoint = new Text("Point de la Question");
     private Label response = new Label("Reponse");
@@ -62,7 +64,7 @@ public class ViewGame extends GridPane {
         initGrid();
         configBinding();
         configListener();
-        Scene scene = new Scene(grid, 1235, 500);
+        Scene scene = new Scene(borderPane, 1235, 500);
         stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Choix de questions");
@@ -72,10 +74,12 @@ public class ViewGame extends GridPane {
     public void initGrid() {
 //        grid.set(50);
 
-        grid.setLeft(subsList);
-        grid.setCenter(middleVbox);
-        grid.setRight(fillQuestion);
-        grid.setPadding(new Insets(25));
+        borderPane.setLeft(subsList);
+        borderPane.setCenter(middleVbox);
+        borderPane.setRight(fillQuestion);
+        borderPane.setTop(gpTop);
+        borderPane.setBottom(gpBottom);
+        borderPane.setPadding(new Insets(25));
         detailsQuestion.add(attrQName, 0, 0);
         detailsQuestion.add(attrQPoint, 0, 1);
         detailsQuestion.add(response, 0, 2);
@@ -85,8 +89,8 @@ public class ViewGame extends GridPane {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         this.gpButtons.add(addQuestion, 0, 0);
         gpButtons.add(delQuestion, 1, 0);
-        gpButtons.add(valider, 0, 1);
-        gpButtons.add(annuler, 1, 1);
+        gpBottom.add(valider, 1, 1);
+        gpBottom.add(annuler, 2, 1);
 
     }
 
@@ -109,8 +113,7 @@ public class ViewGame extends GridPane {
 //                System.out.println(subsList.getSelectionModel().getSelectedItem());
                 vm.addQuestionforOpp(subsList.getSelectionModel().getSelectedItem());
                 System.out.println(vm.selectedQuestionProperty());
-                 
-                
+
             }
         });
     }
