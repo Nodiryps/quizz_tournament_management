@@ -159,12 +159,15 @@ public class ViewGame extends GridPane {
                 });
 
         addQuestion.setOnAction((ActionEvent e) -> {
-            vm.addQuestionforOpp(subsList.getSelectionModel().getSelectedItem());
+            if (subsList.getSelectionModel().getSelectedItem() != null) {
+                vm.addQuestionforOpp(subsList.getSelectionModel().getSelectedItem());
+            }
 
         });
         delQuestion.setOnAction((ActionEvent e) -> {
-            vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedIndex());
-
+            if (fillQuestion.getSelectionModel().getSelectedItem() != null) {
+                vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedIndex());
+            }
         });
     }
 
