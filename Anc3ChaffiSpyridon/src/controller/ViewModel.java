@@ -47,7 +47,7 @@ public final class ViewModel {
     private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
     private IntegerProperty pointTotaux = new SimpleIntegerProperty();
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
-    private final int MAX_POINT=10;
+    private final int MAX_POINT = 10;
     private StringProperty questionName = new SimpleStringProperty();
     private StringProperty questionPoint = new SimpleStringProperty();
     public StringProperty res1 = new SimpleStringProperty();
@@ -67,7 +67,7 @@ public final class ViewModel {
     public StringProperty getRes3() {
         return res3;
     }
-    
+
     public StringProperty getRes4() {
         return res4;
     }
@@ -108,7 +108,7 @@ public final class ViewModel {
 
     public void setAttributQuetion(Question q) {
         this.questionName.set(q.getName().get());
-        this.questionPoint.set(q.getPoints().getValue().toString());
+        this.questionPoint.set(q.pointsProperty().getValue().toString());
         setReponse(q);
     }
 
@@ -120,11 +120,11 @@ public final class ViewModel {
     }
 
     public void addQuestionforOpp(Question q) {
-         if(cptPoint.get()+q.getPoints().get() <=MAX_POINT) {
+        if (cptPoint.get() + q.pointsProperty().get() <= MAX_POINT) {
             selectedQuestion.set(q);
             if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                 this.selectedQuestionList.add(getSelectedQuestion().get());
-                cptPoint.set(cptPoint.get()+q.getPoints().get());
+                cptPoint.set(cptPoint.get() + q.pointsProperty().get());
             }
             setReponse(selectedQuestion.get());
         }
@@ -134,9 +134,10 @@ public final class ViewModel {
     public void deleteQuestionForOpp(int q) {
         IndexQuestion.set(q);
         if (IndexQuestion.get() != -1) {
-        } cptPoint.set(cptPoint.get() - selectedQuestionList.get(IndexQuestion.get()).getPoints().get());
+        }
+        cptPoint.set(cptPoint.get() - selectedQuestionList.get(IndexQuestion.get()).getPoints());
         this.selectedQuestionList.remove(IndexQuestion.get());
-       
+
     }
 
     public SimpleListProperty<Question> quetionsProperty() {
@@ -292,7 +293,7 @@ public final class ViewModel {
 
     public void addPoint() {
         for (Question x : facade.getQuestion()) {
-            pointTotaux.set(pointTotaux.get()+x.getPoints().get());
+            pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
         }
     }
 

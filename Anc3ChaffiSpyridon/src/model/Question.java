@@ -42,7 +42,11 @@ public class Question {
         return numCorrectResponse;
     }
 
-    public IntegerProperty getPoints() {
+    public int getPoints() {
+        return points.get();
+    }
+    
+    public IntegerProperty pointsProperty() {
         return points;
     }
 
