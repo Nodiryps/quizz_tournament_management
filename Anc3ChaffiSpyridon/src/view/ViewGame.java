@@ -47,13 +47,16 @@ import model.Question;
  */
 public class ViewGame extends GridPane {
 
-    private final ListView<Question> subsList = new ListView<>();
+    private final ListView<Question> questionList = new ListView<>();
     private final ListView<Question> fillQuestion = new ListView<>();
+    private Label pointLeft = new Label();
+    private Label pointRight = new Label();
     private final BorderPane borderPane = new BorderPane();
     private final VBox middleVbox = new VBox();
     private final GridPane detailsQuestion = new GridPane();
     private final GridPane gpTop = new GridPane();
     private final GridPane gpBottom = new GridPane();
+    //Zone question display
     private Text attrQName = new Text("Enoncer de la Questions");
     private Text attrQPoint = new Text("Point de la Question");
     private Label response = new Label("Reponse");
@@ -61,22 +64,25 @@ public class ViewGame extends GridPane {
     private Text questionPoints = new Text("Points Questionnaires");
     private Button addQuestion = new Button("=>");
     private Button delQuestion = new Button("<=");
+    private RadioButton reponse1 = new RadioButton();
+    private RadioButton reponse2 = new RadioButton();
+    private RadioButton reponse3 = new RadioButton();
+    private RadioButton reponse4 = new RadioButton();
+    /////////////////////////////////////////////////////////
     private Button valider = new Button("valider");
     private Button annuler = new Button("annuler");
+    ///////element binding
     private StringProperty res1 = new SimpleStringProperty();
     private StringProperty res2 = new SimpleStringProperty();
     private StringProperty res3 = new SimpleStringProperty();
     private StringProperty res4 = new SimpleStringProperty();
     private final ToggleGroup group = new ToggleGroup();
-    private RadioButton reponse1 = new RadioButton();
-    private RadioButton reponse2 = new RadioButton();
-    private RadioButton reponse3 = new RadioButton();
-    private RadioButton reponse4 = new RadioButton();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
     private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
     private List<Question> reponses = new ArrayList<Question>();
-
+    private IntegerProperty pointTotaux = new SimpleIntegerProperty();
+    private IntegerProperty cptPoint = new SimpleIntegerProperty();
     private String text = "text";
 
     ViewModel vm;
@@ -103,7 +109,7 @@ public class ViewGame extends GridPane {
     }
 
     public void configView() {
-        borderPane.setLeft(subsList);
+        borderPane.setLeft(questionList);
         borderPane.setCenter(middleVbox);
         borderPane.setRight(fillQuestion);
         borderPane.setTop(gpTop);
@@ -118,8 +124,11 @@ public class ViewGame extends GridPane {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         this.gpButtons.add(addQuestion, 0, 0);
         gpButtons.add(delQuestion, 1, 0);
+
+        gpBottom.add(pointLeft, 0, 0);
         gpBottom.add(valider, 1, 1);
         gpBottom.add(annuler, 2, 1);
+        gpBottom.add(pointRight, 3, 1);
     }
 
     public void configRadioButton() {
@@ -127,7 +136,6 @@ public class ViewGame extends GridPane {
         reponse2.setToggleGroup(group);
         reponse3.setToggleGroup(group);
         reponse4.setToggleGroup(group);
-
     }
 
     public void configBindCheckBox() {
@@ -135,33 +143,45 @@ public class ViewGame extends GridPane {
         reponse2.textProperty().bind(res2);
         reponse3.textProperty().bind(res3);
         reponse4.textProperty().bind(res4);
-
     }
 
     public void configBinding() {
-        subsList.itemsProperty().bind(vm.quetionsProperty());
+        configBindingVm();
+        configBindingVg();
+    }
+    
+    private void configBindingVg(){
+        questionList.itemsProperty().bind(vm.quetionsProperty());
+        fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
+        pointTotaux.bindBidirectional(vm.pointTotauxProperty());
+        pointLeft.textProperty().bind(pointTotaux.asString());
+        pointRight.textProperty().bind(cptPoint.asString());
+        cptPoint.bind(vm.cptPointProperty());
+    }
+    
+    private void configBindingVm(){
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
         vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
-        fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         vm.getSelectedQuestion().bindBidirectional(this.selectedQuestion);
         vm.getIndexQuestion().bindBidirectional(this.IndexQuestion);
         vm.getRes1().bindBidirectional(res1);
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
+//        vm.cptPointProperty().bindBidirectional(this.cptPoint);
     }
 
     public void configListener() {
-        subsList.getSelectionModel().selectedIndexProperty()
+        questionList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    vm.setAttributQuetion(subsList.getSelectionModel().getSelectedItem());
-                    System.out.println(res1.get());
+                    vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem());
                 });
 
         addQuestion.setOnAction((ActionEvent e) -> {
-            if (subsList.getSelectionModel().getSelectedItem() != null) {
-                vm.addQuestionforOpp(subsList.getSelectionModel().getSelectedItem());
+            if (questionList.getSelectionModel().getSelectedItem() != null) {
+                vm.addQuestionforOpp(questionList.getSelectionModel().getSelectedItem());
             }
+            System.out.println(pointTotaux.get());
 
         });
         delQuestion.setOnAction((ActionEvent e) -> {

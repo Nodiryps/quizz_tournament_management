@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,24 +45,16 @@ public final class ViewModel {
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
     private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
-
-    public IntegerProperty getIndexQuestion() {
-        return IndexQuestion;
-    }
-
-    public ObjectProperty<Question> getSelectedQuestion() {
-        return selectedQuestion;
-    }
-
+    private IntegerProperty pointTotaux = new SimpleIntegerProperty();
+    private IntegerProperty cptPoint = new SimpleIntegerProperty();
+    private final int MAX_POINT=10;
     private StringProperty questionName = new SimpleStringProperty();
     private StringProperty questionPoint = new SimpleStringProperty();
-    private int totalPoint;
-    private IntegerProperty SomPoint = new SimpleIntegerProperty();
-    public  StringProperty res1 = new SimpleStringProperty();
+    public StringProperty res1 = new SimpleStringProperty();
     public StringProperty res2 = new SimpleStringProperty();
     public StringProperty res3 = new SimpleStringProperty();
     public StringProperty res4 = new SimpleStringProperty();
-    private BooleanProperty disable=new SimpleBooleanProperty();
+    private BooleanProperty disable = new SimpleBooleanProperty();
 
     public StringProperty getRes1() {
         return res1;
@@ -74,9 +67,25 @@ public final class ViewModel {
     public StringProperty getRes3() {
         return res3;
     }
-
+    
     public StringProperty getRes4() {
         return res4;
+    }
+
+    public IntegerProperty cptPointProperty() {
+        return cptPoint;
+    }
+
+    public IntegerProperty pointTotauxProperty() {
+        return pointTotaux;
+    }
+
+    public IntegerProperty getIndexQuestion() {
+        return IndexQuestion;
+    }
+
+    public ObjectProperty<Question> getSelectedQuestion() {
+        return selectedQuestion;
     }
 
     public StringProperty questionNameProperty() {
@@ -93,7 +102,8 @@ public final class ViewModel {
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
-        //configBinding();
+        addPoint();
+        System.out.println(pointTotaux.get());
     }
 
     public void setAttributQuetion(Question q) {
@@ -110,19 +120,23 @@ public final class ViewModel {
     }
 
     public void addQuestionforOpp(Question q) {
-        selectedQuestion.set(q);
-        if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
-            this.selectedQuestionList.add(getSelectedQuestion().get());
+         if(cptPoint.get()+q.getPoints().get() <=MAX_POINT) {
+            selectedQuestion.set(q);
+            if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
+                this.selectedQuestionList.add(getSelectedQuestion().get());
+                cptPoint.set(cptPoint.get()+q.getPoints().get());
+            }
+            setReponse(selectedQuestion.get());
         }
-        setReponse(selectedQuestion.get());
+
     }
 
     public void deleteQuestionForOpp(int q) {
         IndexQuestion.set(q);
         if (IndexQuestion.get() != -1) {
-            System.out.println(IndexQuestion.get());
-        }
+        } cptPoint.set(cptPoint.get() - selectedQuestionList.get(IndexQuestion.get()).getPoints().get());
         this.selectedQuestionList.remove(IndexQuestion.get());
+       
     }
 
     public SimpleListProperty<Question> quetionsProperty() {
@@ -276,7 +290,10 @@ public final class ViewModel {
         }
     }
 
-    public static void main(String[] args) {
-
+    public void addPoint() {
+        for (Question x : facade.getQuestion()) {
+            pointTotaux.set(pointTotaux.get()+x.getPoints().get());
+        }
     }
+
 }
