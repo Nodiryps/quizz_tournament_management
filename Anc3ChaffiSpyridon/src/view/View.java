@@ -46,6 +46,7 @@ public class View extends VBox {
     private final ComboBox<String> cbResultsList = new ComboBox<>();
     private final Button btnValidate = new Button();
     private final Button btnClear = new Button();
+    private final Button btnPlay = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private PopUpDelete popup;
     private final IntegerProperty indexTournament = new SimpleIntegerProperty();
@@ -58,8 +59,8 @@ public class View extends VBox {
         configBindings();
         tournamentsList.focusedProperty();
         Scene scene = new Scene(displayZone, 1235, 500);
-        stage.setResizable(false);
-        stage.initStyle(StageStyle.UTILITY);
+        //stage.setResizable(false);
+        //stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
     }
@@ -193,7 +194,14 @@ public class View extends VBox {
             }
         });
         btnClear.setOnAction((ActionEvent event) -> {
-            clearComboBox();
+            
+        }); 
+        btnPlay.setOnAction((ActionEvent event) -> {
+            try {
+                vm.launchGame(stage,cbPlayersList.getSelectionModel().getSelectedItem(),cbOpponentsList.getSelectionModel().getSelectedItem());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
             
             
         });
@@ -254,14 +262,16 @@ public class View extends VBox {
         gpButtons.setHgap(30);
         gpButtons.setPadding(new Insets(20, 0, 0, 20));
         gpButtons.add(new Label("joueur 1: "), 0, 0);
-        gpButtons.add(cbPlayersList, 1, 0);
-        gpButtons.add(new Label("joueur 2: "), 2, 0);
-        gpButtons.add(cbOpponentsList, 3, 0);
-        gpButtons.add(new Label("Resultat "), 4, 0);
-        gpButtons.add(cbResultsList, 5, 0);
+        gpButtons.add(cbPlayersList, 0, 1);
+        gpButtons.add(new Label("joueur 2: "), 1, 0);
+        gpButtons.add(cbOpponentsList, 1, 1);
+        gpButtons.add(new Label("Resultat "), 2, 0);
+        gpButtons.add(cbResultsList, 2, 1);
         btnValidate.setText("valider");
         btnClear.setText("annuler");
-        gpButtons.add(btnValidate, 6, 0);
-        gpButtons.add(btnClear, 7, 0);
+        btnPlay.setText("jouer");
+        gpButtons.add(btnPlay, 5, 1);
+        gpButtons.add(btnValidate, 6, 1);
+        gpButtons.add(btnClear, 7, 1);
     }
 }

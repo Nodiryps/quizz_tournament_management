@@ -36,6 +36,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Player;
@@ -45,12 +46,13 @@ import model.Question;
  *
  * @author 2707chshyaka
  */
-public class ViewGame extends GridPane {
+public class ViewGame extends Popup {
 
     private final ListView<Question> questionList = new ListView<>();
     private final ListView<Question> fillQuestion = new ListView<>();
     private Label pointLeft = new Label();
     private Label pointRight = new Label();
+    private Label fillNummber= new Label();
     private final BorderPane borderPane = new BorderPane();
     private final VBox middleVbox = new VBox();
     private final GridPane detailsQuestion = new GridPane();
@@ -83,29 +85,37 @@ public class ViewGame extends GridPane {
     private List<Question> reponses = new ArrayList<Question>();
     private IntegerProperty pointTotaux = new SimpleIntegerProperty();
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
+    private ObjectProperty<Question> d = new SimpleObjectProperty<>();
+       private IntegerProperty fil = new SimpleIntegerProperty();
+
     private String text = "text";
 
     ViewModel vm;
     Stage stage;
+    Player p1;
+     Player p2;
 
-    public ViewGame(Stage stage, ViewModel facade) throws Exception {
+    public ViewGame(Stage stage, ViewModel facade,Player c1, Player c2) throws Exception {
         this.vm = facade;
-        this.stage = stage;
-
+        this.stage =stage;
+        p1=c1;
+        p2=c2;
         initGrid();
         configBinding();
         configListener();
         Scene scene = new Scene(borderPane, 1235, 500);
-        stage.setResizable(false);
+       // stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
-        stage.setTitle("Choix de questions");
-        stage.setScene(scene);
+        this.stage.setTitle("Choix de questions");
+        this.stage.setScene(scene);
     }
 
     public void initGrid() {
         configView();
         configRadioButton();
         configBindCheckBox();
+        disableRadioButtons();
+        preselectAnswer();
     }
 
     public void configView() {
@@ -122,9 +132,12 @@ public class ViewGame extends GridPane {
         middleVbox.setPadding(new Insets(0, 50, 0, 50));
         middleVbox.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        
+       gpTop.add(new Label(p1.getFirstName()+" contre"+p2.getFirstName()), 0, 1);
+       gpTop.add(new Label("Construction Questionnaire"), 1, 0);
+       gpTop.add(fillNummber, 2, 0);
         this.gpButtons.add(addQuestion, 0, 0);
         gpButtons.add(delQuestion, 1, 0);
-
         gpBottom.add(pointLeft, 0, 0);
         gpBottom.add(valider, 1, 1);
         gpBottom.add(annuler, 2, 1);
@@ -149,17 +162,19 @@ public class ViewGame extends GridPane {
         configBindingVm();
         configBindingVg();
     }
-    
-    private void configBindingVg(){
+
+    private void configBindingVg() {
         questionList.itemsProperty().bind(vm.quetionsProperty());
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         pointTotaux.bindBidirectional(vm.pointTotauxProperty());
         pointLeft.textProperty().bind(pointTotaux.asString());
         pointRight.textProperty().bind(cptPoint.asString());
         cptPoint.bind(vm.cptPointProperty());
+        fillNummber.textProperty().bind(fil.asString());
+
     }
-    
-    private void configBindingVm(){
+
+    private void configBindingVm() {
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
         vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
         vm.getSelectedQuestion().bindBidirectional(this.selectedQuestion);
@@ -169,12 +184,16 @@ public class ViewGame extends GridPane {
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
 //        vm.cptPointProperty().bindBidirectional(this.cptPoint);
+        vm.thisQuestion.bindBidirectional(d);
+        vm.fillNumber.bindBidirectional(fil);
     }
 
     public void configListener() {
         questionList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem());
+                    preselectAnswer();
+                    System.out.println(d.get());
                 });
 
         addQuestion.setOnAction((ActionEvent e) -> {
@@ -189,6 +208,34 @@ public class ViewGame extends GridPane {
                 vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedIndex());
             }
         });
+    }
+
+    public void disableRadioButtons() {
+        reponse1.setDisable(true);
+        reponse2.setDisable(true);
+        reponse3.setDisable(true);
+        reponse4.setDisable(true);
+    }
+
+    public void preselectAnswer() {
+        if (d.get() != null) {
+            int indice = d.get().getNumCorrectResponse().get();
+
+            switch (indice) {
+                case 1:
+                    reponse1.setSelected(true);
+                    break;
+                case 2:
+                    reponse2.setSelected(true);
+                    break;
+                case 3:
+                    reponse3.setSelected(true);
+                    break;
+                case 4:
+                    reponse4.setSelected(true);
+                    break;
+            }
+        }
     }
 
 }

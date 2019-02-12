@@ -29,8 +29,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         facade = new TournamentFacade();
         viewmodel = new ViewModel(facade);
-//        view = new View(primaryStage, viewmodel);
-        this.viewgame=new ViewGame(primaryStage,viewmodel);
+        view = new View(primaryStage, viewmodel);
         primaryStage.show();
 
     }

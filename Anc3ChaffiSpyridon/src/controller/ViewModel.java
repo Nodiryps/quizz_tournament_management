@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import model.Match;
 import model.Player;
 import model.Question;
@@ -55,7 +56,15 @@ public final class ViewModel {
     public StringProperty res3 = new SimpleStringProperty();
     public StringProperty res4 = new SimpleStringProperty();
     private BooleanProperty disable = new SimpleBooleanProperty();
+      public ObjectProperty<Question> thisQuestion = new SimpleObjectProperty<>();
+       public IntegerProperty fillNumber = new SimpleIntegerProperty();
 
+    public ViewModel(TournamentFacade facade) {
+        this.facade = facade;
+        addPoint();
+        System.out.println(pointTotaux.get());
+    }
+    
     public StringProperty getRes1() {
         return res1;
     }
@@ -100,16 +109,11 @@ public final class ViewModel {
         return new SimpleListProperty<>(selectedQuestionList);
     }
 
-    public ViewModel(TournamentFacade facade) {
-        this.facade = facade;
-        addPoint();
-        System.out.println(pointTotaux.get());
-    }
-
     public void setAttributQuetion(Question q) {
         this.questionName.set(q.getName().get());
         this.questionPoint.set(q.pointsProperty().getValue().toString());
         setReponse(q);
+        this.thisQuestion.set(q);
     }
 
     public void setReponse(Question q) {
@@ -125,6 +129,7 @@ public final class ViewModel {
             if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                 this.selectedQuestionList.add(getSelectedQuestion().get());
                 cptPoint.set(cptPoint.get() + q.pointsProperty().get());
+                fillNumber.set(selectedQuestionList.size());
             }
             setReponse(selectedQuestion.get());
         }
@@ -297,4 +302,7 @@ public final class ViewModel {
         }
     }
 
+    public void launchGame(Stage s,Player c1,Player c2) throws FileNotFoundException, Exception {
+        new ViewGame(s,this,c1,c2);
+    }
 }
