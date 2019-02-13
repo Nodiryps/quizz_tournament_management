@@ -22,14 +22,14 @@ public class Main extends Application {
 
     TournamentFacade facade;
     ViewModel viewmodel;
-    ViewGame viewgame;
-    View view;
+    ViewGamePlayer1 viewgame;
+    ViewTournManagmt view;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         facade = new TournamentFacade();
         viewmodel = new ViewModel(facade);
-        view = new View(primaryStage, viewmodel);
+        view = new ViewTournManagmt(primaryStage, viewmodel);
         primaryStage.show();
 
     }

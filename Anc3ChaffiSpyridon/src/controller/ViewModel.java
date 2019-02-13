@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 import model.Match;
 import model.Player;
@@ -24,8 +25,8 @@ import model.Tournament;
 import model.TournamentFacade;
 import model.RESULTS;
 import view.PopUpDelete;
-import view.View;
-import view.ViewGame;
+import view.ViewTournManagmt;
+import view.ViewGamePlayer1;
 
 /**
  *
@@ -56,8 +57,8 @@ public final class ViewModel {
     public StringProperty res3 = new SimpleStringProperty();
     public StringProperty res4 = new SimpleStringProperty();
     private BooleanProperty disable = new SimpleBooleanProperty();
-      public ObjectProperty<Question> thisQuestion = new SimpleObjectProperty<>();
-       public IntegerProperty fillNumber = new SimpleIntegerProperty();
+      public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
+       public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -109,11 +110,33 @@ public final class ViewModel {
         return new SimpleListProperty<>(selectedQuestionList);
     }
 
-    public void setAttributQuetion(Question q) {
+    public void setAttributQuetion(Question q, RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
         this.questionName.set(q.getName().get());
         this.questionPoint.set(q.pointsProperty().getValue().toString());
         setReponse(q);
-        this.thisQuestion.set(q);
+        this.currentQuestion.set(q);
+        preselectAnswer(reponse1,reponse2,reponse3,reponse4);
+    }
+    
+    private void preselectAnswer(RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
+        if (currentQuestion.get() != null) {
+            int indice = currentQuestion.get().getNumCorrectResponse().get();
+
+            switch (indice) {
+                case 1:
+                    reponse1.setSelected(true);
+                    break;
+                case 2:
+                    reponse2.setSelected(true);
+                    break;
+                case 3:
+                    reponse3.setSelected(true);
+                    break;
+                case 4:
+                    reponse4.setSelected(true);
+                    break;
+            }
+        }
     }
 
     public void setReponse(Question q) {
@@ -129,7 +152,7 @@ public final class ViewModel {
             if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                 this.selectedQuestionList.add(getSelectedQuestion().get());
                 cptPoint.set(cptPoint.get() + q.pointsProperty().get());
-                fillNumber.set(selectedQuestionList.size());
+                cptFillQuestions.set(selectedQuestionList.size());
             }
             setReponse(selectedQuestion.get());
         }
@@ -303,6 +326,6 @@ public final class ViewModel {
     }
 
     public void launchGame(Stage s,Player c1,Player c2) throws FileNotFoundException, Exception {
-        new ViewGame(s,this,c1,c2);
+        new ViewGamePlayer1(s,this,c1,c2);
     }
 }

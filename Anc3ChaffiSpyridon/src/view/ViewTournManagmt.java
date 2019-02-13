@@ -30,7 +30,7 @@ import javafx.stage.StageStyle;
 
 import model.*;
 
-public class View extends VBox {
+public class ViewTournManagmt extends VBox {
 
     private final Stage stage;
     private final ViewModel vm;
@@ -52,7 +52,7 @@ public class View extends VBox {
     private final IntegerProperty indexTournament = new SimpleIntegerProperty();
     private final StringProperty actualPlayer = new SimpleStringProperty("");
 
-    public View(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
+    public ViewTournManagmt(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
         this.vm = ctrl;
         this.stage = primaryStage;
         initData();
@@ -143,7 +143,7 @@ public class View extends VBox {
                             cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
                             configBindings();
                         } catch (FileNotFoundException ex) {
-                            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(ViewTournManagmt.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         matchesList.getSelectionModel().clearSelection();
                         configBindings();
