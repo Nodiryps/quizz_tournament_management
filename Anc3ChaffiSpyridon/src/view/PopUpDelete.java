@@ -60,9 +60,10 @@ public class PopUpDelete extends Popup {
     private void popupWindowSettings() {
         Scene scene = new Scene(vbLayout, 325, 200);
         popUpWindow = new Stage();
+        popupWindow();
         popUpWindow.setScene(scene);
         popUpWindow.showAndWait();
-        popupWindow();
+        
     }
     
     private void popupWindow() {

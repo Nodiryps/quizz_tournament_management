@@ -103,7 +103,7 @@ public class ViewGamePlayer1 extends Popup {
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Choix de questions");
-        stage.setScene(new Scene(borderPane, 1235, 500));
+        stage.setScene(new Scene(borderPane, 1145, 500));
     }
 
     private void initGrid() {
