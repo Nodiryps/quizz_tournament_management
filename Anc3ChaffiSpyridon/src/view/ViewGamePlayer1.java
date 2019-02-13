@@ -37,6 +37,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -129,9 +130,10 @@ public class ViewGamePlayer1 extends Popup {
         vbMiddle.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
-        gpTop.add(new Label(p1.getFirstName() + " contre" + p2.getFirstName()), 0, 1);
+        gpTop.add(new Label(p1.getFirstName() + "  contre  " + p2.getFirstName()), 0, 1);
         gpTop.add(new Label("Construction Questionnaire"), 1, 0);
         gpTop.add(lbFillQuestions, 2, 1);
+        lbFillQuestions.autosize();
         this.gpButtons.add(addQuestion, 0, 0);
         gpButtons.add(delQuestion, 1, 0);
         gpBottom.add(lbPointsLeft, 0, 0);
@@ -163,10 +165,10 @@ public class ViewGamePlayer1 extends Popup {
         questionList.itemsProperty().bind(vm.quetionsProperty());
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         totalPoints.bindBidirectional(vm.pointTotauxProperty());
-        lbPointsLeft.textProperty().bind(totalPoints.asString());
-        lbPointsRight.textProperty().bind(cptPoints.asString());
+        lbPointsLeft.textProperty().bind(totalPoints.asString("Points disponibles: %d"));
+        lbPointsRight.textProperty().bind(cptPoints.asString("Points Total: %d /10"));
         cptPoints.bind(vm.cptPointProperty());
-        lbFillQuestions.textProperty().bind(cptFillQuestions.asString());
+        lbFillQuestions.textProperty().bind(cptFillQuestions.asString("NOMBRES DE QUESTIONS: %d"));
 
     }
 
@@ -179,7 +181,6 @@ public class ViewGamePlayer1 extends Popup {
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
-//        vm.cptPointProperty().bindBidirectional(this.cptPoint);
         vm.currentQuestion.bindBidirectional(currentQuestion);
         vm.cptFillQuestions.bindBidirectional(cptFillQuestions);
     }
@@ -187,20 +188,34 @@ public class ViewGamePlayer1 extends Popup {
     private void configListener() {
         questionList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem(), reponse1,reponse2,reponse3,reponse4);
-                    System.out.println(currentQuestion.get());
+                    vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem(), reponse1, reponse2, reponse3, reponse4);
                 });
 
         addQuestion.setOnAction((ActionEvent e) -> {
             if (questionList.getSelectionModel().getSelectedItem() != null) {
                 vm.addQuestionforOpp(questionList.getSelectionModel().getSelectedItem());
             }
-            System.out.println(totalPoints.get());
 
         });
         delQuestion.setOnAction((ActionEvent e) -> {
             if (fillQuestion.getSelectionModel().getSelectedItem() != null) {
-                vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedIndex());
+                vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedItem());
+            }
+        });
+        valider.setOnAction((ActionEvent event) -> {
+            try {
+                vm.launchPlay();
+                stage.close();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        annuler.setOnAction((ActionEvent event) -> {
+            try {
+                vm.emptyselectedList();
+                stage.close();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
             }
         });
     }

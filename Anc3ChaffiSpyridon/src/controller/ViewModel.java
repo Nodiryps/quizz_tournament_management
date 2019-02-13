@@ -22,6 +22,7 @@ import model.TournamentFacade;
 import model.RESULTS;
 import view.PopUpDelete;
 import view.ViewGamePlayer1;
+import view.ViewGamePlayer2;
 
 /**
  *
@@ -52,15 +53,15 @@ public final class ViewModel {
     public StringProperty res3 = new SimpleStringProperty();
     public StringProperty res4 = new SimpleStringProperty();
     private BooleanProperty disable = new SimpleBooleanProperty();
-      public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
-       public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
+    public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
+    public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         addPoint();
         System.out.println(pointTotaux.get());
     }
-    
+
     public StringProperty getRes1() {
         return res1;
     }
@@ -110,9 +111,9 @@ public final class ViewModel {
         this.questionPoint.set(q.pointsProperty().getValue().toString());
         setReponse(q);
         this.currentQuestion.set(q);
-        preselectAnswer(reponse1,reponse2,reponse3,reponse4);
+        preselectAnswer(reponse1, reponse2, reponse3, reponse4);
     }
-    
+
     private void preselectAnswer(RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
         if (currentQuestion.get() != null) {
             int indice = currentQuestion.get().getNumCorrectResponse().get();
@@ -142,25 +143,27 @@ public final class ViewModel {
     }
 
     public void addQuestionforOpp(Question q) {
-        if (cptPoint.get() + q.pointsProperty().get() <= MAX_POINT) {
+        if (cptPoint.get() + q.pointsProperty().get() <= MAX_POINT && !selectedQuestionList.contains(q)) {
             selectedQuestion.set(q);
             if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                 this.selectedQuestionList.add(getSelectedQuestion().get());
                 cptPoint.set(cptPoint.get() + q.pointsProperty().get());
                 cptFillQuestions.set(selectedQuestionList.size());
             }
+            pointTotaux.set(pointTotaux.get() - q.pointsProperty().get());
             setReponse(selectedQuestion.get());
         }
 
     }
 
-    public void deleteQuestionForOpp(int q) {
-        IndexQuestion.set(q);
-        if (IndexQuestion.get() != -1) {
+    public void deleteQuestionForOpp(Question q) {
+        if (selectedQuestionList.contains(q)) {
+            selectedQuestion.set(q);
+            cptPoint.set(cptPoint.get() - selectedQuestion.get().pointsProperty().get());
+            this.selectedQuestionList.remove(q);
+            pointTotaux.set(pointTotaux.get() + q.pointsProperty().get());
+            cptFillQuestions.set(selectedQuestionList.size());
         }
-        cptPoint.set(cptPoint.get() - selectedQuestionList.get(IndexQuestion.get()).getPoints());
-        this.selectedQuestionList.remove(IndexQuestion.get());
-
     }
 
     public SimpleListProperty<Question> quetionsProperty() {
@@ -242,9 +245,14 @@ public final class ViewModel {
     public void launchPopUp() throws FileNotFoundException {
         new PopUpDelete(matchSelected.get(), this);
     }
-    
-    public void launchGame(Player p1,Player p2) throws Exception {
-        new ViewGamePlayer1(this,p1,p2);
+
+    public void launchGame(Player p1, Player p2) throws Exception {
+        new ViewGamePlayer1(this, p1, p2);
+    }
+
+    public void launchPlay() throws Exception {
+        new ViewGamePlayer2(this);
+        
     }
 
     public void createMatch() {
@@ -322,5 +330,9 @@ public final class ViewModel {
         for (Question x : facade.getQuestion()) {
             pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
         }
+    }
+    
+    public void emptyselectedList(){
+      selectedQuestionList.clear();
     }
 }
