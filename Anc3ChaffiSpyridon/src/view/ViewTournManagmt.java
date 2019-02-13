@@ -58,14 +58,14 @@ public class ViewTournManagmt extends VBox {
         initData();
         configBindings();
         tournamentsList.focusedProperty();
-        Scene scene = new Scene(displayZone, 1235, 500);
+        Scene scene = new Scene(displayZone, 1145, 500);
         //stage.setResizable(false);
         //stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Gestion de  Tournois");
         stage.setScene(scene);
     }
 
-    public void addResultsToCB() {
+    private void addResultsToCB() {
         cbResultsList.getItems().addAll(
                 "EX_AEQUO",
                 "VAINQUEUR_J1",
@@ -73,13 +73,13 @@ public class ViewTournManagmt extends VBox {
         );
     }
 
-    public void configBindings() {
+    private void configBindings() {
         configBindingsView();
         configBindingAttributes();
 
     }
 
-    public void configBindingsView() {
+    private void configBindingsView() {
         subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
@@ -97,7 +97,7 @@ public class ViewTournManagmt extends VBox {
         vm.matchSelectedProperty().bind(matchesList.getSelectionModel().selectedItemProperty());
     }
 
-    public void tableViewColumnConfig() {
+    private void tableViewColumnConfig() {
         TableColumn<Match, String> player1 = new TableColumn<>("Joueur 1");
         player1.setMinWidth(133);
         player1.setCellValueFactory(new PropertyValueFactory<>("player1"));
@@ -143,7 +143,7 @@ public class ViewTournManagmt extends VBox {
                             cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
                             configBindings();
                         } catch (FileNotFoundException ex) {
-                            Logger.getLogger(ViewTournManagmt.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println(ex.getMessage());
                         }
                         matchesList.getSelectionModel().clearSelection();
                         configBindings();
@@ -183,6 +183,13 @@ public class ViewTournManagmt extends VBox {
                         setButtonDisable(false);
                     }
                 });
+        btnPlay.setOnAction((ActionEvent event) -> {
+            try {
+                vm.launchGame(cbPlayersList.getSelectionModel().getSelectedItem(), cbOpponentsList.getSelectionModel().getSelectedItem());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
         btnValidate.setOnAction((ActionEvent event) -> {
             if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
                 vm.createMatch();
@@ -194,18 +201,8 @@ public class ViewTournManagmt extends VBox {
             }
         });
         btnClear.setOnAction((ActionEvent event) -> {
-            
-        }); 
-        btnPlay.setOnAction((ActionEvent event) -> {
-            try {
-                vm.launchGame(stage,cbPlayersList.getSelectionModel().getSelectedItem(),cbOpponentsList.getSelectionModel().getSelectedItem());
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-            
-            
-        });
 
+        });
     }
 
     private void clearComboBox() {
@@ -224,7 +221,7 @@ public class ViewTournManagmt extends VBox {
                 || cbResultsList.getSelectionModel().isEmpty();
     }
 
-    public void initData() throws FileNotFoundException {
+    private void initData() throws FileNotFoundException {
         configDisplay();
         configBottomZone();
         decor();
@@ -235,7 +232,7 @@ public class ViewTournManagmt extends VBox {
 
     }
 
-    public void decor() {
+    private void decor() {
         tournamentsList.setMinHeight(50);
         subsList.getSelectionModel().select(-1);
         tournamentsList.setPrefWidth(TEXTSIZE);
@@ -261,9 +258,9 @@ public class ViewTournManagmt extends VBox {
         gpButtons.setVgap(4);
         gpButtons.setHgap(30);
         gpButtons.setPadding(new Insets(20, 0, 0, 20));
-        gpButtons.add(new Label("joueur 1: "), 0, 0);
+        gpButtons.add(new Label("Joueur 1: "), 0, 0);
         gpButtons.add(cbPlayersList, 0, 1);
-        gpButtons.add(new Label("joueur 2: "), 1, 0);
+        gpButtons.add(new Label("Joueur 2: "), 1, 0);
         gpButtons.add(cbOpponentsList, 1, 1);
         gpButtons.add(new Label("Resultat "), 2, 0);
         gpButtons.add(cbResultsList, 2, 1);

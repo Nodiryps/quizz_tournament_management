@@ -31,14 +31,12 @@ public class Main extends Application {
         viewmodel = new ViewModel(facade);
         view = new ViewTournManagmt(primaryStage, viewmodel);
         primaryStage.show();
-
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
         launch(args);
     }
 

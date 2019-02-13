@@ -39,40 +39,44 @@ import javafx.scene.text.FontWeight;
 public class PopUpDelete extends Popup {
 
     private Stage popUpWindow;
+    private VBox vbLayout = new VBox();
+    private GridPane gpTop = new GridPane();
+    private GridPane gpBottom = new GridPane();
+    private GridPane gpButtons = new GridPane();
     private ViewModel vm;
     private Match match;
     protected ImageView imgV;
     private Button btnDel = new Button("Supprimer");
     private Button btnCancel = new Button("Annuler");
-    private VBox layout = new VBox();
-    private GridPane gpTop = new GridPane();
-    private GridPane gpBottom = new GridPane();
-    private GridPane gpButtons = new GridPane();
+    
 
     public PopUpDelete(Match m, ViewModel ctrl) throws FileNotFoundException {
         this.vm = ctrl;
         this.match = m;
         initData();
-        popUpWindowSettings();
+        popupWindowSettings();
     }
 
-    private void popUpWindowSettings() {
-        Scene scene = new Scene(layout, 325, 200);
+    private void popupWindowSettings() {
+        Scene scene = new Scene(vbLayout, 325, 200);
         popUpWindow = new Stage();
+        popUpWindow.setScene(scene);
+        popUpWindow.showAndWait();
+        popupWindow();
+    }
+    
+    private void popupWindow() {
+        popUpWindow.setTitle("Confirmation Suppression");
         popUpWindow.setResizable(false);
         popUpWindow.initStyle(StageStyle.UNDECORATED);
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
-        popUpWindow.setTitle("Confirmation Suppression");
-        popUpWindow.setScene(scene);
-        popUpWindow.showAndWait();
-        
     }
 
     private void initData() throws FileNotFoundException {
         configImage();
         paint();
         configPop();
-        boutonListerner(match);
+        buttonsListerner(match);
     }
 
     private void configImage() throws FileNotFoundException {
@@ -86,13 +90,11 @@ public class PopUpDelete extends Popup {
     private void paint() {
         Paint backgroundPaint = Color.LIGHTGRAY;
         Paint backgroundPaint2 = Color.LIGHTGREY;
-
         gpTop.setBackground(new Background(new BackgroundFill(backgroundPaint, CornerRadii.EMPTY, Insets.EMPTY)));
         gpTop.setBackground(new Background(new BackgroundFill(backgroundPaint2, CornerRadii.EMPTY, Insets.EMPTY)));
-
     }
 
-    private void boutonListerner(Match m) {
+    private void buttonsListerner(Match m) {
         btnDel.setOnAction((ActionEvent event) -> {
             vm.removeMatch();
             popUpWindow.close();
@@ -101,29 +103,52 @@ public class PopUpDelete extends Popup {
     }
 
     private void configPop() {
+        Label labelTop = configLabelTop();
+        Label labelBottom = configLabelBottom();
+        configLO();
+        configGpTop(labelTop);
+        configGpButtons();
+        configGpBottom(labelBottom);
+    }
+    
+    private void configGpButtons() {
+        gpButtons.setHgap(20);
+        gpButtons.add(btnDel, 0, 0);
+        gpButtons.add(btnCancel, 1, 0);
+    }
+    
+    private void configGpBottom(Label labelBottom) {
+        gpBottom.setPadding(new Insets(10));
+        gpBottom.setVgap(20);
+        gpBottom.add(labelBottom, 0, 0);
+        gpBottom.add(imgV, 2, 0);
+        gpBottom.add(gpButtons, 0, 1);
+    }
+    
+    private void configLO() {
+        vbLayout.getChildren().addAll(gpTop, gpBottom);
+        vbLayout.setStyle("-fx-border-color: #bfbfbf; -fx-border-width: 1; -fx-border-style: solid;");
+        
+    }
+    
+    private void configGpTop(Label labelTop) {
+        gpTop.setPadding(new Insets(10));
+        gpTop.setVgap(20);
+        gpTop.add(labelTop, 0, 0);
+    }
+    
+    private Label configLabelTop(){
         Label labelTop = new Label("Suppression du match entre: \n"
                 + match.getPlayer1().getFirstName()
                 + " et " + match.getPlayer2().getFirstName());
         labelTop.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        return labelTop;
+    }
+    
+     private Label configLabelBottom(){
         Label labelBottom = new Label("Souhaitez-vous supprimer ce match");
         labelBottom.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 15));
-
-        layout.getChildren().addAll(gpTop, gpBottom);
-        layout.setStyle("-fx-border-color: #bfbfbf; -fx-border-width: 1; -fx-border-style: solid;");
-        gpTop.setPadding(new Insets(10));
-        gpTop.setVgap(20);
-        gpBottom.setPadding(new Insets(10));
-        gpButtons.setHgap(20);
-        gpBottom.setVgap(20);
-        gpButtons.add(btnDel, 0, 0);
-        gpButtons.add(btnCancel, 1, 0);
-
-        gpTop.add(labelTop, 0, 0);
-
-        gpBottom.add(labelBottom, 0, 0);
-        gpBottom.add(imgV, 2, 0);
-        gpBottom.add(gpButtons, 0, 1);
-
+        return labelBottom;
     }
-
+    
 }

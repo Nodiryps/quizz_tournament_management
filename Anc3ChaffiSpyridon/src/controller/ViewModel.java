@@ -1,9 +1,6 @@
 package controller;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -17,7 +14,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;
-import javafx.stage.Stage;
 import model.Match;
 import model.Player;
 import model.Question;
@@ -25,7 +21,6 @@ import model.Tournament;
 import model.TournamentFacade;
 import model.RESULTS;
 import view.PopUpDelete;
-import view.ViewTournManagmt;
 import view.ViewGamePlayer1;
 
 /**
@@ -247,6 +242,10 @@ public final class ViewModel {
     public void launchPopUp() throws FileNotFoundException {
         new PopUpDelete(matchSelected.get(), this);
     }
+    
+    public void launchGame(Player p1,Player p2) throws Exception {
+        new ViewGamePlayer1(this,p1,p2);
+    }
 
     public void createMatch() {
         Match m = new Match(new Player(cb1.getValue().toString()),
@@ -323,9 +322,5 @@ public final class ViewModel {
         for (Question x : facade.getQuestion()) {
             pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
         }
-    }
-
-    public void launchGame(Stage s,Player c1,Player c2) throws FileNotFoundException, Exception {
-        new ViewGamePlayer1(s,this,c1,c2);
     }
 }
