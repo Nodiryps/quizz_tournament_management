@@ -51,8 +51,8 @@ public class PopUpDelete extends Popup {
     
 
     public PopUpDelete(Match m, ViewModel ctrl) throws FileNotFoundException {
-        this.vm = ctrl;
-        this.match = m;
+        vm = ctrl;
+        match = m;
         initData();
         popupWindowSettings();
     }
