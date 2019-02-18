@@ -190,11 +190,6 @@ public class ViewGamePlayer1 extends Popup {
     }
 
     private void configListener() {
-//        questionList.getSelectionModel().selectedIndexProperty()
-//                .addListener((Observable o) -> {
-//                    vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem(), reponse1, reponse2, reponse3, reponse4);
-//                });
-
         addQuestion.setOnAction((ActionEvent e) -> {
             if (questionList.getSelectionModel().getSelectedItem() != null) {
                 vm.addQuestionforOpp(questionList.getSelectionModel().getSelectedItem());

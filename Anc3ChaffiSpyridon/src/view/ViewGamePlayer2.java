@@ -126,31 +126,19 @@ public class ViewGamePlayer2 extends VBox {
     private void configListerner() {
 
         valider.setOnAction((ActionEvent event) -> {
-
-         String t=((RadioButton)group.getSelectedToggle()).getText();
-            
-            vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui seras appeller dans la methode nextQuestion.
-
-        });
-//       group.selectedToggleProperty().addListener((observable, oldVal, newVal) -> 
-//               System.out.println(newVal + " was selected")
-//       ); 
-
-        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle){
-
-                if (group.getSelectedToggle() != null) {
-                
-                    
-                }
-
+            String t = ((RadioButton) group.getSelectedToggle()).getText();
+            System.out.println(t);
+            if (nextQuestion.get()<= selectedQuestionList.size()) {
+                vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui seras appeller dans la methode nextQuestion.
+            }else{
+               this.stage.close();
             }
         });
-
-  
-}
-      public void configQuetion() {
-
+        annuler.setOnAction((ActionEvent event) -> {
+//           vm.emptyselectedList();
+//           this.stage.close();;
+        });
     }
+
+ 
 }
