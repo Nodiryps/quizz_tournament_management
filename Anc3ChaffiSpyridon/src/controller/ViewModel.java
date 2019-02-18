@@ -55,6 +55,7 @@ public final class ViewModel {
     private BooleanProperty disable = new SimpleBooleanProperty();
     public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
+      public IntegerProperty nextQuestion = new SimpleIntegerProperty(5);
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -105,36 +106,19 @@ public final class ViewModel {
     public SimpleListProperty<Question> selectedQuestionProperty() {
         return new SimpleListProperty<>(selectedQuestionList);
     }
+    
+    public ObservableList<Question> selectedQuestionList() {
+        return selectedQuestionList;
+    }
 
-    public void setAttributQuetion(Question q, RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
+    public void setAttributQuetion(Question q) {
         this.questionName.set(q.getName().get());
         this.questionPoint.set(q.pointsProperty().getValue().toString());
         setReponse(q);
         this.currentQuestion.set(q);
-        preselectAnswer(reponse1, reponse2, reponse3, reponse4);
     }
 
-    private void preselectAnswer(RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
-        if (currentQuestion.get() != null) {
-            int indice = currentQuestion.get().getNumCorrectResponse().get();
-
-            switch (indice) {
-                case 1:
-                    reponse1.setSelected(true);
-                    break;
-                case 2:
-                    reponse2.setSelected(true);
-                    break;
-                case 3:
-                    reponse3.setSelected(true);
-                    break;
-                case 4:
-                    reponse4.setSelected(true);
-                    break;
-            }
-        }
-    }
-
+   
     public void setReponse(Question q) {
         res1.set(q.getResponses().get(0));
         res2.set(q.getResponses().get(1));
@@ -247,11 +231,18 @@ public final class ViewModel {
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
+        
         new ViewGamePlayer1(this, p1, p2);
     }
 
     public void launchPlay() throws Exception {
-        new ViewGamePlayer2(this);
+        
+        new ViewGamePlayer2(this,selectedQuestionList);
+        if(nextQuestion.get() <= selectedQuestionList.size()){
+                afficheQuestion();
+              nextQuestion.set(nextQuestion.get() + 1);
+            
+         }
         
     }
 
@@ -335,4 +326,29 @@ public final class ViewModel {
     public void emptyselectedList(){
       selectedQuestionList.clear();
     }
+    
+     public void afficheQuestion(){
+         if(nextQuestion.get() <0){
+             nextQuestion.set(0);
+             setAttributQuetion(selectedQuestionList.get(nextQuestion.get()));
+         }else if(nextQuestion.get() < selectedQuestionList.size()){
+              setAttributQuetion(selectedQuestionList.get(nextQuestion.get()));
+         }
+        
+    }
+     
+     public void nextQuestion(String t){
+         if(nextQuestion.get() <= selectedQuestionList.size()){
+                afficheQuestion();
+              nextQuestion.set(nextQuestion.get() + 1);
+            
+         }
+       
+       
+     }
+     
+     public void CompareReponse(){
+     selectedQuestionList.get(nextQuestion.get());
+     
+     }
 }

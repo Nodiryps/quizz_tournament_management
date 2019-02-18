@@ -51,8 +51,8 @@ import model.Question;
  */
 public class ViewGamePlayer1 extends Popup {
 
-    private final ListView<Question> questionList = new ListView<>();
-    private final ListView<Question> fillQuestion = new ListView<>();
+    private final LVQuestions questionList;
+    private final LVOppQuestions fillQuestion;
     private Label lbPointsLeft = new Label();
     private Label lbPointsRight = new Label();
     private Label lbFillQuestions = new Label();
@@ -93,13 +93,17 @@ public class ViewGamePlayer1 extends Popup {
     private final Player p2;
 
     public ViewGamePlayer1(ViewModel vm, Player p1, Player p2) throws Exception {
+        
+        
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
+        this.questionList = new LVQuestions(this.vm,reponse1,reponse2,reponse3,reponse4);
+        this.fillQuestion = new LVOppQuestions(this.vm);
         initGrid();
         configBinding();
         configListener();
-//        Scene scene = new Scene(borderPane, 1235, 500);
+        preselectAnswer();
         stage = new Stage();
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
@@ -162,7 +166,7 @@ public class ViewGamePlayer1 extends Popup {
     }
 
     private void configBindingViewGP1() {
-        questionList.itemsProperty().bind(vm.quetionsProperty());
+//        questionList.itemsProperty().bind(vm.quetionsProperty());
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         totalPoints.bindBidirectional(vm.pointTotauxProperty());
         lbPointsLeft.textProperty().bind(totalPoints.asString("Points disponibles: %d"));
@@ -186,10 +190,10 @@ public class ViewGamePlayer1 extends Popup {
     }
 
     private void configListener() {
-        questionList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-                    vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem(), reponse1, reponse2, reponse3, reponse4);
-                });
+//        questionList.getSelectionModel().selectedIndexProperty()
+//                .addListener((Observable o) -> {
+//                    vm.setAttributQuetion(questionList.getSelectionModel().getSelectedItem(), reponse1, reponse2, reponse3, reponse4);
+//                });
 
         addQuestion.setOnAction((ActionEvent e) -> {
             if (questionList.getSelectionModel().getSelectedItem() != null) {
@@ -226,4 +230,25 @@ public class ViewGamePlayer1 extends Popup {
         reponse3.setDisable(true);
         reponse4.setDisable(true);
     }
+    
+     private void preselectAnswer() {
+        if (currentQuestion.get() != null) {
+            int indice = currentQuestion.get().getNumCorrectResponse().get();
+            switch (indice) {
+                case 1:
+                    reponse1.setSelected(true);
+                    break;
+                case 2:
+                    reponse2.setSelected(true);
+                    break;
+                case 3:
+                    reponse3.setSelected(true);
+                    break;
+                case 4:
+                    reponse4.setSelected(true);
+                    break;
+            }
+        }
+    }
+
 }
