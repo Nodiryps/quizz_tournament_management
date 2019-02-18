@@ -142,6 +142,7 @@ public class ViewGamePlayer2 extends VBox {
 
                 if (group.getSelectedToggle() != null) {
                 
+                    
                 }
 
             }
