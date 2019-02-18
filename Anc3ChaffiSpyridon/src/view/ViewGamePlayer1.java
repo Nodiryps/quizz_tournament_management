@@ -203,7 +203,7 @@ public class ViewGamePlayer1 extends Popup {
         });
         delQuestion.setOnAction((ActionEvent e) -> {
             if (fillQuestion.getSelectionModel().getSelectedItem() != null) {
-                vm.deleteQuestionForOpp(fillQuestion.getSelectionModel().getSelectedItem());
+                vm.deleteQuestionForOpp(getSelected(fillQuestion));
             }
         });
         valider.setOnAction((ActionEvent event) -> {
@@ -250,5 +250,9 @@ public class ViewGamePlayer1 extends Popup {
             }
         }
     }
+     
+     public Question getSelected(ListView<Question> o){
+         return o.getSelectionModel().getSelectedItem();
+     }
 
 }
