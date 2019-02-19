@@ -192,7 +192,7 @@ public class ViewTournManagmt extends VBox {
         });
         btnValidate.setOnAction((ActionEvent event) -> {
             if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
-                vm.createMatch();
+                vm.createMatch(cbResultsList.getValue().toString());
                 vm.clearOppList();
                 vm.oppValidList();
                 cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());

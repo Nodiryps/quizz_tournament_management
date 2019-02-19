@@ -37,7 +37,7 @@ public final class ViewModel {
     private ObjectProperty<Player> actualPlayer = new SimpleObjectProperty<Player>();
     private ObjectProperty<Player> cb1 = new SimpleObjectProperty<>();
     private ObjectProperty<Player> cb2 = new SimpleObjectProperty<>();
-    private ObjectProperty<String> cb3 = new SimpleObjectProperty<>();
+    private StringProperty cb3 = new SimpleStringProperty();
     private IntegerProperty indexMatch = new SimpleIntegerProperty();
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
@@ -56,6 +56,8 @@ public final class ViewModel {
     public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
     public IntegerProperty indexQuestion = new SimpleIntegerProperty();
+    private String resuls;
+    public BooleanProperty gameOver = new SimpleBooleanProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -177,7 +179,7 @@ public final class ViewModel {
         return cb2;
     }
 
-    public ObjectProperty<String> combobox3Property() {
+    public StringProperty combobox3Property() {
         return cb3;
     }
 
@@ -230,14 +232,19 @@ public final class ViewModel {
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
-
-        new ViewGamePlayer1(this, p1, p2);
+        launchAttributes();
+        new ViewGamePlayer1(this, cb1.get(), cb2.get());
     }
 
-    public void launchPlay(Player p1,Player p2) throws Exception {
-         cptPointProperty().set(0);
-         cptFillQuestions.set(1);
-        new ViewGamePlayer2(this, selectedQuestionList,p1,p2);
+    private void launchAttributes() {
+        cptPointProperty().set(0);
+        cptFillQuestions.set(1);
+        gameOver.set(false);
+    }
+
+    public void launchPlay(Player p1, Player p2) throws Exception {
+        launchAttributes();
+        new ViewGamePlayer2(this, selectedQuestionList, cb1.get(), cb2.get());
         if (indexQuestion.get() <= selectedQuestionList.size()) {
             afficheQuestion();
             indexQuestion.set(indexQuestion.get() + 1);
@@ -246,10 +253,11 @@ public final class ViewModel {
 
     }
 
-    public void createMatch() {
+
+    public void createMatch(String t) {
         Match m = new Match(new Player(cb1.getValue().toString()),
                 new Player(cb2.getValue().toString()),
-                results(cb3.getValue().toString()));
+                results(t));
         if (!matchsProperty().contains(m)) {
             facade.getTournament().addMatch(m);
         }
@@ -343,10 +351,17 @@ public final class ViewModel {
             if (rightResponse(t)) {
                 AjouterPointQuestion();
             }
-            cptFillQuestions.set(cptFillQuestions.get()+1);
+            cptFillQuestions.set(cptFillQuestions.get() + 1);
             indexQuestion.set(indexQuestion.get() + 1);
+            System.out.println(indexQuestion);
         }
-
+        if (indexQuestion.get() == selectedQuestionList.size()) {
+            String score = analyseScore();
+            createMatch(score);
+            emptyselectedList();
+            clearOppList();
+            gameOver.set(true);
+        }
     }
 
     public boolean rightResponse(String s) {
@@ -356,7 +371,18 @@ public final class ViewModel {
     }
 
     public void AjouterPointQuestion() {
-        Question q = selectedQuestionList.get(indexQuestion.get()-1);
+        Question q = selectedQuestionList.get(indexQuestion.get() - 1);
         cptPointProperty().set(cptPointProperty().get() + q.getPoints());
+    }
+
+    public String analyseScore() {
+        int score = cptPointProperty().get();
+        if (score < 5) {
+            return RESULTS.VAINQUEUR_J1.name();
+        } else if (score == 5) {
+            return RESULTS.EX_AEQUO.name();
+        } else {
+            return RESULTS.VAINQUEUR_J2.name();
+        }
     }
 }

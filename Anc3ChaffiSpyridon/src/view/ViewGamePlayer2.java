@@ -7,8 +7,10 @@ package view;
 
 import controller.ViewModel;
 import java.awt.GridBagConstraints;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -64,9 +66,10 @@ public class ViewGamePlayer2 extends VBox {
     private final IntegerProperty cptQuestion = new SimpleIntegerProperty();
     private Label response = new Label("Reponse");
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
-    private IntegerProperty nextQuestion = new SimpleIntegerProperty();
+    private IntegerProperty indexQuestion = new SimpleIntegerProperty();
     private final Player p1;
     private final Player p2;
+    private BooleanProperty gameOver = new SimpleBooleanProperty();
 
     public ViewGamePlayer2(ViewModel vm, ObservableList<Question> list, Player p1, Player p2) {
         stage = new Stage();
@@ -105,15 +108,15 @@ public class ViewGamePlayer2 extends VBox {
         reponse2.setToggleGroup(group);
         reponse3.setToggleGroup(group);
         reponse4.setToggleGroup(group);
-       cptQ.bind(vm.cptFillQuestions);
-        lbcptq.textProperty().bind(cptQ.asString("Question restante: %d/"+selectedQuestionList.size()));
-        
-        vm.indexQuestion.bindBidirectional(nextQuestion);
+        cptQ.bind(vm.cptFillQuestions);
+        lbcptq.textProperty().bind(cptQ.asString("Question restante: %d/" + selectedQuestionList.size()));
+
+        vm.indexQuestion.bindBidirectional(indexQuestion);
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
         vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
         pointGagner.textProperty().bind(score.asString("Votre score: %d/10"));
         score.bind(vm.cptPointProperty());
-        
+        gameOver.bindBidirectional(vm.gameOver);
 
     }
 
@@ -132,14 +135,13 @@ public class ViewGamePlayer2 extends VBox {
     private void configListerner() {
 
         valider.setOnAction((ActionEvent event) -> {
-            System.out.println(cptQ.get());
-            System.out.println(vm.cptPointProperty());
+            if(!gameOver.get()){
             String t = ((RadioButton) group.getSelectedToggle()).getText();
-            if (nextQuestion.get() < selectedQuestionList.size()) {
-                vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui seras appeller dans la methode nextQuestion.
-            } else {
-                this.stage.close();
+            vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui 
+            }else{
+             stage.close();
             }
+            
         });
         annuler.setOnAction((ActionEvent event) -> {
 //           vm.emptyselectedList();
