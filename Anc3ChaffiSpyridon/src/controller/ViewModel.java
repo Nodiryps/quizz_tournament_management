@@ -55,7 +55,7 @@ public final class ViewModel {
     private BooleanProperty disable = new SimpleBooleanProperty();
     public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
-      public IntegerProperty nextQuestion = new SimpleIntegerProperty(5);
+    public IntegerProperty indexQuestion = new SimpleIntegerProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -106,7 +106,7 @@ public final class ViewModel {
     public SimpleListProperty<Question> selectedQuestionProperty() {
         return new SimpleListProperty<>(selectedQuestionList);
     }
-    
+
     public ObservableList<Question> selectedQuestionList() {
         return selectedQuestionList;
     }
@@ -118,7 +118,6 @@ public final class ViewModel {
         this.currentQuestion.set(q);
     }
 
-   
     public void setReponse(Question q) {
         res1.set(q.getResponses().get(0));
         res2.set(q.getResponses().get(1));
@@ -231,19 +230,20 @@ public final class ViewModel {
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
-        
+
         new ViewGamePlayer1(this, p1, p2);
     }
 
-    public void launchPlay() throws Exception {
-        
-        new ViewGamePlayer2(this,selectedQuestionList);
-        if(nextQuestion.get() <= selectedQuestionList.size()){
-                afficheQuestion();
-              nextQuestion.set(nextQuestion.get() + 1);
-            
-         }
-        
+    public void launchPlay(Player p1,Player p2) throws Exception {
+         cptPointProperty().set(0);
+         cptFillQuestions.set(1);
+        new ViewGamePlayer2(this, selectedQuestionList,p1,p2);
+        if (indexQuestion.get() <= selectedQuestionList.size()) {
+            afficheQuestion();
+            indexQuestion.set(indexQuestion.get() + 1);
+
+        }
+
     }
 
     public void createMatch() {
@@ -322,33 +322,41 @@ public final class ViewModel {
             pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
         }
     }
-    
-    public void emptyselectedList(){
-      selectedQuestionList.clear();
+
+    public void emptyselectedList() {
+        selectedQuestionList.clear();
     }
-    
-     public void afficheQuestion(){
-         if(nextQuestion.get() <0){
-             nextQuestion.set(0);
-             setAttributQuetion(selectedQuestionList.get(nextQuestion.get()));
-         }else if(nextQuestion.get() < selectedQuestionList.size()){
-              setAttributQuetion(selectedQuestionList.get(nextQuestion.get()));
-         }
-        
+
+    public void afficheQuestion() {
+        if (indexQuestion.get() < 0) {
+            indexQuestion.set(0);
+            setAttributQuetion(selectedQuestionList.get(indexQuestion.get()));
+        } else if (indexQuestion.get() < selectedQuestionList.size()) {
+            setAttributQuetion(selectedQuestionList.get(indexQuestion.get()));
+        }
+
     }
-     
-     public void nextQuestion(String t){
-         if(nextQuestion.get() <= selectedQuestionList.size()){
-                afficheQuestion();
-              nextQuestion.set(nextQuestion.get() + 1);
-            
-         }
-       
-       
-     }
-     
-     public void CompareReponse(){
-     selectedQuestionList.get(nextQuestion.get());
-     
-     }
+
+    public void nextQuestion(String t) {
+        if (indexQuestion.get() < selectedQuestionList.size()) {
+            afficheQuestion();
+            if (rightResponse(t)) {
+                AjouterPointQuestion();
+            }
+            cptFillQuestions.set(cptFillQuestions.get()+1);
+            indexQuestion.set(indexQuestion.get() + 1);
+        }
+
+    }
+
+    public boolean rightResponse(String s) {
+        int r = selectedQuestionList.get(indexQuestion.get() - 1).getNumCorrectResponse().get();
+        String st = selectedQuestionList.get(indexQuestion.get() - 1).getResponses().get(r - 1);
+        return st.equals(s);
+    }
+
+    public void AjouterPointQuestion() {
+        Question q = selectedQuestionList.get(indexQuestion.get()-1);
+        cptPointProperty().set(cptPointProperty().get() + q.getPoints());
+    }
 }

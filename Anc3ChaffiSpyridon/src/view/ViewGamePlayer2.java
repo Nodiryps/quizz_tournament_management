@@ -54,23 +54,26 @@ public class ViewGamePlayer2 extends VBox {
     private RadioButton reponse3 = new RadioButton();
     private RadioButton reponse4 = new RadioButton();
     private Label Title = new Label("Reponse a la question");
-    private Label Match = new Label("le match");
-    private Label cptq = new Label("le compteur/nrb de question");
+    private Label lbcptq = new Label("le compteur/nrb de question");
     private IntegerProperty cptQ = new SimpleIntegerProperty();
     private Label pointGagner = new Label("les points");
     private Button valider = new Button("valider");
-    private Button annuler = new Button("annuler");
+    private Button annuler = new Button("abandonner");
     private Text attrQName = new Text("Enoncer de la Question");
     private Text attrQPoint = new Text("Point de la Question");
     private final IntegerProperty cptQuestion = new SimpleIntegerProperty();
     private Label response = new Label("Reponse");
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private IntegerProperty nextQuestion = new SimpleIntegerProperty();
+    private final Player p1;
+    private final Player p2;
 
-    public ViewGamePlayer2(ViewModel vm, ObservableList<Question> list) {
+    public ViewGamePlayer2(ViewModel vm, ObservableList<Question> list, Player p1, Player p2) {
         stage = new Stage();
         this.selectedQuestionList = list;
         this.vm = vm;
+        this.p1 = p1;
+        this.p2 = p2;
         initData();
         stage = new Stage();
         stage.setTitle("Choix de questions");
@@ -87,10 +90,9 @@ public class ViewGamePlayer2 extends VBox {
 
     public void configView() {
         display.add(Title, 0, 0);
-        display.add(Match, 0, 1);
-        display.add(cptq, 0, 5);
+        display.add(new Label(p1.getFirstName() + "  contre  " + p2.getFirstName()), 0, 1);
+        display.add(lbcptq, 0, 5);
         displayQuestion.getChildren().addAll(attrQName, attrQPoint, response, reponse1, reponse2, reponse3, reponse4);
-
         display.add(displayQuestion, 0, 8);
         display.add(pointGagner, 0, 9);
         display.add(valider, 0, 10);
@@ -103,11 +105,15 @@ public class ViewGamePlayer2 extends VBox {
         reponse2.setToggleGroup(group);
         reponse3.setToggleGroup(group);
         reponse4.setToggleGroup(group);
-        cptq.textProperty().bind(cptQ.asString());
-        vm.cptFillQuestions.bindBidirectional(cptQ);
-        vm.nextQuestion.bindBidirectional(nextQuestion);
+       cptQ.bind(vm.cptFillQuestions);
+        lbcptq.textProperty().bind(cptQ.asString("Question restante: %d/"+selectedQuestionList.size()));
+        
+        vm.indexQuestion.bindBidirectional(nextQuestion);
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
         vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
+        pointGagner.textProperty().bind(score.asString("Votre score: %d/10"));
+        score.bind(vm.cptPointProperty());
+        
 
     }
 
@@ -126,19 +132,22 @@ public class ViewGamePlayer2 extends VBox {
     private void configListerner() {
 
         valider.setOnAction((ActionEvent event) -> {
+            System.out.println(cptQ.get());
+            System.out.println(vm.cptPointProperty());
             String t = ((RadioButton) group.getSelectedToggle()).getText();
-            System.out.println(t);
-            if (nextQuestion.get()<selectedQuestionList.size()) {
+            if (nextQuestion.get() < selectedQuestionList.size()) {
                 vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui seras appeller dans la methode nextQuestion.
-            }else{
-               this.stage.close();
+            } else {
+                this.stage.close();
             }
         });
         annuler.setOnAction((ActionEvent event) -> {
 //           vm.emptyselectedList();
 //           this.stage.close();;
+//              vider liste de qiestionOPP
+//              vider les comboBox.
+//              rajouter une defaite.
         });
     }
 
- 
 }

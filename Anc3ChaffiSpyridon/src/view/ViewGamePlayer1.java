@@ -166,7 +166,6 @@ public class ViewGamePlayer1 extends Popup {
     }
 
     private void configBindingViewGP1() {
-//        questionList.itemsProperty().bind(vm.quetionsProperty());
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         totalPoints.bindBidirectional(vm.pointTotauxProperty());
         lbPointsLeft.textProperty().bind(totalPoints.asString("Points disponibles: %d"));
@@ -203,7 +202,7 @@ public class ViewGamePlayer1 extends Popup {
         });
         valider.setOnAction((ActionEvent event) -> {
             try {
-                vm.launchPlay();
+                vm.launchPlay(p1,p2);
                 stage.close();
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
