@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -62,7 +63,8 @@ public class ViewGamePlayer2 extends VBox {
     private Button valider = new Button("valider");
     private Button annuler = new Button("abandonner");
     private Text attrQName = new Text("Enoncer de la Question");
-    private Text attrQPoint = new Text("Point de la Question");
+    private IntegerProperty attrQPoint = new SimpleIntegerProperty();
+    private Label attribQuestionPoints= new Label();
     private final IntegerProperty cptQuestion = new SimpleIntegerProperty();
     private Label response = new Label("Reponse");
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
@@ -72,7 +74,6 @@ public class ViewGamePlayer2 extends VBox {
     private BooleanProperty gameOver = new SimpleBooleanProperty();
 
     public ViewGamePlayer2(ViewModel vm, ObservableList<Question> list, Player p1, Player p2) {
-        stage = new Stage();
         this.selectedQuestionList = list;
         this.vm = vm;
         this.p1 = p1;
@@ -95,11 +96,12 @@ public class ViewGamePlayer2 extends VBox {
         display.add(Title, 0, 0);
         display.add(new Label(p1.getFirstName() + "  contre  " + p2.getFirstName()), 0, 1);
         display.add(lbcptq, 0, 5);
-        displayQuestion.getChildren().addAll(attrQName, attrQPoint, response, reponse1, reponse2, reponse3, reponse4);
+        displayQuestion.getChildren().addAll(attrQName,attribQuestionPoints, response, reponse1, reponse2, reponse3, reponse4);
         display.add(displayQuestion, 0, 8);
         display.add(pointGagner, 0, 9);
         display.add(valider, 0, 10);
         display.add(annuler, 0, 11);
+        displayQuestion.setStyle(css());
 
     }
 
@@ -113,10 +115,11 @@ public class ViewGamePlayer2 extends VBox {
 
         vm.indexQuestion.bindBidirectional(indexQuestion);
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
-        vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
+        vm.questionPointProperty().bindBidirectional((attrQPoint));
         pointGagner.textProperty().bind(score.asString("Votre score: %d/10"));
         score.bind(vm.cptPointProperty());
         gameOver.bindBidirectional(vm.gameOver);
+        attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d point(s)"));
 
     }
 
@@ -150,6 +153,14 @@ public class ViewGamePlayer2 extends VBox {
 //              vider les comboBox.
 //              rajouter une defaite.
         });
+    }
+    
+     public String css(){
+    return "-fx-border-color: black;\n" +
+                   "-fx-border-insets: 5;\n" +
+                   "-fx-border-width: 1;\n" +
+                   "-fx-border-style: solid;\n"+
+                     "-fx-padding: 12;\n";
     }
 
 }

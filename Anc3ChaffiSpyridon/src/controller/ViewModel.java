@@ -47,7 +47,7 @@ public final class ViewModel {
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
     private final int MAX_POINT = 10;
     private StringProperty questionName = new SimpleStringProperty();
-    private StringProperty questionPoint = new SimpleStringProperty();
+    private IntegerProperty questionPoint = new SimpleIntegerProperty();
     public StringProperty res1 = new SimpleStringProperty();
     public StringProperty res2 = new SimpleStringProperty();
     public StringProperty res3 = new SimpleStringProperty();
@@ -58,11 +58,12 @@ public final class ViewModel {
     public IntegerProperty indexQuestion = new SimpleIntegerProperty();
     private String resuls;
     public BooleanProperty gameOver = new SimpleBooleanProperty();
-
+ public final BooleanProperty bl =new SimpleBooleanProperty(true);
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
         addPoint();
         System.out.println(pointTotaux.get());
+       bl.setValue(Boolean.TRUE);
     }
 
     public StringProperty getRes1() {
@@ -101,7 +102,7 @@ public final class ViewModel {
         return questionName;
     }
 
-    public StringProperty questionPointProperty() {
+    public IntegerProperty questionPointProperty() {
         return questionPoint;
     }
 
@@ -114,10 +115,12 @@ public final class ViewModel {
     }
 
     public void setAttributQuetion(Question q) {
+        if(null != q){
         this.questionName.set(q.getName().get());
-        this.questionPoint.set(q.pointsProperty().getValue().toString());
+        this.questionPoint.set(q.pointsProperty().getValue());
         setReponse(q);
         this.currentQuestion.set(q);
+        }
     }
 
     public void setReponse(Question q) {
@@ -133,6 +136,7 @@ public final class ViewModel {
             if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                 this.selectedQuestionList.add(getSelectedQuestion().get());
                 cptPoint.set(cptPoint.get() + q.pointsProperty().get());
+                quetionsProperty().remove(q);
                 cptFillQuestions.set(selectedQuestionList.size());
             }
             pointTotaux.set(pointTotaux.get() - q.pointsProperty().get());
@@ -232,6 +236,7 @@ public final class ViewModel {
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
+        bl.setValue(true);
         launchAttributes();
         new ViewGamePlayer1(this, cb1.get(), cb2.get());
     }
@@ -242,7 +247,7 @@ public final class ViewModel {
         gameOver.set(false);
     }
 
-    public void launchPlay(Player p1, Player p2) throws Exception {
+    public void launchPlay(Player fp1, Player p2) throws Exception {
         launchAttributes();
         new ViewGamePlayer2(this, selectedQuestionList, cb1.get(), cb2.get());
         if (indexQuestion.get() <= selectedQuestionList.size()) {

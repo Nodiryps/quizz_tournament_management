@@ -27,13 +27,14 @@ public class LVOppQuestions extends ListView<Question> {
     private void configListener() {
           this.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    
+                    vm.setAttributQuetion(this.getSelectionModel().getSelectedItem());
                 });
     }
 
     public void configbinding() {
         this.itemsProperty().bind(vm.selectedQuestionProperty());
     }
+   
     
     
 }

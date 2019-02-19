@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -63,7 +65,8 @@ public class ViewGamePlayer1 extends Popup {
     private final GridPane gpBottom = new GridPane();
     //Zone milieu
     private Text attrQName = new Text("Enoncer de la Questions");
-    private Text attrQPoint = new Text("Point de la Question");
+   private IntegerProperty attrQPoint = new SimpleIntegerProperty();
+    private Label attribQuestionPoints= new Label();
     private Label response = new Label("Reponse");
     private Button addQuestion = new Button("=>");
     private Button delQuestion = new Button("<=");
@@ -91,10 +94,11 @@ public class ViewGamePlayer1 extends Popup {
     private final Stage stage;
     private final Player p1;
     private final Player p2;
+    
+    private final BooleanProperty bl =new SimpleBooleanProperty();
 
     public ViewGamePlayer1(ViewModel vm, Player p1, Player p2) throws Exception {
-        
-        
+    
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
@@ -104,6 +108,7 @@ public class ViewGamePlayer1 extends Popup {
         configBinding();
         configListener();
         preselectAnswer();
+        System.out.println(vm.bl.get());
         stage = new Stage();
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
@@ -116,7 +121,8 @@ public class ViewGamePlayer1 extends Popup {
         configView();
         configRadioButton();
         configBindCheckBox();
-        disableRadioButtons();
+        disableRadioButtons(bl.get());
+        System.out.println(bl.get());
     }
 
     private void configView() {
@@ -127,7 +133,7 @@ public class ViewGamePlayer1 extends Popup {
         borderPane.setBottom(gpBottom);
         borderPane.setPadding(new Insets(25));
         gpDetailsQuestion.add(attrQName, 0, 0);
-        gpDetailsQuestion.add(attrQPoint, 0, 1);
+        gpDetailsQuestion.add(attribQuestionPoints, 0, 1);
         gpDetailsQuestion.add(response, 0, 2);
         vbMiddle.getChildren().addAll(gpDetailsQuestion, reponse1, reponse2, reponse3, reponse4, gpButtons);
         vbMiddle.setPadding(new Insets(0, 50, 0, 50));
@@ -145,6 +151,13 @@ public class ViewGamePlayer1 extends Popup {
         gpBottom.add(annuler, 2, 1);
         gpBottom.add(lbPointsRight, 3, 1);
     }
+     
+    public String css(){
+    return "-fx-border-color: black;\n" +
+                   "-fx-border-insets: 5;\n" +
+                   "-fx-border-width: 3;\n" +
+                   "-fx-border-style: dashed;\n";
+    }
 
     private void configRadioButton() {
         reponse1.setToggleGroup(group);
@@ -158,6 +171,7 @@ public class ViewGamePlayer1 extends Popup {
         reponse2.textProperty().bind(res2);
         reponse3.textProperty().bind(res3);
         reponse4.textProperty().bind(res4);
+        
     }
 
     private void configBinding() {
@@ -172,12 +186,14 @@ public class ViewGamePlayer1 extends Popup {
         lbPointsRight.textProperty().bind(cptPoints.asString("Points Total: %d /10"));
         cptPoints.bind(vm.cptPointProperty());
         lbFillQuestions.textProperty().bind(cptFillQuestions.asString("NOMBRES DE QUESTIONS: %d"));
+        attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d Point(s)"));
+        bl.bindBidirectional(vm.bl);
 
     }
 
     private void configBindingViewModel() {
         vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
-        vm.questionPointProperty().bindBidirectional(attrQPoint.textProperty());
+        vm.questionPointProperty().bindBidirectional(attrQPoint);
         vm.getSelectedQuestion().bindBidirectional(this.selectedQuestion);
         vm.getIndexQuestion().bindBidirectional(this.IndexQuestion);
         vm.getRes1().bindBidirectional(res1);
@@ -218,11 +234,12 @@ public class ViewGamePlayer1 extends Popup {
         });
     }
 
-    private void disableRadioButtons() {
-        reponse1.setDisable(true);
-        reponse2.setDisable(true);
-        reponse3.setDisable(true);
-        reponse4.setDisable(true);
+    private void disableRadioButtons(Boolean b) {
+        System.out.println(b);
+        reponse1.setDisable(b);
+        reponse2.setDisable(b);
+        reponse3.setDisable(b);
+        reponse4.setDisable(b);
     }
     
      private void preselectAnswer() {

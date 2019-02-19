@@ -27,6 +27,8 @@ public class LVQuestions extends ListView<Question> {
     private void configListener() {
         this.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
+                    System.out.println("this.getSelectionModel().getSelectedItem() est " +
+                            this.getSelectionModel().getSelectedItem());
                     vm.setAttributQuetion(this.getSelectionModel().getSelectedItem());
                 });
     }
