@@ -128,7 +128,7 @@ public class ViewGamePlayer2 extends VBox {
         valider.setOnAction((ActionEvent event) -> {
             String t = ((RadioButton) group.getSelectedToggle()).getText();
             System.out.println(t);
-            if (nextQuestion.get()<= selectedQuestionList.size()) {
+            if (nextQuestion.get()<selectedQuestionList.size()) {
                 vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui seras appeller dans la methode nextQuestion.
             }else{
                this.stage.close();
