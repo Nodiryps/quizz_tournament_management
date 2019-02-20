@@ -22,7 +22,7 @@ public class Main extends Application {
 
     TournamentFacade facade;
     ViewModel viewmodel;
-    ViewGamePlayer1 viewgame;
+    ViewInitGame viewgame;
     ViewTournManagmt view;
 
     @Override

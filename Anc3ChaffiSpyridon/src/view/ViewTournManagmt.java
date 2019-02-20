@@ -2,8 +2,6 @@ package view;
 
 import controller.ViewModel;
 import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -26,7 +24,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import model.*;
 
@@ -201,7 +198,7 @@ public class ViewTournManagmt extends VBox {
             }
         });
         btnClear.setOnAction((ActionEvent event) -> {
-
+          vm.clearComboBox();
         });
     }
 

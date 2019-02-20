@@ -5,9 +5,9 @@
  */
 package view;
 
+import controller.VMInitGame;
 import controller.ViewModel;
 import javafx.beans.Observable;
-import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import model.Question;
@@ -17,8 +17,10 @@ import model.Question;
  * @author 2707chshyaka
  */
 public class LVQuestions extends ListView<Question> {
- private ViewModel vm;
-    public LVQuestions(ViewModel vm,RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
+
+    private VMInitGame vm;
+
+    public LVQuestions(VMInitGame vm, RadioButton reponse1, RadioButton reponse2, RadioButton reponse3, RadioButton reponse4) {
         this.vm = vm;
         configbinding();
         configListener();
@@ -27,15 +29,12 @@ public class LVQuestions extends ListView<Question> {
     private void configListener() {
         this.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    System.out.println("this.getSelectionModel().getSelectedItem() est " +
-                            this.getSelectionModel().getSelectedItem());
                     vm.setAttributQuetion(this.getSelectionModel().getSelectedItem());
                 });
     }
 
     public void configbinding() {
-        this.itemsProperty().bind(vm.quetionsProperty());
+        this.itemsProperty().bind(vm.questionsProperty());
     }
-    
-    
+
 }

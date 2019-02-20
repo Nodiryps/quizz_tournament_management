@@ -17,13 +17,14 @@ import javafx.collections.ObservableList;
  * @author Spy
  */
 public class TournamentFacade {
+
     public enum TypeNotif {
         INIT, TOURNAMENT_SELECTED, PLAYER_ONE_SELECTED, PLAYER_TWO_SELECTED, ADD_MATCH, REMOVE_MATCH
     }
 
     private ObservableList<Tournament> tournamentList = FXCollections.observableArrayList();
-    private IntegerProperty indexTournament=new SimpleIntegerProperty();
-    private StringProperty actualPlayer=new SimpleStringProperty();
+    private IntegerProperty indexTournament = new SimpleIntegerProperty();
+    private StringProperty actualPlayer = new SimpleStringProperty();
     private Match selectedMatch;
     private IntegerProperty indexMatch;
 
@@ -34,19 +35,19 @@ public class TournamentFacade {
     public Tournament getTournament() {
         return tournamentList.get(indexTournament.get());
     }
-    
+
     public int getIndexTournament() {
         return indexTournament.get();
     }
-    
-    public ObservableList<Question> getQuestion(){
-      return getTournament().getQuestions();
+
+    public ObservableList<Question> getQuestion() {
+        return getTournament().getQuestions();
     }
-    
+
     public IntegerProperty indexTournamentProperty() {
         return indexTournament;
     }
-   
+
     public ObservableList<Tournament> getTournamentList() {
         return tournamentList;
     }
@@ -62,7 +63,7 @@ public class TournamentFacade {
     public Match selectedMatchProperty() {
         return selectedMatch;
     }
-    
+
     public void initData() {
         Tournament t1 = new Tournament("E-Sport");
         Tournament t2 = new Tournament("T2");
@@ -102,7 +103,5 @@ public class TournamentFacade {
         tournamentList.add(t1);
         tournamentList.add(t2);
     }
-    
-  
 
 }

@@ -5,12 +5,8 @@
  */
 package view;
 
+import controller.VMInitGame;
 import controller.ViewModel;
-import java.awt.Checkbox;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.application.Application;
-import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -20,7 +16,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -35,15 +30,11 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import model.Player;
 import model.Question;
 
@@ -51,7 +42,7 @@ import model.Question;
  *
  * @author 2707chshyaka
  */
-public class ViewGamePlayer1 extends Popup {
+public class ViewInitGame extends Popup {
 
     private final LVQuestions questionList;
     private final LVOppQuestions fillQuestion;
@@ -65,8 +56,8 @@ public class ViewGamePlayer1 extends Popup {
     private final GridPane gpBottom = new GridPane();
     //Zone milieu
     private Text attrQName = new Text("Enoncer de la Questions");
-   private IntegerProperty attrQPoint = new SimpleIntegerProperty();
-    private Label attribQuestionPoints= new Label();
+    private IntegerProperty attrQPoint = new SimpleIntegerProperty();
+    private Label attribQuestionPoints = new Label();
     private Label response = new Label("Reponse");
     private Button addQuestion = new Button("=>");
     private Button delQuestion = new Button("<=");
@@ -90,25 +81,24 @@ public class ViewGamePlayer1 extends Popup {
     private IntegerProperty cptPoints = new SimpleIntegerProperty();
     private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     private IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
-    private final ViewModel vm;
+    private final VMInitGame vm;
     private final Stage stage;
     private final Player p1;
     private final Player p2;
-    
-    private final BooleanProperty bl =new SimpleBooleanProperty();
 
-    public ViewGamePlayer1(ViewModel vm, Player p1, Player p2) throws Exception {
-    
+    private final BooleanProperty bl = new SimpleBooleanProperty();
+
+    public ViewInitGame(VMInitGame vm, Player p1, Player p2) throws Exception {
+
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
-        this.questionList = new LVQuestions(this.vm,reponse1,reponse2,reponse3,reponse4);
+        this.questionList = new LVQuestions(this.vm, reponse1, reponse2, reponse3, reponse4);
         this.fillQuestion = new LVOppQuestions(this.vm);
         initGrid();
         configBinding();
         configListener();
         preselectAnswer();
-        System.out.println(vm.bl.get());
         stage = new Stage();
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
@@ -122,7 +112,6 @@ public class ViewGamePlayer1 extends Popup {
         configRadioButton();
         configBindCheckBox();
         disableRadioButtons(bl.get());
-        System.out.println(bl.get());
     }
 
     private void configView() {
@@ -151,12 +140,12 @@ public class ViewGamePlayer1 extends Popup {
         gpBottom.add(annuler, 2, 1);
         gpBottom.add(lbPointsRight, 3, 1);
     }
-     
-    public String css(){
-    return "-fx-border-color: black;\n" +
-                   "-fx-border-insets: 5;\n" +
-                   "-fx-border-width: 3;\n" +
-                   "-fx-border-style: dashed;\n";
+
+    public String css() {
+        return "-fx-border-color: black;\n"
+                + "-fx-border-insets: 5;\n"
+                + "-fx-border-width: 3;\n"
+                + "-fx-border-style: dashed;\n";
     }
 
     private void configRadioButton() {
@@ -171,7 +160,8 @@ public class ViewGamePlayer1 extends Popup {
         reponse2.textProperty().bind(res2);
         reponse3.textProperty().bind(res3);
         reponse4.textProperty().bind(res4);
-        
+        reponse1.selectedProperty().bind(bl);
+
     }
 
     private void configBinding() {
@@ -187,21 +177,21 @@ public class ViewGamePlayer1 extends Popup {
         cptPoints.bind(vm.cptPointProperty());
         lbFillQuestions.textProperty().bind(cptFillQuestions.asString("NOMBRES DE QUESTIONS: %d"));
         attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d Point(s)"));
-        bl.bindBidirectional(vm.bl);
+        //bl.bindBidirectional(vm.bl);
 
     }
 
     private void configBindingViewModel() {
-        vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
-        vm.questionPointProperty().bindBidirectional(attrQPoint);
+        vm.getQuestionName().bindBidirectional(attrQName.textProperty());
+        vm.getQuestionPoint().bindBidirectional(attrQPoint);
         vm.getSelectedQuestion().bindBidirectional(this.selectedQuestion);
         vm.getIndexQuestion().bindBidirectional(this.IndexQuestion);
         vm.getRes1().bindBidirectional(res1);
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
-        vm.currentQuestion.bindBidirectional(currentQuestion);
-        vm.cptFillQuestions.bindBidirectional(cptFillQuestions);
+        vm.getCurrentQuestion().bindBidirectional(currentQuestion);
+        vm.getCptFillQuestions().bindBidirectional(cptFillQuestions);
     }
 
     private void configListener() {
@@ -218,10 +208,9 @@ public class ViewGamePlayer1 extends Popup {
         });
         valider.setOnAction((ActionEvent event) -> {
             try {
-                vm.launchPlay(p1,p2);
-                stage.close();
+                vm.launchPlay(p1, p2, stage);
+
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
             }
         });
         annuler.setOnAction((ActionEvent event) -> {
@@ -229,20 +218,18 @@ public class ViewGamePlayer1 extends Popup {
                 vm.emptyselectedList();
                 stage.close();
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
             }
         });
     }
 
     private void disableRadioButtons(Boolean b) {
-        System.out.println(b);
         reponse1.setDisable(b);
         reponse2.setDisable(b);
         reponse3.setDisable(b);
         reponse4.setDisable(b);
     }
-    
-     private void preselectAnswer() {
+
+    private void preselectAnswer() {
         if (currentQuestion.get() != null) {
             int indice = currentQuestion.get().getNumCorrectResponse().get();
             switch (indice) {
@@ -261,9 +248,9 @@ public class ViewGamePlayer1 extends Popup {
             }
         }
     }
-     
-     public Question getSelected(ListView<Question> o){
-         return o.getSelectionModel().getSelectedItem();
-     }
+
+    public Question getSelected(ListView<Question> o) {
+        return o.getSelectionModel().getSelectedItem();
+    }
 
 }

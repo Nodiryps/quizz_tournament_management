@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.RadioButton;
+import javafx.stage.Stage;
 import model.Match;
 import model.Player;
 import model.Question;
@@ -21,29 +21,28 @@ import model.Tournament;
 import model.TournamentFacade;
 import model.RESULTS;
 import view.PopUpDelete;
-import view.ViewGamePlayer1;
-import view.ViewGamePlayer2;
+import view.ViewInitGame;
+import view.ViewGame;
 
 /**
  *
  * @author Spy
  */
-public final class ViewModel {
+public class ViewModel {
 
     TournamentFacade facade;
     private ListProperty<Player> subscribeList;
     private ObservableList<Player> oppList = FXCollections.observableArrayList();
     public IntegerProperty indexTournament = new SimpleIntegerProperty();
-    private ObjectProperty<Player> actualPlayer = new SimpleObjectProperty<Player>();
-    private ObjectProperty<Player> cb1 = new SimpleObjectProperty<>();
-    private ObjectProperty<Player> cb2 = new SimpleObjectProperty<>();
+    private final ObjectProperty<Player> actualPlayer = new SimpleObjectProperty<Player>();
+    private final ObjectProperty<Player> cb1 = new SimpleObjectProperty<>();
+    private final ObjectProperty<Player> cb2 = new SimpleObjectProperty<>();
     private StringProperty cb3 = new SimpleStringProperty();
     private IntegerProperty indexMatch = new SimpleIntegerProperty();
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
-    private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
-    private IntegerProperty pointTotaux = new SimpleIntegerProperty();
+   
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
     private final int MAX_POINT = 10;
     private StringProperty questionName = new SimpleStringProperty();
@@ -58,12 +57,13 @@ public final class ViewModel {
     public IntegerProperty indexQuestion = new SimpleIntegerProperty();
     private String resuls;
     public BooleanProperty gameOver = new SimpleBooleanProperty();
- public final BooleanProperty bl =new SimpleBooleanProperty(true);
+    public final BooleanProperty bl = new SimpleBooleanProperty(true);
+    public final BooleanProperty deselectedRadioButon = new SimpleBooleanProperty(true);
+
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
-        addPoint();
-        System.out.println(pointTotaux.get());
-       bl.setValue(Boolean.TRUE);
+        
+        bl.setValue(Boolean.TRUE);
     }
 
     public StringProperty getRes1() {
@@ -82,18 +82,7 @@ public final class ViewModel {
         return res4;
     }
 
-    public IntegerProperty cptPointProperty() {
-        return cptPoint;
-    }
-
-    public IntegerProperty pointTotauxProperty() {
-        return pointTotaux;
-    }
-
-    public IntegerProperty getIndexQuestion() {
-        return IndexQuestion;
-    }
-
+   
     public ObjectProperty<Question> getSelectedQuestion() {
         return selectedQuestion;
     }
@@ -106,20 +95,16 @@ public final class ViewModel {
         return questionPoint;
     }
 
-    public SimpleListProperty<Question> selectedQuestionProperty() {
-        return new SimpleListProperty<>(selectedQuestionList);
-    }
-
     public ObservableList<Question> selectedQuestionList() {
         return selectedQuestionList;
     }
 
     public void setAttributQuetion(Question q) {
-        if(null != q){
-        this.questionName.set(q.getName().get());
-        this.questionPoint.set(q.pointsProperty().getValue());
-        setReponse(q);
-        this.currentQuestion.set(q);
+        if (null != q) {
+            this.questionName.set(q.getName().get());
+            this.questionPoint.set(q.pointsProperty().getValue());
+            setReponse(q);
+            this.currentQuestion.set(q);
         }
     }
 
@@ -130,30 +115,8 @@ public final class ViewModel {
         res4.set(q.getResponses().get(3));
     }
 
-    public void addQuestionforOpp(Question q) {
-        if (cptPoint.get() + q.pointsProperty().get() <= MAX_POINT && !selectedQuestionList.contains(q)) {
-            selectedQuestion.set(q);
-            if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
-                this.selectedQuestionList.add(getSelectedQuestion().get());
-                cptPoint.set(cptPoint.get() + q.pointsProperty().get());
-                quetionsProperty().remove(q);
-                cptFillQuestions.set(selectedQuestionList.size());
-            }
-            pointTotaux.set(pointTotaux.get() - q.pointsProperty().get());
-            setReponse(selectedQuestion.get());
-        }
+   
 
-    }
-
-    public void deleteQuestionForOpp(Question q) {
-        if (selectedQuestionList.contains(q)) {
-            selectedQuestion.set(q);
-            cptPoint.set(cptPoint.get() - selectedQuestion.get().pointsProperty().get());
-            this.selectedQuestionList.remove(q);
-            pointTotaux.set(pointTotaux.get() + q.pointsProperty().get());
-            cptFillQuestions.set(selectedQuestionList.size());
-        }
-    }
 
     public SimpleListProperty<Question> quetionsProperty() {
         return new SimpleListProperty<>(facade.getQuestion());
@@ -237,27 +200,9 @@ public final class ViewModel {
 
     public void launchGame(Player p1, Player p2) throws Exception {
         bl.setValue(true);
-        launchAttributes();
-        new ViewGamePlayer1(this, cb1.get(), cb2.get());
+        VMInitGame vm1 = new VMInitGame(this);
+        new ViewInitGame(vm1, cb1.get(), cb2.get());
     }
-
-    private void launchAttributes() {
-        cptPointProperty().set(0);
-        cptFillQuestions.set(1);
-        gameOver.set(false);
-    }
-
-    public void launchPlay(Player fp1, Player p2) throws Exception {
-        launchAttributes();
-        new ViewGamePlayer2(this, selectedQuestionList, cb1.get(), cb2.get());
-        if (indexQuestion.get() <= selectedQuestionList.size()) {
-            afficheQuestion();
-            indexQuestion.set(indexQuestion.get() + 1);
-
-        }
-
-    }
-
 
     public void createMatch(String t) {
         Match m = new Match(new Player(cb1.getValue().toString()),
@@ -330,64 +275,15 @@ public final class ViewModel {
         }
     }
 
-    public void addPoint() {
-        for (Question x : facade.getQuestion()) {
-            pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
-        }
-    }
+    
 
     public void emptyselectedList() {
         selectedQuestionList.clear();
     }
 
-    public void afficheQuestion() {
-        if (indexQuestion.get() < 0) {
-            indexQuestion.set(0);
-            setAttributQuetion(selectedQuestionList.get(indexQuestion.get()));
-        } else if (indexQuestion.get() < selectedQuestionList.size()) {
-            setAttributQuetion(selectedQuestionList.get(indexQuestion.get()));
-        }
-
-    }
-
-    public void nextQuestion(String t) {
-        if (indexQuestion.get() < selectedQuestionList.size()) {
-            afficheQuestion();
-            if (rightResponse(t)) {
-                AjouterPointQuestion();
-            }
-            cptFillQuestions.set(cptFillQuestions.get() + 1);
-            indexQuestion.set(indexQuestion.get() + 1);
-            System.out.println(indexQuestion);
-        }
-        if (indexQuestion.get() == selectedQuestionList.size()) {
-            String score = analyseScore();
-            createMatch(score);
-            emptyselectedList();
-            clearOppList();
-            gameOver.set(true);
-        }
-    }
-
-    public boolean rightResponse(String s) {
-        int r = selectedQuestionList.get(indexQuestion.get() - 1).getNumCorrectResponse().get();
-        String st = selectedQuestionList.get(indexQuestion.get() - 1).getResponses().get(r - 1);
-        return st.equals(s);
-    }
-
-    public void AjouterPointQuestion() {
-        Question q = selectedQuestionList.get(indexQuestion.get() - 1);
-        cptPointProperty().set(cptPointProperty().get() + q.getPoints());
-    }
-
-    public String analyseScore() {
-        int score = cptPointProperty().get();
-        if (score < 5) {
-            return RESULTS.VAINQUEUR_J1.name();
-        } else if (score == 5) {
-            return RESULTS.EX_AEQUO.name();
-        } else {
-            return RESULTS.VAINQUEUR_J2.name();
-        }
+    public void clearComboBox() {
+        cb1.set(new Player(""));
+        cb2.set(new Player(""));
+        cb3.set(" ");
     }
 }

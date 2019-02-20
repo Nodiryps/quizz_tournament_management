@@ -5,9 +5,9 @@
  */
 package view;
 
+import controller.VMInitGame;
 import controller.ViewModel;
 import javafx.beans.Observable;
-import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;
 import model.Question;
 
@@ -16,16 +16,18 @@ import model.Question;
  * @author 2707chshyaka
  */
 public class LVOppQuestions extends ListView<Question> {
-    private ViewModel vm;
-    public LVOppQuestions(ViewModel vm) {
-        this.vm=vm;
-         configbinding();
+
+    private VMInitGame vm;
+
+    public LVOppQuestions(VMInitGame vm) {
+        this.vm = vm;
+        configbinding();
         configListener();
-        
+
     }
-    
+
     private void configListener() {
-          this.getSelectionModel().selectedIndexProperty()
+        this.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     vm.setAttributQuetion(this.getSelectionModel().getSelectedItem());
                 });
@@ -34,7 +36,5 @@ public class LVOppQuestions extends ListView<Question> {
     public void configbinding() {
         this.itemsProperty().bind(vm.selectedQuestionProperty());
     }
-   
-    
-    
+
 }

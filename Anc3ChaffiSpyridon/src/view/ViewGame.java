@@ -5,18 +5,15 @@
  */
 package view;
 
+import controller.VMGame;
+import controller.VMInitGame;
 import controller.ViewModel;
-import java.awt.GridBagConstraints;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -37,10 +33,10 @@ import model.Question;
  *
  * @author Spy
  */
-public class ViewGamePlayer2 extends VBox {
+public class ViewGame extends VBox {
 
     Stage stage;
-    ViewModel vm;
+    VMGame vm;
     private final VBox boutonVB = new VBox();
     private final VBox displayQuestion = new VBox();
     private final GridPane display = new GridPane();
@@ -72,8 +68,9 @@ public class ViewGamePlayer2 extends VBox {
     private final Player p1;
     private final Player p2;
     private BooleanProperty gameOver = new SimpleBooleanProperty();
+    private BooleanProperty deselectedRadioButon = new SimpleBooleanProperty();
 
-    public ViewGamePlayer2(ViewModel vm, ObservableList<Question> list, Player p1, Player p2) {
+    public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2) {
         this.selectedQuestionList = list;
         this.vm = vm;
         this.p1 = p1;
@@ -102,7 +99,6 @@ public class ViewGamePlayer2 extends VBox {
         display.add(valider, 0, 10);
         display.add(annuler, 0, 11);
         displayQuestion.setStyle(css());
-
     }
 
     private void configRadioButton() {
@@ -110,17 +106,16 @@ public class ViewGamePlayer2 extends VBox {
         reponse2.setToggleGroup(group);
         reponse3.setToggleGroup(group);
         reponse4.setToggleGroup(group);
-        cptQ.bind(vm.cptFillQuestions);
+        cptQ.bind(vm.getCptFillQuestions());
         lbcptq.textProperty().bind(cptQ.asString("Question restante: %d/" + selectedQuestionList.size()));
 
-        vm.indexQuestion.bindBidirectional(indexQuestion);
-        vm.questionNameProperty().bindBidirectional(attrQName.textProperty());
-        vm.questionPointProperty().bindBidirectional((attrQPoint));
+        vm.getIndexQuestion().bindBidirectional(indexQuestion);
+        vm.getQuestionName().bindBidirectional(attrQName.textProperty());
+        vm.getQuestionPoint().bindBidirectional((attrQPoint));
         pointGagner.textProperty().bind(score.asString("Votre score: %d/10"));
         score.bind(vm.cptPointProperty());
-        gameOver.bindBidirectional(vm.gameOver);
+        gameOver.bindBidirectional(vm.getGameOver());
         attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d point(s)"));
-
     }
 
     private void configBindRadioBtn() {
@@ -132,19 +127,13 @@ public class ViewGamePlayer2 extends VBox {
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
-
     }
 
     private void configListerner() {
-
         valider.setOnAction((ActionEvent event) -> {
-            if(!gameOver.get()){
             String t = ((RadioButton) group.getSelectedToggle()).getText();
-            vm.nextQuestion(t);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui 
-            }else{
-             stage.close();
-            }
-            
+            vm.nextQuestion(t,stage);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui 
+          
         });
         annuler.setOnAction((ActionEvent event) -> {
 //           vm.emptyselectedList();
@@ -154,7 +143,6 @@ public class ViewGamePlayer2 extends VBox {
 //              rajouter une defaite.
         });
     }
-    
      public String css(){
     return "-fx-border-color: black;\n" +
                    "-fx-border-insets: 5;\n" +
@@ -162,5 +150,7 @@ public class ViewGamePlayer2 extends VBox {
                    "-fx-border-style: solid;\n"+
                      "-fx-padding: 12;\n";
     }
+     
+     
 
 }
