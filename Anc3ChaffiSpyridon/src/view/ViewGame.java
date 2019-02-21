@@ -70,6 +70,7 @@ public class ViewGame extends VBox {
     private final Player p2;
     private BooleanProperty gameOver = new SimpleBooleanProperty();
     private BooleanProperty deselectedRadioButon = new SimpleBooleanProperty();
+    public final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
 
     public ViewGame(VMInitGame vm, ObservableList<Question> list, Player p1, Player p2,Stage stage) {
         this.selectedQuestionList = list;
@@ -117,6 +118,7 @@ public class ViewGame extends VBox {
         score.bind(vm.cptPointProperty());
         gameOver.bindBidirectional(vm.getGameOver());
         attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d point(s)"));
+           disableRadioBtn.bindBidirectional(vm.disableRadioBtn);
         
     }
 
@@ -129,6 +131,10 @@ public class ViewGame extends VBox {
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
+        reponse1.setSelected(disableRadioBtn.get());
+        reponse2.setSelected(disableRadioBtn.get());
+        reponse3.setSelected(disableRadioBtn.get());
+        reponse4.setSelected(disableRadioBtn.get());
         
         
         vm.getSelectedQuestionList().bind(this.getSelectedQuestionList());

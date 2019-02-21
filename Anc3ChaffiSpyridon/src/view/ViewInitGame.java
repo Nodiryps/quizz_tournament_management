@@ -6,6 +6,8 @@
 package view;
 
 import controller.VMInitGame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -167,6 +169,7 @@ public class ViewInitGame extends Popup {
         reponse2.disableProperty().bind(disableRadioBtn);
         reponse3.disableProperty().bind(disableRadioBtn);
         reponse4.disableProperty().bind(disableRadioBtn);
+        
     }
 
     private void configBinding() {
@@ -208,8 +211,6 @@ public class ViewInitGame extends Popup {
         addQuestion.setOnAction((ActionEvent e) -> {
             if (questionList.getSelectionModel().getSelectedItem() != null) {
                 vm.addQuestionforOpp(questionList.getSelectionModel().getSelectedItem());
-                System.out.println(disableRadioBtn.get());
-                System.out.println(vm.disableRadioBtn.get());
             }
 
         });
@@ -219,11 +220,14 @@ public class ViewInitGame extends Popup {
             }
         });
         valider.setOnAction((ActionEvent event) -> {
+           
             try {
                 vm.launchPlay(p1, p2, this.stage);
-
             } catch (Exception ex) {
+                Logger.getLogger(ViewInitGame.class.getName()).log(Level.SEVERE, null, ex);
             }
+
+           
         });
         annuler.setOnAction((ActionEvent event) -> {
             try {

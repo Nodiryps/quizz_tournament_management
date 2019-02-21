@@ -78,11 +78,11 @@ public class VMInitGame {
                 indexQuestion.set(indexQuestion.get() + 1);
             }
             System.out.println("ksdfjlkjsdf");
-            //stage.close();
         }
     }
 
     public void afficheQuestion() {
+        disableRadioBtn.set(true);
         if (indexQuestion.get() < 0) {
             indexQuestion.set(0);
             setAttributQuetion(selectedQuestionList.get(indexQuestion.get()));
@@ -318,7 +318,6 @@ public class VMInitGame {
     }
     
     public void nextQuestion(String t, Stage stage) {
-        System.out.println("nextQ");
         if (getIndexQuestion().get() <= selectedQuestionList.size() && !getGameOver().get()) {
             afficheQuestion();
             System.out.println("if 1");
@@ -330,6 +329,7 @@ public class VMInitGame {
                 System.out.println("if 3");
               getCptFillQuestions().set(getCptFillQuestions().get() + 1);
               getIndexQuestion().set(getIndexQuestion().get() + 1);
+              disableRadioBtn.set(true);
             }
 
             if(getIndexQuestion().get() == selectedQuestionList.size())
