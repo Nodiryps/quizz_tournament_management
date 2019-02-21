@@ -88,6 +88,7 @@ public class ViewInitGame extends Popup {
     private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
+    private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
 
     public ViewInitGame(VMInitGame vm, Player p1, Player p2) throws Exception {
         this.vm = vm;
@@ -98,7 +99,6 @@ public class ViewInitGame extends Popup {
         initGrid();
         configBinding();
         configListener();
-        preselectAnswer();
         stage = new Stage();
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
@@ -163,6 +163,10 @@ public class ViewInitGame extends Popup {
         reponse2.selectedProperty().bind(boolSelectRadioBtn2);
         reponse3.selectedProperty().bind(boolSelectRadioBtn3);
         reponse4.selectedProperty().bind(boolSelectRadioBtn4);
+        reponse1.disableProperty().bind(disableRadioBtn);
+        reponse2.disableProperty().bind(disableRadioBtn);
+        reponse3.disableProperty().bind(disableRadioBtn);
+        reponse4.disableProperty().bind(disableRadioBtn);
     }
 
     private void configBinding() {
@@ -183,6 +187,7 @@ public class ViewInitGame extends Popup {
         boolSelectRadioBtn2.bindBidirectional(vm.getBoolSelectRadioBtn2());
         boolSelectRadioBtn3.bindBidirectional(vm.getBoolSelectRadioBtn3());
         boolSelectRadioBtn4.bindBidirectional(vm.getBoolSelectRadioBtn4());
+        disableRadioBtn.bindBidirectional(vm.disableRadioBtn);
 
     }
 
@@ -203,6 +208,8 @@ public class ViewInitGame extends Popup {
         addQuestion.setOnAction((ActionEvent e) -> {
             if (questionList.getSelectionModel().getSelectedItem() != null) {
                 vm.addQuestionforOpp(questionList.getSelectionModel().getSelectedItem());
+                System.out.println(disableRadioBtn.get());
+                System.out.println(vm.disableRadioBtn.get());
             }
 
         });
@@ -227,25 +234,7 @@ public class ViewInitGame extends Popup {
         });
     }
 
-    private void preselectAnswer() {
-        if (currentQuestion.get() != null) {
-            int indice = currentQuestion.get().getNumCorrectResponse().get();
-            switch (indice) {
-                case 1:
-                    reponse1.setSelected(true);
-                    break;
-                case 2:
-                    reponse2.setSelected(true);
-                    break;
-                case 3:
-                    reponse3.setSelected(true);
-                    break;
-                case 4:
-                    reponse4.setSelected(true);
-                    break;
-            }
-        }
-    }
+   
 
     public Question getSelected(ListView<Question> o) {
         return o.getSelectionModel().getSelectedItem();

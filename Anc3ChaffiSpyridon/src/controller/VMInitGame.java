@@ -59,11 +59,13 @@ public class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
+      public final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
     
     //////////////////////////////
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
         addPoint();
+        disableRadioBtn.set(true);
 
     }
 
