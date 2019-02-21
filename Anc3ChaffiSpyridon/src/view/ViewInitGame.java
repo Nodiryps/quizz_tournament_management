@@ -213,7 +213,7 @@ public class ViewInitGame extends Popup {
         });
         valider.setOnAction((ActionEvent event) -> {
             try {
-                vm.launchPlay(p1, p2, stage);
+                vm.launchPlay(p1, p2, this.stage);
 
             } catch (Exception ex) {
             }

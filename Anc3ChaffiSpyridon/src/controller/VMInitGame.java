@@ -24,6 +24,7 @@ import model.Question;
 import model.TournamentFacade;
 import view.ViewGame;
 import java.io.FileNotFoundException;
+import model.RESULTS;
 
 /**
  *
@@ -43,7 +44,7 @@ public class VMInitGame {
     private StringProperty res2 = new SimpleStringProperty();
     private StringProperty res3 = new SimpleStringProperty();
     private StringProperty res4 = new SimpleStringProperty();
-    private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
+    public  ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
     private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     private BooleanProperty gameOver = new SimpleBooleanProperty();
@@ -66,18 +67,16 @@ public class VMInitGame {
 
     }
 
-    public void launchPlay(Player fp1, Player p2, Stage stage) throws Exception {
+    public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
         if (cptPointProperty().get() == MAX_POINT) {
             launchAttributes();
-            VMGame vmGame = new VMGame(vm);
-            System.out.println(vmGame.getReponse1() + "bbbbbbbbbbbbbbbbbbbbb");
-            ViewGame viewGame = new ViewGame(vmGame, selectedQuestionList, cb1.get(), cb2.get(),stage);
-            if (indexQuestion.get() <= selectedQuestionList.size()) {
+            new ViewGame(this, selectedQuestionList, p1, p2, stage);
+            if (cptFillQuestions.get() <= selectedQuestionList.size()) {
                 afficheQuestion();
                 indexQuestion.set(indexQuestion.get() + 1);
             }
             System.out.println("ksdfjlkjsdf");
-            stage.close();
+            //stage.close();
         }
     }
 
@@ -248,8 +247,8 @@ public class VMInitGame {
         return res4;
     }
 
-    public ObservableList<Question> getSelectedQuestionList() {
-        return selectedQuestionList;
+    public SimpleListProperty<Question> getSelectedQuestionList() {
+        return new SimpleListProperty<>(selectedQuestionList);
     }
 
     public ObjectProperty<Question> getSelectedQuestion() {
@@ -314,6 +313,60 @@ public class VMInitGame {
 
     public IntegerProperty pointTotauxProperty() {
         return pointTotaux;
+    }
+    
+    public void nextQuestion(String t, Stage stage) {
+        System.out.println("nextQ");
+        if (getIndexQuestion().get() <= selectedQuestionList.size() && !getGameOver().get()) {
+            afficheQuestion();
+            System.out.println("if 1");
+            if (rightResponse(t)) {
+                AjouterPointQuestion();
+                System.out.println("if 2");
+            }
+            if(cptFillQuestions.get() < selectedQuestionList.size()){
+                System.out.println("if 3");
+              getCptFillQuestions().set(getCptFillQuestions().get() + 1);
+              getIndexQuestion().set(getIndexQuestion().get() + 1);
+            }
+
+            if(getIndexQuestion().get() == selectedQuestionList.size())
+                gameOver.setValue(Boolean.TRUE);
+        }
+        if(getGameOver().get())  {
+            System.out.println("elssss");
+            String score = analyseScore();
+            System.out.println(score);
+            createMatch(score);
+            emptyselectedList();
+            clearOppList();
+            getGameOver().set(true);
+            System.out.println("test");
+            System.out.println(stage.toString());
+            stage.close();
+        }
+    }
+    
+    public boolean rightResponse(String s) {
+        int r = getSelectedQuestionList().get(getIndexQuestion().get() - 1).getNumCorrectResponse().get();
+        String st = getSelectedQuestionList().get(getIndexQuestion().get() - 1).getResponses().get(r - 1);
+        return st.equals(s);
+    }
+    
+    public String analyseScore() {
+        int score = getCptPoint().get();
+        if (score < 5) {
+            return RESULTS.VAINQUEUR_J1.name();
+        } else if (score == 5) {
+            return RESULTS.EX_AEQUO.name();
+        } else {
+            return RESULTS.VAINQUEUR_J2.name();
+        }
+    }
+    
+    public void AjouterPointQuestion() {
+        Question q = getSelectedQuestionList().get(getIndexQuestion().get() - 1);
+        cptPointProperty().set(cptPointProperty().get() + q.getPoints());
     }
 
 }

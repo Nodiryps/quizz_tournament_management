@@ -6,11 +6,13 @@
 package view;
 
 import java.io.FileNotFoundException;
-import controller.VMGame;
+import controller.VMInitGame;
+import controller.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -35,7 +37,7 @@ import model.Question;
 public class ViewGame extends VBox {
 
     Stage stage;
-    VMGame vm;
+    VMInitGame vm;
     private final VBox boutonVB = new VBox();
     private final VBox displayQuestion = new VBox();
     private final GridPane display = new GridPane();
@@ -69,13 +71,13 @@ public class ViewGame extends VBox {
     private BooleanProperty gameOver = new SimpleBooleanProperty();
     private BooleanProperty deselectedRadioButon = new SimpleBooleanProperty();
 
-    public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2,Stage stage) {
+    public ViewGame(VMInitGame vm, ObservableList<Question> list, Player p1, Player p2,Stage stage) {
         this.selectedQuestionList = list;
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
         initData();
-        stage = stage;
+        this.stage = stage;
         stage.setTitle("Choix de questions");
         stage.setScene(new Scene(display, 500, 800));
         stage.show();
@@ -106,7 +108,7 @@ public class ViewGame extends VBox {
         reponse3.setToggleGroup(group);
         reponse4.setToggleGroup(group);
         cptQ.bind(vm.getCptFillQuestions());
-        lbcptq.textProperty().bind(cptQ.asString("Question restante: %d/" + selectedQuestionList.size()));
+        lbcptq.textProperty().bind(cptQ.asString("Question restante: %d/" + this.getSelectedQuestionList().size()));
 
         vm.getIndexQuestion().bindBidirectional(indexQuestion);
         vm.getQuestionName().bindBidirectional(attrQName.textProperty());
@@ -115,6 +117,7 @@ public class ViewGame extends VBox {
         score.bind(vm.cptPointProperty());
         gameOver.bindBidirectional(vm.getGameOver());
         attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d point(s)"));
+        
     }
 
     private void configBindRadioBtn() {
@@ -126,6 +129,13 @@ public class ViewGame extends VBox {
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
+        
+        
+        vm.getSelectedQuestionList().bind(this.getSelectedQuestionList());
+    }
+
+    public SimpleListProperty<Question> getSelectedQuestionList() {
+        return new SimpleListProperty<>(selectedQuestionList);
     }
 
     private void configListerner() {
