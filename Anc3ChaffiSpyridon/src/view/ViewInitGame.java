@@ -6,7 +6,6 @@
 package view;
 
 import controller.VMInitGame;
-import controller.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -85,8 +84,10 @@ public class ViewInitGame extends Popup {
     private final Stage stage;
     private final Player p1;
     private final Player p2;
-
-    private final BooleanProperty bl = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn1 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
 
     public ViewInitGame(VMInitGame vm, Player p1, Player p2) throws Exception {
 
@@ -111,7 +112,6 @@ public class ViewInitGame extends Popup {
         configView();
         configRadioButton();
         configBindCheckBox();
-        disableRadioButtons(bl.get());
     }
 
     private void configView() {
@@ -160,16 +160,18 @@ public class ViewInitGame extends Popup {
         reponse2.textProperty().bind(res2);
         reponse3.textProperty().bind(res3);
         reponse4.textProperty().bind(res4);
-        reponse1.selectedProperty().bind(bl);
-
+        reponse1.selectedProperty().bind(boolSelectRadioBtn1);
+        reponse2.selectedProperty().bind(boolSelectRadioBtn2);
+        reponse3.selectedProperty().bind(boolSelectRadioBtn3);
+        reponse4.selectedProperty().bind(boolSelectRadioBtn4);
     }
 
     private void configBinding() {
         configBindingViewModel();
-        configBindingViewGP1();
+        configBindingViewInitGame();
     }
 
-    private void configBindingViewGP1() {
+    private void configBindingViewInitGame() {
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         totalPoints.bindBidirectional(vm.pointTotauxProperty());
         lbPointsLeft.textProperty().bind(totalPoints.asString("Points disponibles: %d"));
@@ -178,6 +180,10 @@ public class ViewInitGame extends Popup {
         lbFillQuestions.textProperty().bind(cptFillQuestions.asString("NOMBRES DE QUESTIONS: %d"));
         attribQuestionPoints.textProperty().bind(attrQPoint.asString("%d Point(s)"));
         //bl.bindBidirectional(vm.bl);
+        boolSelectRadioBtn1.bindBidirectional(vm.getBoolSelectRadioBtn1());
+        boolSelectRadioBtn2.bindBidirectional(vm.getBoolSelectRadioBtn2());
+        boolSelectRadioBtn3.bindBidirectional(vm.getBoolSelectRadioBtn3());
+        boolSelectRadioBtn4.bindBidirectional(vm.getBoolSelectRadioBtn4());
 
     }
 
@@ -220,13 +226,6 @@ public class ViewInitGame extends Popup {
             } catch (Exception ex) {
             }
         });
-    }
-
-    private void disableRadioButtons(Boolean b) {
-        reponse1.setDisable(b);
-        reponse2.setDisable(b);
-        reponse3.setDisable(b);
-        reponse4.setDisable(b);
     }
 
     private void preselectAnswer() {

@@ -2,6 +2,8 @@ package view;
 
 import controller.ViewModel;
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -180,11 +182,14 @@ public class ViewTournManagmt extends VBox {
                         setButtonDisable(false);
                     }
                 });
-        btnPlay.setOnAction((ActionEvent event) -> {
-            try {
-                vm.launchGame(cbPlayersList.getSelectionModel().getSelectedItem(), cbOpponentsList.getSelectionModel().getSelectedItem());
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+        btnPlay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    vm.launchGame(cbPlayersList.getSelectionModel().getSelectedItem(), cbOpponentsList.getSelectionModel().getSelectedItem());
+                } catch (Exception ex) {
+                    Logger.getLogger(ViewTournManagmt.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         btnValidate.setOnAction((ActionEvent event) -> {

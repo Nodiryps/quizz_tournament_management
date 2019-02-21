@@ -5,6 +5,8 @@
  */
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -21,6 +23,7 @@ import model.Player;
 import model.Question;
 import model.TournamentFacade;
 import view.ViewGame;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -51,6 +54,10 @@ public class VMInitGame {
     private StringProperty cb3 = new SimpleStringProperty();
     private IntegerProperty indexQuestion = new SimpleIntegerProperty();
     private IntegerProperty pointTotaux = new SimpleIntegerProperty();
+    private final BooleanProperty boolSelectRadioBtn1 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
 
     //////////////////////////////
     public VMInitGame(ViewModel vm) {
@@ -63,7 +70,7 @@ public class VMInitGame {
         if (cptPointProperty().get() == MAX_POINT) {
             launchAttributes();
             VMGame vmGame = new VMGame(vm);
-            System.out.println("szdjfskjdf");
+            System.out.println(vmGame + "bbbbbbbbbbbbbbbbbbbbb");
             new ViewGame(vmGame, selectedQuestionList, cb1.get(), cb2.get());
             if (indexQuestion.get() <= selectedQuestionList.size()) {
                 afficheQuestion();
@@ -86,10 +93,13 @@ public class VMInitGame {
 
     public void setAttributQuetion(Question q) {
         if (null != q) {
+            selectedQuestion.set(q);
+            setBoolAllRadioBtnTrue();
             this.questionName.set(q.getName().get());
             this.questionPoint.set(q.pointsProperty().getValue());
             setReponse(q);
             this.currentQuestion.set(q);
+            selectedQuestion.set(null);
         }
     }
 
@@ -116,6 +126,33 @@ public class VMInitGame {
         cb3.set(" ");
     }
 
+    private void setBoolAllRadioBtnTrue() {
+        disableAllRadioBouton();
+        int rightResponse = selectedQuestion.get().getNumCorrectResponse().get();
+        switch (rightResponse) {
+            case 1:
+                boolSelectRadioBtn1.setValue(Boolean.TRUE);
+                break;
+            case 2:
+                boolSelectRadioBtn2.setValue(Boolean.TRUE);
+                break;
+            case 3:
+                boolSelectRadioBtn3.setValue(Boolean.TRUE);
+                break;
+            case 4:
+                boolSelectRadioBtn4.setValue(Boolean.TRUE);
+                break;
+        }
+    }
+
+    private void disableAllRadioBouton() {
+
+        boolSelectRadioBtn1.setValue(Boolean.FALSE);
+        boolSelectRadioBtn2.setValue(Boolean.FALSE);
+        boolSelectRadioBtn3.setValue(Boolean.FALSE);
+        boolSelectRadioBtn4.setValue(Boolean.FALSE);
+    }
+
     public void addQuestionforOpp(Question q) {
         if (cptPoint.get() + q.pointsProperty().get() <= MAX_POINT && !selectedQuestionList.contains(q)) {
             selectedQuestion.set(q);
@@ -131,12 +168,6 @@ public class VMInitGame {
 
     }
 
-    public void addPoint() {
-        for (Question x : questionsProperty()) {
-            pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
-        }
-    }
-
     public void deleteQuestionForOpp(Question q) {
         if (selectedQuestionList.contains(q)) {
             selectedQuestion.set(q);
@@ -145,6 +176,32 @@ public class VMInitGame {
             pointTotaux.set(pointTotaux.get() + q.pointsProperty().get());
             cptFillQuestions.set(selectedQuestionList.size());
         }
+    }
+
+    public void addPoint() {
+        for (Question x : questionsProperty()) {
+            pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
+        }
+    }
+
+    public IntegerProperty getPointTotaux() {
+        return pointTotaux;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn1() {
+        return boolSelectRadioBtn1;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn2() {
+        return boolSelectRadioBtn2;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn3() {
+        return boolSelectRadioBtn3;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn4() {
+        return boolSelectRadioBtn4;
     }
 
     public BooleanProperty getReponse1() {

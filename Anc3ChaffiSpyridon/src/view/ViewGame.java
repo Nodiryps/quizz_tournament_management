@@ -5,9 +5,8 @@
  */
 package view;
 
+import java.io.FileNotFoundException;
 import controller.VMGame;
-import controller.VMInitGame;
-import controller.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;

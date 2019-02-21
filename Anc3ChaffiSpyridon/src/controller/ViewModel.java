@@ -22,7 +22,6 @@ import model.TournamentFacade;
 import model.RESULTS;
 import view.PopUpDelete;
 import view.ViewInitGame;
-import view.ViewGame;
 
 /**
  *
