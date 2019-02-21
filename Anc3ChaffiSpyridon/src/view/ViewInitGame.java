@@ -90,7 +90,6 @@ public class ViewInitGame extends Popup {
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
 
     public ViewInitGame(VMInitGame vm, Player p1, Player p2) throws Exception {
-
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;

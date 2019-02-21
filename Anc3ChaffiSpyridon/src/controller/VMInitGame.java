@@ -58,7 +58,7 @@ public class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
-
+    
     //////////////////////////////
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
@@ -70,8 +70,8 @@ public class VMInitGame {
         if (cptPointProperty().get() == MAX_POINT) {
             launchAttributes();
             VMGame vmGame = new VMGame(vm);
-            System.out.println(vmGame + "bbbbbbbbbbbbbbbbbbbbb");
-            new ViewGame(vmGame, selectedQuestionList, cb1.get(), cb2.get());
+            System.out.println(vmGame.getReponse1() + "bbbbbbbbbbbbbbbbbbbbb");
+            ViewGame viewGame = new ViewGame(vmGame, selectedQuestionList, cb1.get(), cb2.get(),stage);
             if (indexQuestion.get() <= selectedQuestionList.size()) {
                 afficheQuestion();
                 indexQuestion.set(indexQuestion.get() + 1);

@@ -285,4 +285,6 @@ public class ViewModel {
         cb2.set(new Player(""));
         cb3.set(" ");
     }
+    
+    
 }

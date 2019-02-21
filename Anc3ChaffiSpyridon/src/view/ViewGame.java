@@ -69,13 +69,13 @@ public class ViewGame extends VBox {
     private BooleanProperty gameOver = new SimpleBooleanProperty();
     private BooleanProperty deselectedRadioButon = new SimpleBooleanProperty();
 
-    public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2) {
+    public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2,Stage stage) {
         this.selectedQuestionList = list;
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
         initData();
-        stage = new Stage();
+        stage = stage;
         stage.setTitle("Choix de questions");
         stage.setScene(new Scene(display, 500, 800));
         stage.show();
