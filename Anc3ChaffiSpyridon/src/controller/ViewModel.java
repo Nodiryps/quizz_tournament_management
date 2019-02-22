@@ -65,39 +65,6 @@ public class ViewModel {
         bl.setValue(Boolean.TRUE);
     }
 
-    public StringProperty getRes1() {
-        return res1;
-    }
-
-    public StringProperty getRes2() {
-        return res2;
-    }
-
-    public StringProperty getRes3() {
-        return res3;
-    }
-
-    public StringProperty getRes4() {
-        return res4;
-    }
-
-   
-    public ObjectProperty<Question> getSelectedQuestion() {
-        return selectedQuestion;
-    }
-
-    public StringProperty questionNameProperty() {
-        return questionName;
-    }
-
-    public IntegerProperty questionPointProperty() {
-        return questionPoint;
-    }
-
-    public ObservableList<Question> selectedQuestionList() {
-        return selectedQuestionList;
-    }
-
     public void setAttributQuetion(Question q) {
         if (null != q) {
             this.questionName.set(q.getName().get());
@@ -114,83 +81,8 @@ public class ViewModel {
         res4.set(q.getResponses().get(3));
     }
 
-   
-
-
-    public SimpleListProperty<Question> quetionsProperty() {
-        return new SimpleListProperty<>(facade.getQuestion());
-    }
-
-    public void setTournois() {
-        facade.indexTournamentProperty().set(indexTournament.get());
-    }
-
     public void clearOppList() {
         this.oppList().clear();
-    }
-
-    public ObservableList<Player> oppList() {
-        return this.oppList;
-    }
-
-    public SimpleListProperty<Player> subscribesListProperty() {
-        return new SimpleListProperty<>(facade.getTournamentSubsList());
-    }
-
-    public ObjectProperty<Player> combobox1Property() {
-        return cb1;
-    }
-
-    public ObjectProperty<Player> combobox2Property() {
-        return cb2;
-    }
-
-    public StringProperty combobox3Property() {
-        return cb3;
-    }
-
-    public SimpleIntegerProperty indexMatchProperty() {
-        return new SimpleIntegerProperty(indexMatch.get());
-    }
-
-    public ObjectProperty<Match> matchSelectedProperty() {
-        return matchSelected;
-    }
-
-    public SimpleListProperty<Player> opponentsListProperty() {
-        return new SimpleListProperty<Player>(this.oppList);
-    }
-
-    public SimpleListProperty<Match> matchsProperty() {
-        return new SimpleListProperty<Match>(facade.getMatchList());
-    }
-
-    public SimpleListProperty<Tournament> tournamantProperty() {
-        return new SimpleListProperty<Tournament>(facade.getTournamentList());
-    }
-
-    public TournamentFacade getFacade() {
-        return facade;
-    }
-
-    public ObjectProperty<Player> actualProperty() {
-        return actualPlayer;
-    }
-
-    public ObservableList<Match> getAllMatch() {
-        return facade.getTournament().getMatchList();
-    }
-
-    public IntegerProperty indexTournamentProperty() {
-        return this.indexTournament;
-    }
-
-    public void setTournamant(int index) {
-        this.indexTournamentProperty().set(index);
-    }
-
-    public Tournament getTournament() {
-        return facade.getTournament();
     }
 
     public void launchPopUp() throws FileNotFoundException {
@@ -274,8 +166,6 @@ public class ViewModel {
         }
     }
 
-    
-
     public void emptyselectedList() {
         selectedQuestionList.clear();
     }
@@ -286,5 +176,104 @@ public class ViewModel {
         cb3.set(" ");
     }
     
+    public void setTournois() {
+        facade.indexTournamentProperty().set(indexTournament.get());
+    }
     
+    public SimpleListProperty<Question> quetionsProperty() {
+        return new SimpleListProperty<>(facade.getQuestion());
+    }
+
+    public StringProperty getRes1() {
+        return res1;
+    }
+
+    public StringProperty getRes2() {
+        return res2;
+    }
+
+    public StringProperty getRes3() {
+        return res3;
+    }
+
+    public StringProperty getRes4() {
+        return res4;
+    }
+
+   
+    public ObjectProperty<Question> getSelectedQuestion() {
+        return selectedQuestion;
+    }
+
+    public StringProperty questionNameProperty() {
+        return questionName;
+    }
+
+    public IntegerProperty questionPointProperty() {
+        return questionPoint;
+    }
+
+    public ObservableList<Question> selectedQuestionList() {
+        return selectedQuestionList;
+    }
+    
+    public ObservableList<Player> oppList() {
+        return this.oppList;
+    }
+
+    public SimpleListProperty<Player> subscribesListProperty() {
+        return new SimpleListProperty<>(facade.getTournamentSubsList());
+    }
+
+    public ObjectProperty<Player> combobox1Property() {
+        return cb1;
+    }
+
+    public ObjectProperty<Player> combobox2Property() {
+        return cb2;
+    }
+
+    public StringProperty combobox3Property() {
+        return cb3;
+    }
+
+    public SimpleIntegerProperty indexMatchProperty() {
+        return new SimpleIntegerProperty(indexMatch.get());
+    }
+
+    public ObjectProperty<Match> matchSelectedProperty() {
+        return matchSelected;
+    }
+
+    public SimpleListProperty<Player> opponentsListProperty() {
+        return new SimpleListProperty<Player>(this.oppList);
+    }
+
+    public SimpleListProperty<Match> matchsProperty() {
+        return new SimpleListProperty<Match>(facade.getMatchList());
+    }
+
+    public SimpleListProperty<Tournament> tournamantProperty() {
+        return new SimpleListProperty<Tournament>(facade.getTournamentList());
+    }
+
+    public TournamentFacade getFacade() {
+        return facade;
+    }
+
+    public ObjectProperty<Player> actualProperty() {
+        return actualPlayer;
+    }
+
+    public ObservableList<Match> getAllMatch() {
+        return facade.getTournament().getMatchList();
+    }
+
+    public IntegerProperty indexTournamentProperty() {
+        return this.indexTournament;
+    }
+
+    public Tournament getTournament() {
+        return facade.getTournament();
+    }
 }

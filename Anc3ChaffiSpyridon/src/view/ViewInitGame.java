@@ -231,7 +231,7 @@ public class ViewInitGame extends Popup {
         });
         annuler.setOnAction((ActionEvent event) -> {
             try {
-                vm.emptyselectedList();
+                vm.emptySelectedList();
                 stage.close();
             } catch (Exception ex) {
             }
