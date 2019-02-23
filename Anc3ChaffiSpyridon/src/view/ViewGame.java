@@ -58,7 +58,7 @@ public class ViewGame extends VBox {
     private IntegerProperty cptQ = new SimpleIntegerProperty();
     private Label pointGagner = new Label("les points");
     private Button valider = new Button("valider");
-    private Button annuler = new Button("abandonner");
+    private Button abandon = new Button("abandonner");
     private Text attrQName = new Text("Enoncer de la Question");
     private IntegerProperty attrQPoint = new SimpleIntegerProperty();
     private Label attribQuestionPoints= new Label();
@@ -83,6 +83,10 @@ public class ViewGame extends VBox {
         stage.setScene(new Scene(display, 500, 800));
         stage.show();
     }
+    
+    public SimpleListProperty<Question> getSelectedQuestionList() {
+        return new SimpleListProperty<>(selectedQuestionList);
+    }
 
     public void initData() {
         configView();
@@ -99,7 +103,7 @@ public class ViewGame extends VBox {
         display.add(displayQuestion, 0, 8);
         display.add(pointGagner, 0, 9);
         display.add(valider, 0, 10);
-        display.add(annuler, 0, 11);
+        display.add(abandon, 0, 11);
         displayQuestion.setStyle(css());
     }
 
@@ -140,17 +144,13 @@ public class ViewGame extends VBox {
         vm.getSelectedQuestionList().bind(this.getSelectedQuestionList());
     }
 
-    public SimpleListProperty<Question> getSelectedQuestionList() {
-        return new SimpleListProperty<>(selectedQuestionList);
-    }
-
     private void configListerner() {
         valider.setOnAction((ActionEvent event) -> {
-            String t = ((RadioButton) group.getSelectedToggle()).getText();
-            vm.nextQuestion(t,stage);// on vas lui passer les infos des radiobouton et cree une methode dans la ViewModel qui 
+            vm.nextQuestion(((RadioButton) group.getSelectedToggle()).getText(), stage); 
           
         });
-        annuler.setOnAction((ActionEvent event) -> {
+        abandon.setOnAction((ActionEvent event) -> {
+            vm.giveUpGame(stage);
 //           vm.emptyselectedList();
 //           this.stage.close();;
 //              vider liste de qiestionOPP

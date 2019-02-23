@@ -80,7 +80,6 @@ public class VMInitGame {
                 displayTheQuestion();
                 indexQuestion.set(indexQuestion.get() + 1);
             }
-            System.out.println("ksdfjlkjsdf");
         }
     }
 
@@ -96,7 +95,7 @@ public class VMInitGame {
     }
 
     public void setAttributQuetion(Question q) {
-        if (null != q) {
+        if (q != null) {
             selectedQuestion.set(q);
             setBoolAllRadioBtnTrue();
             this.questionName.set(q.getName().get());
@@ -186,23 +185,44 @@ public class VMInitGame {
             pointTotaux.set(pointTotaux.get() + x.pointsProperty().get());
         }
     }
+    
+    public void giveUpGame(Stage stage) {
+        Alert alert = new Alert(AlertType.WARNING, "Êtes-vous sûr.e de vouloir quitter la partie ?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
 
+        if (alert.getResult() == ButtonType.YES) {
+            endOfGameManagmnt(stage);
+            alert.close();
+        } else {
+            alert.close();
+        }
+        
+    }
+    
     public void nextQuestion(String response, Stage stage) {
         if (isGameOn()) {
             displayTheQuestion();
-            if (isResponseRight(response)) {
-                incrementPoints();
-            }
-            if (!isTheLastQuestion()) {
-                incrementQuestion();
-                disableRadioBtn.set(true);
-            } if(isTheLastQuestion()) {
-                gameOver.setValue(Boolean.TRUE);
+            nextQuestionManagmnt(response);
+            if (isTheLastQuestion()) {
+                nextQuestionManagmnt(response);
+                getIndexQuestion().set(getIndexQuestion().get() + 10);
+//                getGameOver().set(true);
             }
         }
-        if (gameOver.get()) {
+        if (getIndexQuestion().get() > selectedQuestionList.size()) {
             endOfGameManagmnt(stage);
         }
+
+    }
+    
+    private void nextQuestionManagmnt(String response) {
+        if (hasNextQuestion()) {
+                if (isResponseRight(response)) {
+                    incrementPoints();
+                }
+                incrementQuestion();
+                disableRadioBtn.set(true);
+            }
     }
 
     private void incrementQuestion() {
@@ -211,7 +231,11 @@ public class VMInitGame {
     }
 
     private boolean isTheLastQuestion() {
-        return cptFillQuestions.get() == selectedQuestionList.size();
+        return getIndexQuestion().get() == selectedQuestionList.size();
+    }
+
+    private boolean hasNextQuestion() {
+        return cptFillQuestions.get() < selectedQuestionList.size();
     }
 
     private boolean isGameOn() {
@@ -219,14 +243,18 @@ public class VMInitGame {
     }
 
     private void endOfGameManagmnt(Stage stage) {
-        String score = analyseScore();
+        String score = "";
+        if(!gameOver.get())
+            score = RESULTS.VAINQUEUR_J1.name();
+        else
+            score = analyseScore();
         createMatch(score);
         emptySelectedList();
         clearOppList();
-//        popupEnd(score);
+        popupEnd(score);
         stage.close();
     }
-    
+
     private void popupEnd(String score) {
         Alert alert = new Alert(AlertType.INFORMATION, score, ButtonType.FINISH);
         alert.showAndWait();
@@ -237,8 +265,7 @@ public class VMInitGame {
     }
 
     private boolean isResponseRight(String s) {
-        int rightRespIndex = getRightResponseIndex();
-        String resp = getResponseFromIndex(rightRespIndex);
+        String resp = getResponseFromIndex(getRightResponseIndex());
         return resp.equals(s);
     }
 
@@ -248,6 +275,10 @@ public class VMInitGame {
 
     private String getResponseFromIndex(int rightRespIndex) {
         return getSelectedQuestionList().get(getIndexQuestion().get() - 1).getResponses().get(rightRespIndex - 1);
+    }
+
+    private Question getQuestionFromIndex() {
+        return getSelectedQuestionList().get(getIndexQuestion().get() - 1);
     }
 
     public String analyseScore() {
@@ -262,7 +293,7 @@ public class VMInitGame {
     }
 
     public void incrementPoints() {
-        Question q = getSelectedQuestionList().get(getIndexQuestion().get() - 1);
+        Question q = getQuestionFromIndex();
         cptPointProperty().set(cptPointProperty().get() + q.getPoints());
     }
 

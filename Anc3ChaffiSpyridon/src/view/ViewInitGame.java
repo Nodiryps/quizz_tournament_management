@@ -226,8 +226,6 @@ public class ViewInitGame extends Popup {
             } catch (Exception ex) {
                 Logger.getLogger(ViewInitGame.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-           
         });
         annuler.setOnAction((ActionEvent event) -> {
             try {
