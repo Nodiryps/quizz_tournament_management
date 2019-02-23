@@ -121,7 +121,7 @@ public class ViewTournManagmt extends VBox {
     private void configFocusListener() throws FileNotFoundException {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    vm.setTournois();
+                    vm.setTournament();
                     clearComboBox();
                     configBindingsView();
                 });

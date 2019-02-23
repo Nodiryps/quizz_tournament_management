@@ -40,7 +40,7 @@ public class TournamentFacade {
         return indexTournament.get();
     }
 
-    public ObservableList<Question> getQuestion() {
+    public ObservableList<Question> getQuestions() {
         return getTournament().getQuestions();
     }
 

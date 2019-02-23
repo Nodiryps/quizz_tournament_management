@@ -30,6 +30,7 @@ import view.ViewInitGame;
 public class ViewModel {
 
     TournamentFacade facade;
+    private final int MAX_POINT = 10;
     private ListProperty<Player> subscribeList;
     private ObservableList<Player> oppList = FXCollections.observableArrayList();
     public IntegerProperty indexTournament = new SimpleIntegerProperty();
@@ -43,18 +44,16 @@ public class ViewModel {
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
    
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
-    private final int MAX_POINT = 10;
+    
     private StringProperty questionName = new SimpleStringProperty();
     private IntegerProperty questionPoint = new SimpleIntegerProperty();
     public StringProperty res1 = new SimpleStringProperty();
     public StringProperty res2 = new SimpleStringProperty();
     public StringProperty res3 = new SimpleStringProperty();
     public StringProperty res4 = new SimpleStringProperty();
-    private BooleanProperty disable = new SimpleBooleanProperty();
     public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
     public IntegerProperty indexQuestion = new SimpleIntegerProperty();
-    private String resuls;
     public BooleanProperty gameOver = new SimpleBooleanProperty();
     public final BooleanProperty bl = new SimpleBooleanProperty(true);
     public final BooleanProperty deselectedRadioButon = new SimpleBooleanProperty(true);
@@ -140,8 +139,7 @@ public class ViewModel {
         return !p.equals(actualPlayer.getValue().toString());
     }
 
-    //ajouter les adversaire de player p dans la liste opponentsListInvalid(les joueur qui n'ont deja jouer contre player p et recois aussi la liste des matchs deja jouer par player p)
-    public ObservableList<Player> addOpponentInvalidList() {
+    private ObservableList<Player> addOpponentInvalidList() {
         ObservableList<Player> playerInvalid = FXCollections.observableArrayList();
         for (Match m : addMatchPlayed()) {
             if (isTheOpponent(m.getPlayer1().getFirstName())) {
@@ -155,14 +153,12 @@ public class ViewModel {
     }
 
     public void oppValidList() {
-        ObservableList<Player> playerValid = FXCollections.observableArrayList();
         ObservableList<Player> list2 = addOpponentInvalidList();
         oppList.clear();
         for (Player s : subscribesListProperty()) {
             if (!list2.contains(s) && !s.getFirstName().equals(actualPlayer.getValue().toString())) {
                 this.oppList.add(s);
             }
-
         }
     }
 
@@ -176,12 +172,12 @@ public class ViewModel {
         cb3.set(" ");
     }
     
-    public void setTournois() {
+    public void setTournament() {
         facade.indexTournamentProperty().set(indexTournament.get());
     }
     
     public SimpleListProperty<Question> quetionsProperty() {
-        return new SimpleListProperty<>(facade.getQuestion());
+        return new SimpleListProperty<>(facade.getQuestions());
     }
 
     public StringProperty getRes1() {
