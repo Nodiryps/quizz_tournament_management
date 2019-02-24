@@ -119,6 +119,12 @@ public class ViewInitGame extends Popup {
         configListener();
     }
     
+    private void configBinding() {
+        configBindingViewModel();
+        configBindingViewInitGame();
+        configBindRadioBtn();
+    }
+    
     private void configView() {
         configMainGridPanes();
         configBorderPane();
@@ -238,12 +244,6 @@ public class ViewInitGame extends Popup {
         radioBtn2.selectedProperty().bind(boolSelectRadioBtn2);
         radioBtn3.selectedProperty().bind(boolSelectRadioBtn3);
         radioBtn4.selectedProperty().bind(boolSelectRadioBtn4);
-    }
-
-    private void configBinding() {
-        configBindingViewModel();
-        configBindingViewInitGame();
-        configBindRadioBtn();
     }
 
     private void configBindingViewInitGame() {

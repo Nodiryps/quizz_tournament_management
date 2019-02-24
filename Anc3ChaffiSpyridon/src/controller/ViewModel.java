@@ -13,6 +13,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Match;
 import model.Player;
@@ -42,9 +45,9 @@ public class ViewModel {
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
-   
+
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
-    
+
     private StringProperty questionName = new SimpleStringProperty();
     private IntegerProperty questionPoint = new SimpleIntegerProperty();
     public StringProperty res1 = new SimpleStringProperty();
@@ -60,7 +63,7 @@ public class ViewModel {
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
-        
+
         bl.setValue(Boolean.TRUE);
     }
 
@@ -84,14 +87,20 @@ public class ViewModel {
         this.oppList().clear();
     }
 
-    public void launchPopUp() throws FileNotFoundException {
-        new PopUpDelete(matchSelected.get(), this);
+    public void launchPopUp(MouseEvent mouseEvent, TableView<Match> matchesList) throws FileNotFoundException {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+            if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
+                new PopUpDelete(matchSelected.get(), this);
+                clearOppList();
+                oppList();
+            }
+        }
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
         bl.setValue(true);
         VMInitGame vm1 = new VMInitGame(this);
-        new ViewInitGame(vm1, cb1.get(), cb2.get());
+        new ViewInitGame(vm1, p1, p2);
     }
 
     public void createMatch(String t) {
@@ -166,16 +175,16 @@ public class ViewModel {
         selectedQuestionList.clear();
     }
 
-    public void clearComboBox() {
-        cb1.set(new Player(""));
-        cb2.set(new Player(""));
-        cb3.set(" ");
-    }
-    
+//    public void clearComboBox() {
+//        cb1.set(new Player(""));
+//        cb2.set(new Player(""));
+//        cb3.set(" ");
+//    }
+
     public void setTournament() {
         facade.indexTournamentProperty().set(indexTournament.get());
     }
-    
+
     public SimpleListProperty<Question> quetionsProperty() {
         return new SimpleListProperty<>(facade.getQuestions());
     }
@@ -196,7 +205,6 @@ public class ViewModel {
         return res4;
     }
 
-   
     public ObjectProperty<Question> getSelectedQuestion() {
         return selectedQuestion;
     }
@@ -212,7 +220,7 @@ public class ViewModel {
     public ObservableList<Question> selectedQuestionList() {
         return selectedQuestionList;
     }
-    
+
     public ObservableList<Player> oppList() {
         return this.oppList;
     }

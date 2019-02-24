@@ -121,9 +121,7 @@ public class ViewTournManagmt extends VBox {
     private void configFocusListener() throws FileNotFoundException {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    vm.setTournament();
-                    clearComboBox();
-                    configBindingsView();
+                    nextTournament();
                 });
         subsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -131,23 +129,10 @@ public class ViewTournManagmt extends VBox {
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2 && matchesList.getSelectionModel().getSelectedItem() != null) {
-                        try {
-                            vm.launchPopUp();
-                            clearComboBox();
-                            vm.clearOppList();
-                            vm.oppList();
-                            cbPlayersList.itemsProperty().unbindBidirectional(vm.subscribesListProperty());
-                            cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
-                            configBindings();
-                        } catch (FileNotFoundException ex) {
-                            System.out.println(ex.getMessage());
-                        }
-                        matchesList.getSelectionModel().clearSelection();
-                        configBindings();
-
-                    }
+                try {
+                    popupDel(mouseEvent);
+                } catch (FileNotFoundException ex) {
+                    System.out.println(ex.getMessage());
                 }
             }
         });
@@ -186,25 +171,44 @@ public class ViewTournManagmt extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    vm.launchGame(cbPlayersList.getSelectionModel().getSelectedItem(), cbOpponentsList.getSelectionModel().getSelectedItem());
+                    vm.launchGame(getSelectedItem(cbPlayersList), getSelectedItem(cbOpponentsList));
                 } catch (Exception ex) {
                     ex.getMessage();
                 }
             }
         });
         btnValidate.setOnAction((ActionEvent event) -> {
-            if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
-                vm.createMatch(cbResultsList.getValue().toString());
-                vm.clearOppList();
-                vm.oppValidList();
-                cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
-                clearComboBox();
-                configBindings();
-            }
+            newMatch();
         });
         btnClear.setOnAction((ActionEvent event) -> {
-          vm.clearComboBox();
+            clearComboBox();
         });
+    }
+
+    private void popupDel(MouseEvent mouseEvent) throws FileNotFoundException {
+        vm.launchPopUp(mouseEvent, matchesList);
+        clearComboBox();
+    }
+    
+    private void newMatch() {
+        if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
+            vm.createMatch(cbResultsList.getValue().toString());
+            vm.clearOppList();
+            vm.oppValidList();
+            cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
+            clearComboBox();
+            configBindings();
+        }
+    }
+
+    private void nextTournament() {
+        vm.setTournament();
+        clearComboBox();
+        configBindingsView(); // pour changer de tournois
+    }
+    
+    private Player getSelectedItem(ComboBox<Player> cb) {
+        return cb.getSelectionModel().getSelectedItem();
     }
 
     private void clearComboBox() {

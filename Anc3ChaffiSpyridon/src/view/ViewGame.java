@@ -18,6 +18,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,7 +27,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Player;
 import model.Question;
 
@@ -50,16 +53,16 @@ public class ViewGame extends VBox {
     private RadioButton reponse2 = new RadioButton();
     private RadioButton reponse3 = new RadioButton();
     private RadioButton reponse4 = new RadioButton();
-    private Label lbTitle = new Label("Réponse à la question: ");
-    private Label lbCptQ = new Label("nb de question: ");
+    private Label lbTitle = new Label("<REPONDEZ AUX QEUSTIONS>");
+    private Label lbCptQ = new Label("Nb de question: ");
     private Label lbP2Points = new Label("Vos points: ");
     private Label lbAttrQPoints = new Label();
-    private Label lbResponse = new Label("Reponse");
+    private Label lbResponse = new Label("Réponse");
     private Text attrQName = new Text("Enoncer de la Question");
     private IntegerProperty cptQ = new SimpleIntegerProperty();
     private IntegerProperty attrQPoint = new SimpleIntegerProperty();
     private IntegerProperty indexQuestion = new SimpleIntegerProperty();
-    private Button valider = new Button("valider");
+    private Button validate = new Button("valider");
     private Button abandon = new Button("abandonner");
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private final Player p1;
@@ -67,15 +70,15 @@ public class ViewGame extends VBox {
     private BooleanProperty gameOver = new SimpleBooleanProperty();
     private final BooleanProperty boolUnselectRadioBtn = new SimpleBooleanProperty();
     
-    public ViewGame(VMInitGame vm, ObservableList<Question> list, Player p1, Player p2, Stage stage) {
+    public ViewGame(VMInitGame vm, ObservableList<Question> list, Player p1, Player p2, Stage s) {
         this.selectedQuestionList = list;
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
         initData();
-        this.stage = stage;
-        stage.setTitle("Choix de questions");
-        stage.setScene(new Scene(display, 500, 800));
+        stage = s;
+        stage.setTitle("Répondez aux questions");
+        stage.setScene(new Scene(display, 650, 300));
         stage.show();
     }
     
@@ -93,9 +96,10 @@ public class ViewGame extends VBox {
         displayQuestion.getChildren().addAll(attrQName, lbAttrQPoints, lbResponse, reponse1, reponse2, reponse3, reponse4);
         display.add(displayQuestion, 0, 8);
         display.add(lbP2Points, 0, 9);
-        display.add(valider, 0, 10);
+        display.add(validate, 0, 10);
         display.add(abandon, 0, 11);
         displayQuestion.setStyle(css());
+        display.alignmentProperty().set(Pos.CENTER);
     }
     
     private void configRadioButton() {
@@ -160,7 +164,7 @@ public class ViewGame extends VBox {
     }
     
     private void configListerner() {
-        valider.setOnAction((ActionEvent event) -> {
+        validate.setOnAction((ActionEvent event) -> {
             vm.nextQuestion(((RadioButton) group.getSelectedToggle()).getText(), stage);            
             
         });
