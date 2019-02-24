@@ -188,7 +188,7 @@ public class ViewTournManagmt extends VBox {
                 try {
                     vm.launchGame(cbPlayersList.getSelectionModel().getSelectedItem(), cbOpponentsList.getSelectionModel().getSelectedItem());
                 } catch (Exception ex) {
-                    Logger.getLogger(ViewTournManagmt.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.getMessage();
                 }
             }
         });

@@ -83,7 +83,7 @@ public class VMInitGame {
         }
     }
 
-    public void displayTheQuestion() {
+    private void displayTheQuestion() {
         disableRadioBtn.set(true);
         if (indexQuestion.get() < 0) {
             indexQuestion.set(0);
@@ -104,10 +104,6 @@ public class VMInitGame {
             this.currentQuestion.set(q);
             selectedQuestion.set(null);
         }
-    }
-
-    public IntegerProperty cptPointProperty() {
-        return cptPoint;
     }
 
     private void launchAttributes() {
@@ -257,17 +253,22 @@ public class VMInitGame {
     }
 
     private void endOfGameManagmnt(Stage stage) {
-        String score = "";
-        if (!gameOver.get()) {
-            score = RESULTS.VAINQUEUR_J1.name();
-        } else {
-            score = analyseScore();
-        }
+        String score = getScore();
         createMatch(score);
         emptySelectedList();
         clearOppList();
         popupEnd(score);
         stage.close();
+    }
+    
+    private String getScore() {
+        String score = "";
+        if (!gameOver.get()) {
+            score = RESULTS.VAINQUEUR_J1.name();
+        } else {
+            score = analyseScore();
+        } 
+        return score;
     }
 
     private void popupEnd(String score) {
@@ -312,6 +313,10 @@ public class VMInitGame {
         cptPointProperty().set(cptPointProperty().get() + q.getPoints());
     }
 
+    public IntegerProperty cptPointProperty() {
+        return cptPoint;
+    }
+    
     public BooleanProperty getDisableRadioBtn() {
         return disableRadioBtn;
     }

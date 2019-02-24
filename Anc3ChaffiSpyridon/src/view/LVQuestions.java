@@ -33,7 +33,7 @@ public class LVQuestions extends ListView<Question> {
                 });
     }
 
-    public void configbinding() {
+    private void configbinding() {
         this.itemsProperty().bind(vm.questionsProperty());
     }
 

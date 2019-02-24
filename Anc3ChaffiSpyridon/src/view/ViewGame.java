@@ -65,7 +65,7 @@ public class ViewGame extends VBox {
     private final Player p1;
     private final Player p2;
     private BooleanProperty gameOver = new SimpleBooleanProperty();
-    public final BooleanProperty boolUnselectRadioBtn = new SimpleBooleanProperty();
+    private final BooleanProperty boolUnselectRadioBtn = new SimpleBooleanProperty();
     
     public ViewGame(VMInitGame vm, ObservableList<Question> list, Player p1, Player p2, Stage stage) {
         this.selectedQuestionList = list;
@@ -77,10 +77,6 @@ public class ViewGame extends VBox {
         stage.setTitle("Choix de questions");
         stage.setScene(new Scene(display, 500, 800));
         stage.show();
-    }
-    
-    public SimpleListProperty<Question> getSelectedQuestionList() {
-        return new SimpleListProperty<>(selectedQuestionList);
     }
     
     public void initData() {
@@ -170,11 +166,6 @@ public class ViewGame extends VBox {
         });
         abandon.setOnAction((ActionEvent event) -> {
             vm.giveUpGame(stage);
-//           vm.emptyselectedList();
-//           this.stage.close();;
-//              vider liste de qiestionOPP
-//              vider les comboBox.
-//              rajouter une defaite.
         });
     }
 
@@ -184,6 +175,10 @@ public class ViewGame extends VBox {
                 + "-fx-border-width: 1;\n"
                 + "-fx-border-style: solid;\n"
                 + "-fx-padding: 12;\n";
+    }
+    
+    public SimpleListProperty<Question> getSelectedQuestionList() {
+        return new SimpleListProperty<>(selectedQuestionList);
     }
     
 }

@@ -18,6 +18,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,11 +55,15 @@ public class ViewInitGame extends Popup {
     private final BorderPane borderPane = new BorderPane();
     private final VBox vbMiddle = new VBox();
     private final GridPane gpDetailsQuestion = new GridPane();
-    private final GridPane gpTop = new GridPane();
-    private final GridPane gpBottom = new GridPane();
+    private final GridPane gpBtnsValCan = new GridPane();
     private Label lbPointsQuestionList = new Label();
     private Label lbPointsOppList = new Label();
     private Label lbFillQuestions = new Label();
+    
+    private final GridPane gpLeft = new GridPane();
+    private final GridPane gpCenter = new GridPane();
+    private final GridPane gpRight = new GridPane();
+    private final BorderPane bpBottom = new BorderPane();
 
     private Text attrQName = new Text("Enoncer de la Question");
     private IntegerProperty attrQPoint = new SimpleIntegerProperty();
@@ -71,15 +76,15 @@ public class ViewInitGame extends Popup {
     private Button addQuestion = new Button("Ajouter");
     private Button delQuestion = new Button("Supprimer");
 
-    private Button validate = new Button("valider");
-    private Button cancel = new Button("annuler");
+    private Button validate = new Button("Valider");
+    private Button cancel = new Button("Annuler");
 
     private StringProperty resp1 = new SimpleStringProperty();
     private StringProperty resp2 = new SimpleStringProperty();
     private StringProperty resp3 = new SimpleStringProperty();
     private StringProperty resp4 = new SimpleStringProperty();
     private final ToggleGroup group = new ToggleGroup();
-    private final GridPane gpButtons = new GridPane();//gere les boutons
+    private final GridPane gpBtnsAddDel = new GridPane();//gere les boutons
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
     private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     private IntegerProperty IndexQuestion = new SimpleIntegerProperty();
@@ -98,9 +103,7 @@ public class ViewInitGame extends Popup {
         this.p2 = p2;
         this.questionList = new LVQuestions(this.vm, radioBtn1, radioBtn2, radioBtn3, radioBtn4);
         this.fillQuestion = new LVOppQuestions(this.vm);
-        initGrid();
-        configBinding();
-        configListener();
+        init();
         stage = new Stage();
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
@@ -109,52 +112,88 @@ public class ViewInitGame extends Popup {
         stage.show();
     }
 
-    private void initGrid() {
+    private void init() {
         configView();
         setToggleGroup();
+        configBinding();
+        configListener();
     }
-
+    
     private void configView() {
+        configMainGridPanes();
         configBorderPane();
-        configGridPaneDetailsQ();
+        configGridPaneQuestDetails();
         configVBoxMiddle();
-        configGridPaneTop();
-        lbFillQuestions.autosize();
-        this.gpButtons.add(addQuestion, 0, 0);
-        gpButtons.add(delQuestion, 1, 0);
-        configGridPaneBottom();
+        configGPButtons();
+    }
+    
+    private void configMainGridPanes() {
+        configGridPaneLeft();
+        configGridPaneCenter();
+        configGridPaneRight();
+        gridPanesHGap();
+    }
+    
+    private void configGPButtons() {
+        configGridPaneBtnAddDel();
+        configGridPaneBtnValCan();
+    }
+    
+    private void configBorderPane() {
+        borderPane.setLeft(gpLeft);
+        borderPane.setCenter(gpCenter);
+        borderPane.setRight(gpRight);
+        borderPane.setPadding(new Insets(25));
+        borderPane.autosize();
     }
     
     private void configVBoxMiddle() {
-        vbMiddle.getChildren().addAll(gpDetailsQuestion, radioBtn1, radioBtn2, radioBtn3, radioBtn4, gpButtons);
+        vbMiddle.getChildren().addAll(gpDetailsQuestion, radioBtn1, radioBtn2, radioBtn3, radioBtn4, gpBtnsAddDel);
         vbMiddle.setPadding(new Insets(0, 50, 0, 50));
         vbMiddle.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
     }
     
-    private void configBorderPane() {
-        borderPane.setLeft(questionList);
-        borderPane.setCenter(vbMiddle);
-        borderPane.setRight(fillQuestion);
-        borderPane.setTop(gpTop);
-        borderPane.setBottom(gpBottom);
-        borderPane.setPadding(new Insets(25));
+    private void gridPanesHGap() {
+        gpLeft.setHgap(10);
+        gpCenter.setHgap(10);
+        gpRight.setHgap(10);
     }
     
-    private void configGridPaneBottom() {
-        gpBottom.add(lbPointsQuestionList, 0, 0);
-        gpBottom.add(validate, 1, 1);
-        gpBottom.add(cancel, 2, 1);
-        gpBottom.add(lbPointsOppList, 3, 1);
+    private void configGridPaneLeft() {
+        gpLeft.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 0);
+        gpLeft.add(questionList, 0, 1);
+        gpLeft.add(lbPointsQuestionList, 0, 2);
+        gpLeft.alignmentProperty().set(Pos.CENTER_LEFT);
     }
     
-    private void configGridPaneTop() {
-        gpTop.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 1);
-        gpTop.add(new Label("Construction Questionnaire"), 1, 0);
-        gpTop.add(lbFillQuestions, 2, 1);
+    private void configGridPaneCenter() {
+        gpCenter.add(new Label("<CONSTRUCTION QUESTIONNAIRE>"), 0, 0);
+        gpCenter.add(vbMiddle, 0, 1);
+        gpCenter.add(gpBtnsAddDel, 0, 2);
+        gpCenter.alignmentProperty().set(Pos.TOP_CENTER);
     }
     
-    private void configGridPaneDetailsQ() {
+    private void configGridPaneRight() {
+        gpRight.add(lbFillQuestions, 0, 0);
+        gpRight.add(fillQuestion, 0, 1);
+        gpRight.add(lbPointsOppList, 0, 2);
+        gpRight.add(gpBtnsValCan, 0, 3);
+        gpRight.alignmentProperty().set(Pos.CENTER_RIGHT);
+    }
+    
+    private void configGridPaneBtnValCan() {
+        gpBtnsValCan.add(validate, 1, 1);
+        gpBtnsValCan.add(cancel, 2, 1);
+    }
+    
+    private void configGridPaneBtnAddDel() {
+        gpBtnsAddDel.add(addQuestion, 0, 0);
+        gpBtnsAddDel.add(delQuestion, 1, 0);
+        gpBtnsAddDel.setVgap(10);
+    }
+    
+    private void configGridPaneQuestDetails() {
         gpDetailsQuestion.add(attrQName, 0, 0);
         gpDetailsQuestion.add(lbAttrQPoints, 0, 1);
         gpDetailsQuestion.add(lbResponse, 0, 2);
