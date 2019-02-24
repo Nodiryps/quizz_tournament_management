@@ -100,7 +100,7 @@ public class VMInitGame {
             selectRightRespRadioBtn();
             this.questionName.set(q.getName().get());
             this.questionPoint.set(q.pointsProperty().getValue());
-            setReponse(q);
+            setResponse(q);
             this.currentQuestion.set(q);
             selectedQuestion.set(null);
         }
@@ -116,7 +116,7 @@ public class VMInitGame {
         gameOver.set(false);
     }
 
-    public void setReponse(Question q) {
+    public void setResponse(Question q) {
         res1.set(q.getResponses().get(0));
         res2.set(q.getResponses().get(1));
         res3.set(q.getResponses().get(2));
@@ -167,7 +167,7 @@ public class VMInitGame {
                     cptFillQuestions.set(selectedQuestionList.size());
                 }
                 totalPoints.set(totalPoints.get() - q.pointsProperty().get());
-                setReponse(selectedQuestion.get());
+                setResponse(selectedQuestion.get());
             }
         }
 
@@ -313,7 +313,7 @@ public class VMInitGame {
     }
 
     public BooleanProperty getDisableRadioBtn() {
-        return boolSelectRadioBtn1;
+        return disableRadioBtn;
     }
 
     public IntegerProperty getTotalPoints() {

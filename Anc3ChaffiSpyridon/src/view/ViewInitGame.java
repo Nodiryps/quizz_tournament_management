@@ -59,25 +59,25 @@ public class ViewInitGame extends Popup {
     private Label lbPointsQuestionList = new Label();
     private Label lbPointsOppList = new Label();
     private Label lbFillQuestions = new Label();
-    //Zone milieu
-    private Text attrQName = new Text("Enoncer de la Question: ");
+
+    private Text attrQName = new Text("Enoncer de la Question");
     private IntegerProperty attrQPoint = new SimpleIntegerProperty();
     private Label lbAttrQPoints = new Label();
     private Label lbResponse = new Label("Réponses: ");
-    private RadioButton reponse1 = new RadioButton();
-    private RadioButton reponse2 = new RadioButton();
-    private RadioButton reponse3 = new RadioButton();
-    private RadioButton reponse4 = new RadioButton();
+    private RadioButton radioBtn1 = new RadioButton();
+    private RadioButton radioBtn2 = new RadioButton();
+    private RadioButton radioBtn3 = new RadioButton();
+    private RadioButton radioBtn4 = new RadioButton();
     private Button addQuestion = new Button("Ajouter");
     private Button delQuestion = new Button("Supprimer");
-    /////////////////////////////////////////////////////////
-    private Button valider = new Button("valider");
-    private Button annuler = new Button("annuler");
-    ///////elements bindés
-    private StringProperty res1 = new SimpleStringProperty();
-    private StringProperty res2 = new SimpleStringProperty();
-    private StringProperty res3 = new SimpleStringProperty();
-    private StringProperty res4 = new SimpleStringProperty();
+
+    private Button validate = new Button("valider");
+    private Button cancel = new Button("annuler");
+
+    private StringProperty resp1 = new SimpleStringProperty();
+    private StringProperty resp2 = new SimpleStringProperty();
+    private StringProperty resp3 = new SimpleStringProperty();
+    private StringProperty resp4 = new SimpleStringProperty();
     private final ToggleGroup group = new ToggleGroup();
     private final GridPane gpButtons = new GridPane();//gere les boutons
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
@@ -96,7 +96,7 @@ public class ViewInitGame extends Popup {
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
-        this.questionList = new LVQuestions(this.vm, reponse1, reponse2, reponse3, reponse4);
+        this.questionList = new LVQuestions(this.vm, radioBtn1, radioBtn2, radioBtn3, radioBtn4);
         this.fillQuestion = new LVOppQuestions(this.vm);
         initGrid();
         configBinding();
@@ -112,7 +112,6 @@ public class ViewInitGame extends Popup {
     private void initGrid() {
         configView();
         setToggleGroup();
-        configBindRadioBtn();
     }
 
     private void configView() {
@@ -127,7 +126,7 @@ public class ViewInitGame extends Popup {
     }
     
     private void configVBoxMiddle() {
-        vbMiddle.getChildren().addAll(gpDetailsQuestion, reponse1, reponse2, reponse3, reponse4, gpButtons);
+        vbMiddle.getChildren().addAll(gpDetailsQuestion, radioBtn1, radioBtn2, radioBtn3, radioBtn4, gpButtons);
         vbMiddle.setPadding(new Insets(0, 50, 0, 50));
         vbMiddle.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
@@ -144,13 +143,13 @@ public class ViewInitGame extends Popup {
     
     private void configGridPaneBottom() {
         gpBottom.add(lbPointsQuestionList, 0, 0);
-        gpBottom.add(valider, 1, 1);
-        gpBottom.add(annuler, 2, 1);
+        gpBottom.add(validate, 1, 1);
+        gpBottom.add(cancel, 2, 1);
         gpBottom.add(lbPointsOppList, 3, 1);
     }
     
     private void configGridPaneTop() {
-        gpTop.add(new Label(p1.getFirstName() + "  contre  " + p2.getFirstName()), 0, 1);
+        gpTop.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 1);
         gpTop.add(new Label("Construction Questionnaire"), 1, 0);
         gpTop.add(lbFillQuestions, 2, 1);
     }
@@ -169,10 +168,10 @@ public class ViewInitGame extends Popup {
     }
 
     private void setToggleGroup() {
-        reponse1.setToggleGroup(group);
-        reponse2.setToggleGroup(group);
-        reponse3.setToggleGroup(group);
-        reponse4.setToggleGroup(group);
+        radioBtn1.setToggleGroup(group);
+        radioBtn2.setToggleGroup(group);
+        radioBtn3.setToggleGroup(group);
+        radioBtn4.setToggleGroup(group);
     }
 
     private void configBindRadioBtn() {
@@ -182,29 +181,30 @@ public class ViewInitGame extends Popup {
     }
     
     private void bindingTextRadioBtn() {
-        reponse1.textProperty().bind(res1);
-        reponse2.textProperty().bind(res2);
-        reponse3.textProperty().bind(res3);
-        reponse4.textProperty().bind(res4);
+        radioBtn1.textProperty().bind(resp1);
+        radioBtn2.textProperty().bind(resp2);
+        radioBtn3.textProperty().bind(resp3);
+        radioBtn4.textProperty().bind(resp4);
     }
     
     private void bindingDisableRadioBtn() {
-        reponse1.disableProperty().bind(disableRadioBtn);
-        reponse2.disableProperty().bind(disableRadioBtn);
-        reponse3.disableProperty().bind(disableRadioBtn);
-        reponse4.disableProperty().bind(disableRadioBtn);
+        radioBtn1.disableProperty().bind(disableRadioBtn);
+        radioBtn2.disableProperty().bind(disableRadioBtn);
+        radioBtn3.disableProperty().bind(disableRadioBtn);
+        radioBtn4.disableProperty().bind(disableRadioBtn);
     }
     
     private void bindingSelectRadioBtn() {
-        reponse1.selectedProperty().bind(boolSelectRadioBtn1);
-        reponse2.selectedProperty().bind(boolSelectRadioBtn2);
-        reponse3.selectedProperty().bind(boolSelectRadioBtn3);
-        reponse4.selectedProperty().bind(boolSelectRadioBtn4);
+        radioBtn1.selectedProperty().bind(boolSelectRadioBtn1);
+        radioBtn2.selectedProperty().bind(boolSelectRadioBtn2);
+        radioBtn3.selectedProperty().bind(boolSelectRadioBtn3);
+        radioBtn4.selectedProperty().bind(boolSelectRadioBtn4);
     }
 
     private void configBinding() {
         configBindingViewModel();
         configBindingViewInitGame();
+        configBindRadioBtn();
     }
 
     private void configBindingViewInitGame() {
@@ -212,7 +212,7 @@ public class ViewInitGame extends Popup {
         configBindPoints();
         configBindLabels();
         configBindSelectRadioBtn();
-        disableRadioBtn.bindBidirectional(vm.getDisableRadioBtn());
+        disableRadioBtn.bind(vm.getDisableRadioBtn());
     }
     
     private void configBindQuestions() {
@@ -253,10 +253,10 @@ public class ViewInitGame extends Popup {
     }
     
     private void configBindRes() {
-        vm.getRes1().bindBidirectional(res1);
-        vm.getRes2().bindBidirectional(res2);
-        vm.getRes3().bindBidirectional(res3);
-        vm.getRes4().bindBidirectional(res4);
+        vm.getRes1().bindBidirectional(resp1);
+        vm.getRes2().bindBidirectional(resp2);
+        vm.getRes3().bindBidirectional(resp3);
+        vm.getRes4().bindBidirectional(resp4);
     }
 
     private void configListener() {
@@ -267,7 +267,7 @@ public class ViewInitGame extends Popup {
         delQuestion.setOnAction((ActionEvent e) -> {
                 vm.deleteQuestionForOpp(getSelectedItem(fillQuestion));
         });
-        valider.setOnAction((ActionEvent event) -> {
+        validate.setOnAction((ActionEvent event) -> {
            
             try {
                 vm.launchPlay(p1, p2, this.stage);
@@ -275,7 +275,7 @@ public class ViewInitGame extends Popup {
                 ex.getMessage();
             }
         });
-        annuler.setOnAction((ActionEvent event) -> {
+        cancel.setOnAction((ActionEvent event) -> {
             try {
                 vm.emptySelectedList();
                 stage.close();
