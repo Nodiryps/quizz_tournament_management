@@ -70,7 +70,7 @@ public class ViewModel {
     public void setAttributQuetion(Question q) {
         if (null != q) {
             this.questionName.set(q.getName().get());
-            this.questionPoint.set(q.pointsProperty().getValue());
+            this.questionPoint.set(q.getPoints());
             setReponse(q);
             this.currentQuestion.set(q);
         }

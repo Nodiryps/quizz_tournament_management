@@ -7,10 +7,7 @@ package model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
-import element.Elements;
 import element.Elem;
-import java.util.List;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

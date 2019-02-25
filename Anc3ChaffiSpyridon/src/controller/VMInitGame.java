@@ -99,7 +99,7 @@ public class VMInitGame {
             selectedQuestion.set(q);
             selectRightRespRadioBtn();
             this.questionName.set(q.getName().get());
-            this.questionPoint.set(q.pointsProperty().getValue());
+            this.questionPoint.set(q.getPoints());
             setResponse(q);
             this.currentQuestion.set(q);
             selectedQuestion.set(null);
@@ -153,16 +153,16 @@ public class VMInitGame {
 
     public void addQuestionforOpp(Question q) {
         if (q != null) {
-            if (cptPoint.get() + q.pointsProperty().get() <= MAXIMUM_POINTS && !selectedQuestionList.contains(q)) { // 
+            if (cptPoint.get() + q.getPoints() <= MAXIMUM_POINTS && !selectedQuestionList.contains(q)) { // 
                 selectedQuestion.set(q);
                 if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                     this.selectedQuestionList.add(getSelectedQuestion().get());
-                    cptPoint.set(cptPoint.get() + q.pointsProperty().get());
+                    cptPoint.set(cptPoint.get() + q.getPoints());
                     MAX_POINTS_GAME.set(cptPoint.get());
                     questionsProperty().remove(q);
                     cptFillQuestions.set(selectedQuestionList.size());
                 }
-                totalPoints.set(totalPoints.get() - q.pointsProperty().get());
+                totalPoints.set(totalPoints.get() - q.getPoints());
                 setResponse(selectedQuestion.get());
             }
         }
@@ -173,9 +173,9 @@ public class VMInitGame {
         if (q != null) {
             if (selectedQuestionList.contains(q)) {
                 selectedQuestion.set(q);
-                cptPoint.set(cptPoint.get() - selectedQuestion.get().pointsProperty().get());
+                cptPoint.set(cptPoint.get() - selectedQuestion.get().getPoints());
                 this.selectedQuestionList.remove(q);
-                totalPoints.set(totalPoints.get() + q.pointsProperty().get());
+                totalPoints.set(totalPoints.get() + q.getPoints());
                 cptFillQuestions.set(selectedQuestionList.size());
             }
         }
@@ -183,7 +183,7 @@ public class VMInitGame {
 
     public void addPointsToTotal() {
         for (Question q : questionsProperty()) {
-            totalPoints.set(totalPoints.get() + q.pointsProperty().get());
+            totalPoints.set(totalPoints.get() + q.getPoints());
         }
     }
 
