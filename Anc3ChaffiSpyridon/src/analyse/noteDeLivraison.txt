@@ -13,3 +13,4 @@ tout fonctionne, presque comme il faut
 A faire:
 - probleme: la partie s'arrete une question trop tot :(
 - encore un peu de logique dans la viewTournament
+- comboBox a vider quand la partie se termine
