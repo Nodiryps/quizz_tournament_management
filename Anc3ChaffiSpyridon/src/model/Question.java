@@ -22,13 +22,15 @@ public class Question {
     private final StringProperty name;
     private final IntegerProperty numCorrectResponse;
     private final IntegerProperty points;
-    private final ObservableList<String> responses;
+    private  ObservableList<String> responses;
 
     public Question(Elem elem) {
         this.name = new SimpleStringProperty(elem.name);
         this.numCorrectResponse = new SimpleIntegerProperty(elem.numCorrectResponse);
         this.points = new SimpleIntegerProperty(elem.points);
+        if(elem.responses != null){
         this.responses = FXCollections.observableArrayList(elem.responses);
+        }
     }
 
     public StringProperty getName() {

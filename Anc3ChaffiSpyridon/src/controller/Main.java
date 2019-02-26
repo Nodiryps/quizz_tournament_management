@@ -9,8 +9,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import model.*;
 import view.*;
-import element.Elements;
-import element.Elem;
+
 
 import java.util.List;
 

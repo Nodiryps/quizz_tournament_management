@@ -38,7 +38,7 @@ public class Tournament {
     public void fillListQuestions() {
         List<Elem> listElem = Elements.loadElemsFromFile("Questions.JSON");
         for (Elem list : listElem) {
-            questions.add(new Question(list));
+        
         }
     }
     
@@ -76,5 +76,7 @@ public class Tournament {
         for(Question p:t.questions){
             System.out.println(p.getName().get());
         }
+        
+
     }
 }
