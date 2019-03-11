@@ -6,8 +6,7 @@
 package view;
 
 import controller.VMInitGame;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -21,6 +20,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -37,6 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import model.Category;
 import model.Player;
 import model.Question;
 
@@ -63,7 +64,6 @@ public class ViewInitGame extends Popup {
     private final GridPane gpLeft = new GridPane();
     private final GridPane gpCenter = new GridPane();
     private final GridPane gpRight = new GridPane();
-    private final BorderPane bpBottom = new BorderPane();
 
     private Text attrQName = new Text("Enoncer de la Question");
     private IntegerProperty attrQPoint = new SimpleIntegerProperty();
@@ -96,6 +96,7 @@ public class ViewInitGame extends Popup {
     private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
+    private final ComboBox<Category> cbCat = new ComboBox<>();
 
     public ViewInitGame(VMInitGame vm, Player p1, Player p2) throws Exception {
         this.vm = vm;
@@ -167,9 +168,10 @@ public class ViewInitGame extends Popup {
     }
     
     private void configGridPaneLeft() {
-        gpLeft.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 0);
-        gpLeft.add(questionList, 0, 1);
-        gpLeft.add(lbPointsQuestionList, 0, 2);
+        gpLeft.add(cbCat, 0, 0);
+        gpLeft.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 1);
+        gpLeft.add(questionList, 0, 2);
+        gpLeft.add(lbPointsQuestionList, 0, 3);
         gpLeft.alignmentProperty().set(Pos.CENTER_LEFT);
     }
     
@@ -257,6 +259,8 @@ public class ViewInitGame extends Popup {
     private void configBindQuestions() {
         fillQuestion.itemsProperty().bind(vm.selectedQuestionProperty());
         lbAttrQPoints.textProperty().bind(attrQPoint.asString("%d Point(s)"));
+        vm.getCategory().bindBidirectional(cbCat.itemsProperty());
+        cbCat.itemsProperty().bindBidirectional(vm.getCategory());
     }
     
     private void configBindPoints() {
@@ -299,6 +303,11 @@ public class ViewInitGame extends Popup {
     }
 
     private void configListener() {
+        
+        cbCat.getSelectionModel().selectedIndexProperty()
+                .addListener((Observable o) -> {
+                    vm.SetCategory(cbCat.getSelectionModel().getSelectedItem());
+                });
         addQuestion.setOnAction((ActionEvent e) -> {
                 vm.addQuestionforOpp(getSelectedItem(questionList));
 

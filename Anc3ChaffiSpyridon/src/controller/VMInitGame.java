@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import model.Category;
 import model.RESULTS;
 
 /**
@@ -459,5 +460,15 @@ public class VMInitGame {
 
     public IntegerProperty pointTotauxProperty() {
         return totalPoints;
+    }
+    
+    public SimpleListProperty<Category> getCategory(){
+       return new SimpleListProperty<>(vm.facade.getCategory());
+    }
+    
+    public void SetCategory(Category q){
+     vm.facade.getQuestions().clear();
+     vm.facade.getTournament().fillListQuestions(q);
+     
     }
 }

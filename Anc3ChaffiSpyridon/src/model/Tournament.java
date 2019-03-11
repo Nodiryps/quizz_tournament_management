@@ -27,6 +27,10 @@ public class Tournament {
         return questions;
     }
 
+    public ObservableList<Category> getCat() {
+        return cat;
+    }
+
     public Tournament(String s) {
         name = s;
         fillListQuestions();
@@ -38,9 +42,9 @@ public class Tournament {
 
     public void fillListQuestions() {
         List<Elem> listElem = Elements.loadElemsFromFile("Questions.JSON");
-        for (Elem list : listElem) {
-            if (list.subElems != null) {
-                Category c = new Category(list);
+        for (Elem e : listElem) {
+            if (e.subElems != null) {
+                Category c = new Category(e);
                 cat.add(c);
                 fillListQuestions(c);
             }

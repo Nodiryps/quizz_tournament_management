@@ -63,6 +63,10 @@ public class TournamentFacade {
     public Match selectedMatchProperty() {
         return selectedMatch;
     }
+    
+    public ObservableList<Category> getCategory(){
+      return getTournament().getCat();
+    }
 
     public void initData() {
         Tournament t1 = new Tournament("E-Sport");
