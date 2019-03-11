@@ -21,6 +21,7 @@ public class Tournament {
     private ObservableList<Player> subscribersList = FXCollections.observableArrayList();// modifier en hashList peut etre.
     private ObservableList<Match> matchList = FXCollections.observableArrayList();
     private final ObservableList<Question> questions = FXCollections.observableArrayList();
+    private final ObservableList<Category> cat = FXCollections.observableArrayList();
 
     public ObservableList<Question> getQuestions() {
         return questions;
@@ -38,11 +39,24 @@ public class Tournament {
     public void fillListQuestions() {
         List<Elem> listElem = Elements.loadElemsFromFile("Questions.JSON");
         for (Elem list : listElem) {
-        
+            if (list.subElems != null) {
+                Category c = new Category(list);
+                cat.add(c);
+                fillListQuestions(c);
+            }
         }
     }
-    
-    
+
+    public void fillListQuestions(Category q) {
+        for (Elem list : q.subElem) {
+            if (list.subElems == null) {
+                questions.add(new Question(list));
+            } else {
+                cat.add(new Category(list));
+                fillListQuestions(new Category(list));
+            }
+        }
+    }
 
     public ObservableList<Player> getSubscribersList() {
         return subscribersList;
@@ -70,13 +84,17 @@ public class Tournament {
     public String toString() {
         return getName();
     }
-    
+
     public static void main(String[] args) {
-        Tournament t=new Tournament("test");
-        for(Question p:t.questions){
-            System.out.println(p.getName().get());
+        Tournament t = new Tournament("test");
+        // Composant q=t.questions.get(2);
+        for (Question q : t.questions) {
+            System.out.println(q);
         }
-        
+
+        for (Category q : t.cat) {
+            System.out.println(q);
+        }
 
     }
 }
