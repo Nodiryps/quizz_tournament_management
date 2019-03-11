@@ -7,7 +7,10 @@ package model;
 
 import element.Elem;
 import element.Elements;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -21,14 +24,14 @@ public class Tournament {
     private ObservableList<Player> subscribersList = FXCollections.observableArrayList();// modifier en hashList peut etre.
     private ObservableList<Match> matchList = FXCollections.observableArrayList();
     private final ObservableList<Question> questions = FXCollections.observableArrayList();
-    private final ObservableList<Category> cat = FXCollections.observableArrayList();
+    private final Set<Category> cat =new HashSet();
 
     public ObservableList<Question> getQuestions() {
         return questions;
     }
 
     public ObservableList<Category> getCat() {
-        return cat;
+        return FXCollections.observableArrayList(cat);
     }
 
     public Tournament(String s) {
@@ -52,12 +55,16 @@ public class Tournament {
     }
 
     public void fillListQuestions(Category q) {
-        for (Elem list : q.subElem) {
-            if (list.subElems == null) {
-                questions.add(new Question(list));
+             System.out.println(q);
+        for (Elem e : q.subElem) {
+            if (e.subElems == null) {
+                questions.add(new Question(e));
             } else {
-                cat.add(new Category(list));
-                fillListQuestions(new Category(list));
+                
+                if(!cat.contains(new Category(e))){
+                cat.add(new Category(e));
+                }
+                fillListQuestions(new Category(e));
             }
         }
     }
@@ -89,16 +96,4 @@ public class Tournament {
         return getName();
     }
 
-    public static void main(String[] args) {
-        Tournament t = new Tournament("test");
-        // Composant q=t.questions.get(2);
-        for (Question q : t.questions) {
-            System.out.println(q);
-        }
-
-        for (Category q : t.cat) {
-            System.out.println(q);
-        }
-
-    }
 }
