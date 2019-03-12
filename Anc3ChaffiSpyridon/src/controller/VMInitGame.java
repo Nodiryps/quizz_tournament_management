@@ -71,7 +71,6 @@ public class VMInitGame {
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
-        addPointsToTotal();
         disableRadioBtn.set(true);
         questionsProperty().clear();
     }
@@ -483,12 +482,16 @@ public class VMInitGame {
             if (e.subElems == null) {
                 questionsProperty().add(new Question(e));
             }
+            
             removeIfSameQuestion();
+            
             if (e.subElems != null) {
                 Category c = new Category(e);
                 addQuestions(c);
             }
         }
+        pointTotauxProperty().set(0);
+        addPointsToTotal();
     }
     
     private void removeIfSameQuestion() {
