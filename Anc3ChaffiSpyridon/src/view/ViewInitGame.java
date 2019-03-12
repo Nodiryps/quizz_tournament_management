@@ -313,7 +313,7 @@ public class ViewInitGame extends Popup {
 
         });
         delQuestion.setOnAction((ActionEvent e) -> {
-                vm.deleteQuestionForOpp(getSelectedItem(fillQuestion));
+                vm.deleteQuestionForOpp(getSelectedItem(fillQuestion),cbCat.getSelectionModel().getSelectedItem());
         });
         validate.setOnAction((ActionEvent event) -> {
            

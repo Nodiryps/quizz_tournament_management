@@ -59,7 +59,6 @@ public class Tournament {
         for (Elem e : c.subElem) {
             if (e.subElems != null) {
                 cat.add(new Category(e));
-                System.out.println(e.name);
                 addCategory(new Category(e));
             }
         }

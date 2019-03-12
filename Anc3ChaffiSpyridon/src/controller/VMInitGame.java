@@ -73,6 +73,7 @@ public class VMInitGame {
         this.vm = vm;
         addPointsToTotal();
         disableRadioBtn.set(true);
+        questionsProperty().clear();
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
@@ -172,7 +173,7 @@ public class VMInitGame {
 
     }
 
-    public void deleteQuestionForOpp(Question q) {
+    public void deleteQuestionForOpp(Question q,Category c) {
         if (q != null) {
             if (selectedQuestionList.contains(q)) {
                 selectedQuestion.set(q);
@@ -180,6 +181,8 @@ public class VMInitGame {
                 this.selectedQuestionList.remove(q);
                 totalPoints.set(totalPoints.get() + q.getPoints());
                 cptFillQuestions.set(selectedQuestionList.size());
+                questionsProperty().clear();
+                addQuestions(c);
             }
         }
     }
@@ -480,9 +483,11 @@ public class VMInitGame {
             if (e.subElems == null) {
                 questionsProperty().add(new Question(e));
             }
-            for (Question f : selectedQuestionList) {
-                if (e.name.equals(f.getName().get())) {
-                    questionsProperty().remove(f);
+            for (int x = 0; x <= selectedQuestionList.size() - 1; ++x) {
+                for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
+                    if (selectedQuestionList.get(x).getName().get().equals(questionsProperty().get(y).getName().get())) {
+                       questionsProperty().remove(questionsProperty().get(y));
+                    }
                 }
             }
             if (e.subElems != null) {
@@ -490,7 +495,5 @@ public class VMInitGame {
                 addQuestions(c);
             }
         }
-
     }
 }
-
