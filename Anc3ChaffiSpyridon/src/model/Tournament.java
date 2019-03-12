@@ -66,18 +66,6 @@ public class Tournament {
 
     }
 
-    public void addQuestions(Category q) {
-        for (Elem e : q.subElem) {
-            if (e.subElems == null) {
-                questions.add(new Question(e));
-            }
-            if(e.subElems != null){
-               Category c=new Category(e);
-                addQuestions(c);
-            }
-
-        }
-    }
 
     public ObservableList<Player> getSubscribersList() {
         return subscribersList;

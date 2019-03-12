@@ -5,6 +5,7 @@
  */
 package controller;
 
+import element.Elem;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
@@ -29,6 +30,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import model.Category;
 import model.RESULTS;
+import model.Tournament;
 
 /**
  *
@@ -213,8 +215,9 @@ public class VMInitGame {
             if (gameOver.get()) {
                 endOfGameManagmnt(stage);
             }
-        } else
+        } else {
             System.out.println("gneeeeeee");
+        }
     }
 
     private void lastQuestion(String response) {
@@ -261,14 +264,14 @@ public class VMInitGame {
         popupEnd(score);
         stage.close();
     }
-    
+
     private String getScore() {
         String score = "";
         if (!gameOver.get()) {
             score = RESULTS.VAINQUEUR_J1.name();
         } else {
             score = analyseScore();
-        } 
+        }
         return score;
     }
 
@@ -317,7 +320,7 @@ public class VMInitGame {
     public IntegerProperty cptPointProperty() {
         return cptPoint;
     }
-    
+
     public BooleanProperty getDisableRadioBtn() {
         return disableRadioBtn;
     }
@@ -377,7 +380,7 @@ public class VMInitGame {
     public IntegerProperty getMAX_POINTS_GAME() {
         return MAX_POINTS_GAME;
     }
-    
+
     public StringProperty getRes1() {
         return res1;
     }
@@ -461,14 +464,33 @@ public class VMInitGame {
     public IntegerProperty pointTotauxProperty() {
         return totalPoints;
     }
-    
-    public SimpleListProperty<Category> getCategory(){
-       return new SimpleListProperty<>(vm.facade.getCategory());
+
+    public SimpleListProperty<Category> getCategory() {
+        return new SimpleListProperty<>(vm.facade.getCategory());
     }
-    
-    public void SetCategory(Category q){
-     vm.facade.getQuestions().clear();
-     vm.facade.getTournament().addQuestions(q);
-     
+
+    public void SetCategory(Category q) {
+        vm.facade.getQuestions().clear();
+        addQuestions(q);
+
+    }
+
+    public void addQuestions(Category q) {
+        for (Elem e : q.subElem) {
+            if (e.subElems == null) {
+                questionsProperty().add(new Question(e));
+            }
+            for (Question f : selectedQuestionList) {
+                if (e.name.equals(f.getName().get())) {
+                    questionsProperty().remove(f);
+                }
+            }
+            if (e.subElems != null) {
+                Category c = new Category(e);
+                addQuestions(c);
+            }
+        }
+
     }
 }
+
