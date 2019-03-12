@@ -35,23 +35,34 @@ public class Category implements Composant{
         }
         this.subElem=FXCollections.observableArrayList(elem.subElems);
     }
+
+    Category() {
+        this.name=new SimpleStringProperty("Tous");
+    this.numCorrectResponse=null;
+    this.points=null;
+    }
     
+    @Override
      public StringProperty getName() {
         return name;
     }
 
+    @Override
     public IntegerProperty getNumCorrectResponse() {
         return numCorrectResponse;
     }
 
+    @Override
     public int getPoints() {
         return points.get();
     }
     
+    @Override
     public IntegerProperty pointsProperty() {
         return points;
     }
 
+    @Override
     public ObservableList<String> getResponses() {
         return responses;
     }

@@ -172,7 +172,7 @@ public class VMInitGame {
 
     }
 
-    public void deleteQuestionForOpp(Question q,Category c) {
+    public void deleteQuestionForOpp(Question q, Category c) {
         if (q != null) {
             if (selectedQuestionList.contains(q)) {
                 selectedQuestion.set(q);
@@ -478,32 +478,58 @@ public class VMInitGame {
     }
 
     public void addQuestions(Category q) {
-        for (Elem e : q.subElem) {
-            if (e.subElems == null) {
-                questionsProperty().add(new Question(e));
+        if (q.getName().get().equals("Tous")) {
+            addAllQuestions();
+        } else {
+            for (Elem e : q.subElem) {
+                if (e.subElems == null) {
+                    questionsProperty().add(new Question(e));
+                }
+
+                removeIfSameQuestion();
+
+                if (e.subElems != null) {
+                    Category c = new Category(e);
+                    addQuestions(c);
+                }
             }
-            
-            removeIfSameQuestion();
-            
-            if (e.subElems != null) {
-                Category c = new Category(e);
-                addQuestions(c);
+            pointTotauxProperty().set(0);
+            addPointsToTotal();
+        }
+
+    }
+
+    public void addAllQuestions() {
+        questionsProperty().clear();
+        for (Category c : getCat()) {
+            if (!c.getName().get().equals("Tous")) {
+                for (Elem e : c.subElem) {
+                    if (e.subElems == null) {
+                        removeIfSameQuestion();
+                        questionsProperty().add(new Question(e));
+                    }
+                }
             }
+
         }
         pointTotauxProperty().set(0);
         addPointsToTotal();
     }
-    
+
+    public ObservableList<Category> getCat() {
+        return vm.getFacade().getCategory();
+    }
+
     private void removeIfSameQuestion() {
         for (int x = 0; x <= selectedQuestionList.size() - 1; ++x) {
-                for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
-                    if (getQuestionName(selectedQuestionList, x).equals(getQuestionName(questionsProperty(), y))) {
-                       questionsProperty().remove(questionsProperty().get(y));
-                    }
+            for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
+                if (getQuestionName(selectedQuestionList, x).equals(getQuestionName(questionsProperty(), y))) {
+                    questionsProperty().remove(questionsProperty().get(y));
                 }
             }
+        }
     }
-    
+
     private String getQuestionName(ObservableList<Question> list, int index) {
         return list.get(index).getName().get();
     }

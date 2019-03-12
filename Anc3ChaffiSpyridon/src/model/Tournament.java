@@ -46,6 +46,7 @@ public class Tournament {
 
     public void fillListQuestions() {
         List<Elem> listElem = Elements.loadElemsFromFile("Questions.JSON");
+        cat.add(new Category());
         for (Elem e : listElem) {
             if (e.subElems != null) {
                 Category c = new Category(e);
