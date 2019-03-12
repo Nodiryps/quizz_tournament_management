@@ -483,17 +483,25 @@ public class VMInitGame {
             if (e.subElems == null) {
                 questionsProperty().add(new Question(e));
             }
-            for (int x = 0; x <= selectedQuestionList.size() - 1; ++x) {
-                for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
-                    if (selectedQuestionList.get(x).getName().get().equals(questionsProperty().get(y).getName().get())) {
-                       questionsProperty().remove(questionsProperty().get(y));
-                    }
-                }
-            }
+            removeIfSameQuestion();
             if (e.subElems != null) {
                 Category c = new Category(e);
                 addQuestions(c);
             }
         }
+    }
+    
+    private void removeIfSameQuestion() {
+        for (int x = 0; x <= selectedQuestionList.size() - 1; ++x) {
+                for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
+                    if (getQuestionName(selectedQuestionList, x).equals(getQuestionName(questionsProperty(), y))) {
+                       questionsProperty().remove(questionsProperty().get(y));
+                    }
+                }
+            }
+    }
+    
+    private String getQuestionName(ObservableList<Question> list, int index) {
+        return list.get(index).getName().get();
     }
 }

@@ -168,10 +168,11 @@ public class ViewInitGame extends Popup {
     }
     
     private void configGridPaneLeft() {
-        gpLeft.add(cbCat, 0, 0);
-        gpLeft.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 1);
-        gpLeft.add(questionList, 0, 2);
-        gpLeft.add(lbPointsQuestionList, 0, 3);
+        gpLeft.add(new Label("Catégories: "), 0, 0);
+        gpLeft.add(cbCat, 0, 1);
+        gpLeft.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 2);
+        gpLeft.add(questionList, 0, 3);
+        gpLeft.add(lbPointsQuestionList, 0, 4);
         gpLeft.alignmentProperty().set(Pos.CENTER_LEFT);
     }
     
