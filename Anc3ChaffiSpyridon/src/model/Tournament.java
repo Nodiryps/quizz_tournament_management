@@ -7,6 +7,7 @@ package model;
 
 import element.Elem;
 import element.Elements;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,14 +25,14 @@ public class Tournament {
     private ObservableList<Player> subscribersList = FXCollections.observableArrayList();// modifier en hashList peut etre.
     private ObservableList<Match> matchList = FXCollections.observableArrayList();
     private final ObservableList<Question> questions = FXCollections.observableArrayList();
-    private final Set<Category> cat =new HashSet();
+    private final ObservableList<Category> cat = FXCollections.observableArrayList();
 
     public ObservableList<Question> getQuestions() {
         return questions;
     }
 
     public ObservableList<Category> getCat() {
-        return FXCollections.observableArrayList(cat);
+        return cat;
     }
 
     public Tournament(String s) {
@@ -49,23 +50,32 @@ public class Tournament {
             if (e.subElems != null) {
                 Category c = new Category(e);
                 cat.add(c);
-                fillListQuestions(c);
+                addCategory(c);
             }
         }
     }
 
-    public void fillListQuestions(Category q) {
-             System.out.println(q);
+    public void addCategory(Category c) {
+        for (Elem e : c.subElem) {
+            if (e.subElems != null) {
+                cat.add(new Category(e));
+                System.out.println(e.name);
+                addCategory(new Category(e));
+            }
+        }
+
+    }
+
+    public void addQuestions(Category q) {
         for (Elem e : q.subElem) {
             if (e.subElems == null) {
                 questions.add(new Question(e));
-            } else {
-                
-                if(!cat.contains(new Category(e))){
-                cat.add(new Category(e));
-                }
-                fillListQuestions(new Category(e));
             }
+            if(e.subElems != null){
+               Category c=new Category(e);
+                addQuestions(c);
+            }
+
         }
     }
 

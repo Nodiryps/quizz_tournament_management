@@ -468,7 +468,7 @@ public class VMInitGame {
     
     public void SetCategory(Category q){
      vm.facade.getQuestions().clear();
-     vm.facade.getTournament().fillListQuestions(q);
+     vm.facade.getTournament().addQuestions(q);
      
     }
 }
