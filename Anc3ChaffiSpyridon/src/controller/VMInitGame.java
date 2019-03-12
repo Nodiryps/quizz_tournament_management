@@ -73,6 +73,7 @@ public class VMInitGame {
         this.vm = vm;
         disableRadioBtn.set(true);
         questionsProperty().clear();
+        addAllQuestions();
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {

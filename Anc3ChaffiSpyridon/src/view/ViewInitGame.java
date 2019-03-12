@@ -269,6 +269,7 @@ public class ViewInitGame extends Popup {
         lbAttrQPoints.textProperty().bind(attrQPoint.asString("%d Point(s)"));
         vm.getCategory().bindBidirectional(cbCat.itemsProperty());
         cbCat.itemsProperty().bindBidirectional(vm.getCategory());
+        cbCat.getSelectionModel().selectFirst();
     }
     
     private void configBindPoints() {
