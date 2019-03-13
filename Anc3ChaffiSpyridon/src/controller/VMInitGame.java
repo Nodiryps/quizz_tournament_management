@@ -278,11 +278,7 @@ public class VMInitGame {
 
     private String getScore() {
         String score = "";
-        if (!gameOver.get()) {
-            score = RESULTS.VAINQUEUR_J1.name();
-        } else {
-            score = analyseScore();
-        }
+        score = analyseScore();
         return score;
     }
 
@@ -314,13 +310,17 @@ public class VMInitGame {
 
     private String analyseScore() {
         int score = getCptPoint().get();
+        String winner = "";
         if (score < (MAX_POINTS_GAME.get() / 2)) {
-            return RESULTS.VAINQUEUR_J1.name();
-        } else if (score > (MAX_POINTS_GAME.get() / 2)) {
-            return RESULTS.VAINQUEUR_J2.name();
-        } else {
-            return RESULTS.EX_AEQUO.name();
+            winner = RESULTS.VAINQUEUR_J1.name();
         }
+        if (score > (MAX_POINTS_GAME.get() / 2)) {
+            winner = RESULTS.VAINQUEUR_J2.name();
+        } 
+        if (score == (MAX_POINTS_GAME.get() / 2)) {
+            winner = RESULTS.EX_AEQUO.name();
+        }
+        return winner;
     }
 
     public void incrementPoints() {
