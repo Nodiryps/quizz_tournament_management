@@ -68,12 +68,14 @@ public class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
+    static int cpt;
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
         disableRadioBtn.set(true);
         questionsProperty().clear();
         addAllQuestions();
+        cpt = 0;
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
@@ -86,10 +88,9 @@ public class VMInitGame {
             }
         }
     }
-    
+
     private boolean isPartyValid(Player p1, Player p2) {
-        return cptPointProperty().get() >= MINIMUM_POINTS
-                && (p1 != null && p2 != null);
+        return cptPointProperty().get() >= MINIMUM_POINTS;
     }
 
     private void displayTheQuestion() {
@@ -212,29 +213,31 @@ public class VMInitGame {
     }
 
     public void nextQuestion(String response, Stage stage) {
+        System.out.println("cptInit" + cpt);
+        System.out.println("cptPoints: " + cptPointProperty().get());
         if (!response.equals("")) {
             if (isGameOn()) {
                 displayTheQuestion();
                 nextQuestionManagmnt(response);
+                ++cpt;
+                System.out.println("cptPoints: " + cptPointProperty().get());
+                if (isTheLastQuestion()) {
+                    lastQuestion(response);
+                    System.out.println("cptLast: " + cpt + "\n" + selectedQuestionList.size());
+                    System.out.println("cptPoints Last: " + cptPointProperty().get());
+                }
             }
-            if (isTheLastQuestion()) {
-                lastQuestion(response);
-            }
-            if (gameOver.get()) {
+            if (cpt > selectedQuestionList.size()) {
                 endOfGameManagmnt(stage);
             }
-        } else {
-            System.out.println("gneeeeeee");
+            System.out.println("cptEnd: " + cpt + "\n" + selectedQuestionList.size());
         }
     }
 
     private void lastQuestion(String response) {
-        if (isResponseRight(response)) {
+        if (isResponseRight(response)) 
             incrementPoints();
-            getGameOver().set(true);
-        } else {
-            getGameOver().set(true);
-        }
+        ++cpt;
     }
 
     private void nextQuestionManagmnt(String response) {
@@ -261,7 +264,7 @@ public class VMInitGame {
     }
 
     private boolean isGameOn() {
-        return hasNextQuestion() && !getGameOver().get();
+        return hasNextQuestion();
     }
 
     private void endOfGameManagmnt(Stage stage) {

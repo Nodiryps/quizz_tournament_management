@@ -98,9 +98,11 @@ public class ViewModel {
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
-        bl.setValue(true);
-        VMInitGame vm1 = new VMInitGame(this);
-        new ViewInitGame(vm1, p1, p2);
+        if(!cb1.get().getFirstName().equals("") && !cb2.get().getFirstName().equals("")) {
+            bl.setValue(true);
+            VMInitGame vm1 = new VMInitGame(this);
+            new ViewInitGame(vm1, p1, p2);
+        }
     }
 
     public void createMatch(String t) {
