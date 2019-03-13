@@ -155,15 +155,12 @@ public class ViewInitGame extends Popup {
     }
     
     private void configVBoxMiddle() {
-//        Label label = new Label("<CONSTRUCTION QUESTIONNAIRE>");
-//        label.setAlignment(Pos.CENTER);
-//        vbMiddle.getChildren().add(label);
         vbMiddle.getChildren().addAll(gpDetailsQuestion, radioBtn1, radioBtn2, radioBtn3, radioBtn4, gpBtnsAddDel);
         gpDetailsQuestion.setVgap(20);
         gpBtnsAddDel.setVgap(20);
         vbMiddle.setPadding(new Insets(0, 50, 0, 50));
-//        vbMiddle.setBorder(new Border(new BorderStroke(Color.BLACK,
-//                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        vbMiddle.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
     }
     
     private void gridPanesHGap() {
@@ -183,8 +180,6 @@ public class ViewInitGame extends Popup {
     
     private void configGridPaneCenter() {
         gpCenter.add(new Label("<CONSTRUCTION QUESTIONNAIRE>"), 0, 0);
-        Label label = new Label("<CONSTRUCTION QUESTIONNAIRE>");
-        label.setAlignment(Pos.CENTER);
         gpCenter.add(vbMiddle, 0, 1);
         gpCenter.add(gpBtnsAddDel, 0, 2);
         gpCenter.alignmentProperty().set(Pos.CENTER);
@@ -213,13 +208,6 @@ public class ViewInitGame extends Popup {
         gpDetailsQuestion.add(attrQName, 0, 0);
         gpDetailsQuestion.add(lbAttrQPoints, 0, 1);
         gpDetailsQuestion.add(lbResponse, 0, 2);
-    }
-
-    public String css() {
-        return "-fx-border-color: black;\n"
-                + "-fx-border-insets: 5;\n"
-                + "-fx-border-width: 1;\n"
-                + "-fx-border-style: solid;\n";
     }
 
     private void setToggleGroup() {

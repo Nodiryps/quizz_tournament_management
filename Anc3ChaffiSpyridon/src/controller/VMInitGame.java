@@ -77,7 +77,7 @@ public class VMInitGame {
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
-        if (cptPointProperty().get() >= MINIMUM_POINTS) {
+        if (isPartyValid(p1, p2)) {
             launchAttributes();
             new ViewGame(this, selectedQuestionList, p1, p2, stage);
             if (cptFillQuestions.get() <= selectedQuestionList.size()) {
@@ -85,6 +85,11 @@ public class VMInitGame {
                 indexQuestion.set(indexQuestion.get() + 1);
             }
         }
+    }
+    
+    private boolean isPartyValid(Player p1, Player p2) {
+        return cptPointProperty().get() >= MINIMUM_POINTS
+                && (p1 != null && p2 != null);
     }
 
     private void displayTheQuestion() {
