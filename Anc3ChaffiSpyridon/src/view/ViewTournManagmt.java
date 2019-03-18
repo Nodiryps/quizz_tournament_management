@@ -79,15 +79,17 @@ public class ViewTournManagmt extends VBox {
     }
 
     private void configBindingsView() {
-        subsList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
-        matchesList.itemsProperty().bindBidirectional(vm.matchsProperty());
+        subsList.itemsProperty().bindBidirectional(vm.SubscribListProperty());
+        matchesList.itemsProperty().bindBidirectional(vm.matchListProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
+        tournamentsList.getSelectionModel().selectFirst();
         cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
         cbPlayersList.valueProperty().bindBidirectional(vm.clearPlayerOne);
         cbOpponentsList.valueProperty().bindBidirectional(vm.clearPlayerTwo);
         cbResultsList.valueProperty().bindBidirectional(vm.clearResult);
         btnValidate.disableProperty().bindBidirectional(vm.btnValidate);
+
     }
 
     private void configBindingAttributes() {
@@ -125,24 +127,21 @@ public class ViewTournManagmt extends VBox {
     private void configFocusListener() throws FileNotFoundException {
         tournamentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    nextTournament();
-                });
-        subsList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
+                    vm.setTournament();
                 });
         matchesList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    popupDel(mouseEvent);
+                    vm.launchPopUp(mouseEvent, matchesList);
                 } catch (FileNotFoundException ex) {
                     System.out.println(ex.getMessage());
                 }
             }
         });
     }
-    
-     private boolean cbEmpty() {
+
+    private boolean cbEmpty() {
         return cbPlayersList.getSelectionModel().isEmpty()
                 || cbOpponentsList.getSelectionModel().isEmpty()
                 || cbResultsList.getSelectionModel().isEmpty();
@@ -152,23 +151,14 @@ public class ViewTournManagmt extends VBox {
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                        vm.oppValidList();
+                    vm.oppValidList();
+
                 });
-        cbOpponentsList.getSelectionModel().selectedIndexProperty()
-                .addListener((Observable o) -> {
-                    if (cbEmpty()) {
-                        setButtonDisable(true);
-                    } else {
-                        setButtonDisable(false);
-                    }
-                });
+
         cbResultsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    if (cbEmpty()) {
-                        setButtonDisable(true);
-                    } else {
-                        setButtonDisable(false);
-                    }
+                    vm.btnValidateDisable();
+
                 });
         btnPlay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -181,32 +171,16 @@ public class ViewTournManagmt extends VBox {
             }
         });
         btnValidate.setOnAction((ActionEvent event) -> {
-             vm.createMatch(cbResultsList.getSelectionModel().getSelectedItem());
+            vm.createMatch(cbResultsList.getSelectionModel().getSelectedItem());
         });
         btnClear.setOnAction((ActionEvent event) -> {
-          vm.ClearComboBox();
+            vm.ClearComboBox();
         });
     }
 
-    private void popupDel(MouseEvent mouseEvent) throws FileNotFoundException {
-        vm.launchPopUp(mouseEvent, matchesList);
-        
-    }
-    
-    private void nextTournament() {
-        vm.setTournament();
-        configBindingsView(); // pour changer de tournois
-    }
-    
     private Player getSelectedItem(ComboBox<Player> cb) {
         return cb.getSelectionModel().getSelectedItem();
     }
-
-    private void setButtonDisable(boolean b) {
-        btnValidate.setDisable(b);
-    }
-
-   
 
     private void initData() throws FileNotFoundException {
         configDisplay();
@@ -224,6 +198,7 @@ public class ViewTournManagmt extends VBox {
         subsList.getSelectionModel().select(-1);
         tournamentsList.setPrefWidth(TEXTSIZE);
         matchesList.setPrefWidth(TEXTSIZE);
+
     }
 
     private void configDisplay() {

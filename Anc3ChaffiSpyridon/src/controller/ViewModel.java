@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.FocusModel;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -34,7 +35,8 @@ public class ViewModel {
 
     TournamentFacade facade;
     private final int MAX_POINT = 10;
-    private ListProperty<Player> subscribeList;
+    private ObservableList<Player> subscribeList;
+    private ObservableList<Match> matchList;
     private ObservableList<Player> oppList = FXCollections.observableArrayList();
     public IntegerProperty indexTournament = new SimpleIntegerProperty();
     private final ObjectProperty<Player> actualPlayer = new SimpleObjectProperty<Player>();
@@ -64,12 +66,36 @@ public class ViewModel {
     public ObjectProperty<Player> clearPlayerOne = new SimpleObjectProperty<>();
     public ObjectProperty<Player> clearPlayerTwo = new SimpleObjectProperty<>();
     public ObjectProperty<String> clearResult = new SimpleObjectProperty<>();
+    public ObjectProperty<FocusModel<Tournament>> selectTournament = new SimpleObjectProperty<>();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
-
         bl.setValue(Boolean.TRUE);
+        initList();
+        System.out.println(indexTournamentProperty());
+    }
+
+    public void initList() {
+        subscribeList = FXCollections.observableArrayList(subscribesListProperty());
+        matchList = FXCollections.observableArrayList(matchsProperty());
+        setFirstIndex();
         btnValidate.set(true);
+    }
+    
+    public void setFirstIndex(){
+    indexTournament.set(0);
+    }
+
+    public void fillList() {
+        subscribeList.clear();
+        matchList.clear();
+        for (Player p : subscribesListProperty()) {
+            subscribeList.add(p);
+        }
+        for (Match m : matchsProperty()) {
+            matchList.add(m);
+        }
+
     }
 
     public void setAttributQuetion(Question q) {
@@ -100,6 +126,7 @@ public class ViewModel {
                 oppList();
             }
         }
+        fillList();
         ClearComboBox();
     }
 
@@ -120,7 +147,9 @@ public class ViewModel {
                 facade.getTournament().addMatch(m);
             }
         }
+        fillList();
         ClearComboBox();
+//        oppValidList();
     }
 
     public void ClearComboBox() {
@@ -187,13 +216,16 @@ public class ViewModel {
                     this.oppList.add(s);
                 }
             }
-        } 
-        if(actualProperty().get() != null && cb2.get() != null && cb3.get() != null)
-            btnValidate.set(false);
-
         }
+        btnValidateDisable();
 
-    
+    }
+
+    public void btnValidateDisable() {
+        if (actualProperty().get() != null && cb2.get() != null && cb3.get() != null) {
+            btnValidate.set(false);
+        }
+    }
 
     public void emptyselectedList() {
         selectedQuestionList.clear();
@@ -205,7 +237,10 @@ public class ViewModel {
 //        cb3.set(" ");
 //    }
     public void setTournament() {
+        System.out.println(indexTournament.get());
         facade.indexTournamentProperty().set(indexTournament.get());
+        fillList();
+        System.out.println(subscribeList);
         ClearComboBox();
     }
 
@@ -303,5 +338,15 @@ public class ViewModel {
 
     public Tournament getTournament() {
         return facade.getTournament();
+    }
+
+    public SimpleListProperty<Player> SubscribListProperty() {
+        return new SimpleListProperty<>(subscribeList);
+
+    }
+
+    public SimpleListProperty<Match> matchListProperty() {
+        return new SimpleListProperty<>(matchList);
+
     }
 }
