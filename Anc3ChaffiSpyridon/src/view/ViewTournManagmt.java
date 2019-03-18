@@ -84,6 +84,10 @@ public class ViewTournManagmt extends VBox {
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
         cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
         cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
+        cbPlayersList.valueProperty().bindBidirectional(vm.clearPlayerOne);
+        cbOpponentsList.valueProperty().bindBidirectional(vm.clearPlayerTwo);
+        cbResultsList.valueProperty().bindBidirectional(vm.clearResult);
+        btnValidate.disableProperty().bindBidirectional(vm.btnValidate);
     }
 
     private void configBindingAttributes() {
@@ -137,19 +141,18 @@ public class ViewTournManagmt extends VBox {
             }
         });
     }
+    
+     private boolean cbEmpty() {
+        return cbPlayersList.getSelectionModel().isEmpty()
+                || cbOpponentsList.getSelectionModel().isEmpty()
+                || cbResultsList.getSelectionModel().isEmpty();
+    }
 
     // ajoute un listener sur les combobox.
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    if (cbEmpty()) {
-                        setButtonDisable(true);
-                    }
-                    if (!cbPlayersList.getSelectionModel().isEmpty()) {
                         vm.oppValidList();
-                    } else {
-                        clearComboBox();
-                    }
                 });
         cbOpponentsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
@@ -178,32 +181,20 @@ public class ViewTournManagmt extends VBox {
             }
         });
         btnValidate.setOnAction((ActionEvent event) -> {
-            newMatch();
+             vm.createMatch(cbResultsList.getSelectionModel().getSelectedItem());
         });
         btnClear.setOnAction((ActionEvent event) -> {
-            clearComboBox();
+          vm.ClearComboBox();
         });
     }
 
     private void popupDel(MouseEvent mouseEvent) throws FileNotFoundException {
         vm.launchPopUp(mouseEvent, matchesList);
-        clearComboBox();
+        
     }
     
-    private void newMatch() {
-        if (cbOpponentsList.getSelectionModel().getSelectedItem() != null) {
-            vm.createMatch(cbResultsList.getValue().toString());
-            vm.clearOppList();
-            vm.oppValidList();
-            cbOpponentsList.itemsProperty().unbindBidirectional(vm.opponentsListProperty());
-            clearComboBox();
-            configBindings();
-        }
-    }
-
     private void nextTournament() {
         vm.setTournament();
-        clearComboBox();
         configBindingsView(); // pour changer de tournois
     }
     
@@ -211,21 +202,11 @@ public class ViewTournManagmt extends VBox {
         return cb.getSelectionModel().getSelectedItem();
     }
 
-    private void clearComboBox() {
-        cbPlayersList.setValue(new Player(""));
-        cbOpponentsList.setValue(new Player(""));
-        cbResultsList.setValue(null);
-    }
-
     private void setButtonDisable(boolean b) {
         btnValidate.setDisable(b);
     }
 
-    private boolean cbEmpty() {
-        return cbPlayersList.getSelectionModel().isEmpty()
-                || cbOpponentsList.getSelectionModel().isEmpty()
-                || cbResultsList.getSelectionModel().isEmpty();
-    }
+   
 
     private void initData() throws FileNotFoundException {
         configDisplay();

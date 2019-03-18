@@ -45,6 +45,7 @@ public class ViewModel {
     public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
+    public BooleanProperty btnValidate = new SimpleBooleanProperty();
 
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
 
@@ -60,11 +61,15 @@ public class ViewModel {
     public BooleanProperty gameOver = new SimpleBooleanProperty();
     public final BooleanProperty bl = new SimpleBooleanProperty(true);
     public final BooleanProperty deselectedRadioButon = new SimpleBooleanProperty(true);
+    public ObjectProperty<Player> clearPlayerOne = new SimpleObjectProperty<>();
+    public ObjectProperty<Player> clearPlayerTwo = new SimpleObjectProperty<>();
+    public ObjectProperty<String> clearResult = new SimpleObjectProperty<>();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
 
         bl.setValue(Boolean.TRUE);
+        btnValidate.set(true);
     }
 
     public void setAttributQuetion(Question q) {
@@ -95,10 +100,11 @@ public class ViewModel {
                 oppList();
             }
         }
+        ClearComboBox();
     }
 
     public void launchGame(Player p1, Player p2) throws Exception {
-        if(!cb1.get().getFirstName().equals("") && !cb2.get().getFirstName().equals("")) {
+        if (!cb1.get().getFirstName().equals("") && !cb2.get().getFirstName().equals("")) {
             bl.setValue(true);
             VMInitGame vm1 = new VMInitGame(this);
             new ViewInitGame(vm1, p1, p2);
@@ -106,12 +112,21 @@ public class ViewModel {
     }
 
     public void createMatch(String t) {
-        Match m = new Match(new Player(cb1.getValue().toString()),
-                new Player(cb2.getValue().toString()),
-                results(t));
-        if (!matchsProperty().contains(m)) {
-            facade.getTournament().addMatch(m);
+        if (!t.equals(null)) {
+            Match m = new Match(new Player(cb1.getValue().toString()),
+                    new Player(cb2.getValue().toString()),
+                    results(t));
+            if (!matchsProperty().contains(m)) {
+                facade.getTournament().addMatch(m);
+            }
         }
+        ClearComboBox();
+    }
+
+    public void ClearComboBox() {
+        clearPlayerOne.set(null);
+        clearPlayerTwo.set(null);
+        clearResult.set("");
     }
 
     public void removeMatch() {
@@ -164,14 +179,21 @@ public class ViewModel {
     }
 
     public void oppValidList() {
-        ObservableList<Player> list2 = addOpponentInvalidList();
-        oppList.clear();
-        for (Player s : subscribesListProperty()) {
-            if (!list2.contains(s) && !s.getFirstName().equals(actualPlayer.getValue().toString())) {
-                this.oppList.add(s);
+        if (actualProperty().get() != null) {
+            ObservableList<Player> list2 = addOpponentInvalidList();
+            oppList.clear();
+            for (Player s : subscribesListProperty()) {
+                if (!list2.contains(s) && !s.getFirstName().equals(actualPlayer.getValue().toString())) {
+                    this.oppList.add(s);
+                }
             }
+        } 
+        if(actualProperty().get() != null && cb2.get() != null && cb3.get() != null)
+            btnValidate.set(false);
+
         }
-    }
+
+    
 
     public void emptyselectedList() {
         selectedQuestionList.clear();
@@ -182,9 +204,9 @@ public class ViewModel {
 //        cb2.set(new Player(""));
 //        cb3.set(" ");
 //    }
-
     public void setTournament() {
         facade.indexTournamentProperty().set(indexTournament.get());
+        ClearComboBox();
     }
 
     public SimpleListProperty<Question> quetionsProperty() {
