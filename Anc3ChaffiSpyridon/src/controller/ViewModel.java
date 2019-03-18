@@ -138,7 +138,8 @@ public class ViewModel {
     }
 
     public void createMatch(String t) {
-        if (!t.equals(null)) {
+        System.out.println(cb3.get());
+        if (!t.equals(null) && cb1!=null && cb2 != null) {
             Match m = new Match(new Player(cb1.getValue().toString()),
                     new Player(cb2.getValue().toString()),
                     results(t));

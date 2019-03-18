@@ -26,6 +26,7 @@ public class Tournament {
     private ObservableList<Match> matchList = FXCollections.observableArrayList();
     private final ObservableList<Question> questions = FXCollections.observableArrayList();
     private final ObservableList<Category> cat = FXCollections.observableArrayList();
+    private final ObservableList<Composant> composant = FXCollections.observableArrayList();
 
     public ObservableList<Question> getQuestions() {
         return questions;
@@ -49,23 +50,30 @@ public class Tournament {
         cat.add(new Category());
         for (Elem e : listElem) {
             if (e.subElems != null) {
-                Category c = new Category(e);
-                cat.add(c);
+                Composant c = new Category(e);
+                composant.add(c);
+                Category cate=(Category)c;
+                cat.add(cate);
                 addCategory(c);
+//           
             }
+
         }
+        System.out.println(composant);
     }
 
-    public void addCategory(Category c) {
-        for (Elem e : c.subElem) {
-            if (e.subElems != null) {
-                cat.add(new Category(e));
-                addCategory(new Category(e));
+    public void addCategory(Composant c) {
+        if (c instanceof Category) {
+            Category cats = (Category) c;
+            for (Elem e :  cats.subElem) {
+                if (e.subElems != null) {
+                    cat.add(new Category(e));
+                    addCategory(new Category(e));
+                }
             }
         }
 
     }
-
 
     public ObservableList<Player> getSubscribersList() {
         return subscribersList;
