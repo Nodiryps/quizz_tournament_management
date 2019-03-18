@@ -72,7 +72,6 @@ public class ViewModel {
         this.facade = facade;
         bl.setValue(Boolean.TRUE);
         initList();
-        System.out.println(indexTournamentProperty());
     }
 
     public void initList() {
@@ -237,10 +236,8 @@ public class ViewModel {
 //        cb3.set(" ");
 //    }
     public void setTournament() {
-        System.out.println(indexTournament.get());
         facade.indexTournamentProperty().set(indexTournament.get());
         fillList();
-        System.out.println(subscribeList);
         ClearComboBox();
     }
 

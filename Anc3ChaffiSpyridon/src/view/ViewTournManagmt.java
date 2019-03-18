@@ -83,7 +83,7 @@ public class ViewTournManagmt extends VBox {
         matchesList.itemsProperty().bindBidirectional(vm.matchListProperty());
         tournamentsList.itemsProperty().bind(vm.tournamantProperty());
         tournamentsList.getSelectionModel().selectFirst();
-        cbPlayersList.itemsProperty().bindBidirectional(vm.subscribesListProperty());
+        cbPlayersList.itemsProperty().bindBidirectional(vm.SubscribListProperty());
         cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
         cbPlayersList.valueProperty().bindBidirectional(vm.clearPlayerOne);
         cbOpponentsList.valueProperty().bindBidirectional(vm.clearPlayerTwo);
