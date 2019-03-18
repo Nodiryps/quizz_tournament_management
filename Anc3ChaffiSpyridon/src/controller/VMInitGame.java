@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ToggleGroup;
 import model.Category;
 import model.RESULTS;
 import model.Tournament;
@@ -68,11 +69,13 @@ public class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
+    public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     static int cpt;
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
         disableRadioBtn.set(true);
+        selectRadioBtn.set(false);
         questionsProperty().clear();
         addAllQuestions();
         cpt = 0;
@@ -155,10 +158,10 @@ public class VMInitGame {
     }
 
     private void unselectAllRadioBouton() {
-        boolSelectRadioBtn1.setValue(Boolean.FALSE);
-        boolSelectRadioBtn2.setValue(Boolean.FALSE);
-        boolSelectRadioBtn3.setValue(Boolean.FALSE);
-        boolSelectRadioBtn4.setValue(Boolean.FALSE);
+        boolSelectRadioBtn1.set(false);
+        boolSelectRadioBtn2.set(false);
+        boolSelectRadioBtn3.set(false);
+        boolSelectRadioBtn4.set(false);
     }
 
     public void addQuestionforOpp(Question q) {
@@ -212,25 +215,20 @@ public class VMInitGame {
 
     }
 
-    public void nextQuestion(String response, Stage stage) {
-        System.out.println("cptInit" + cpt);
-        System.out.println("cptPoints: " + cptPointProperty().get());
+    public void nextQuestion(String response, Stage stage,ToggleGroup g) {
+        g.selectToggle(null);
         if (!response.equals("")) {
             if (isGameOn()) {
                 displayTheQuestion();
                 nextQuestionManagmnt(response);
                 ++cpt;
-                System.out.println("cptPoints: " + cptPointProperty().get());
                 if (isTheLastQuestion()) {
                     lastQuestion(response);
-                    System.out.println("cptLast: " + cpt + "\n" + selectedQuestionList.size());
-                    System.out.println("cptPoints Last: " + cptPointProperty().get());
                 }
             }
             if (cpt > selectedQuestionList.size()) {
                 endOfGameManagmnt(stage);
             }
-            System.out.println("cptEnd: " + cpt + "\n" + selectedQuestionList.size());
         }
     }
 
