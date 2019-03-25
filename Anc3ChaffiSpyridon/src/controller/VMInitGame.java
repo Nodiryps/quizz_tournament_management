@@ -77,15 +77,29 @@ public class VMInitGame {
     public BooleanProperty bntHint = new SimpleBooleanProperty();
     public StringProperty hint = new SimpleStringProperty();
     private boolean hintClicked = false;
+    private BooleanProperty btnValidateQuestion = new SimpleBooleanProperty();
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
+        initData();
+
+    }
+
+    public void initData() {
         disableRadioBtn.set(true);
         selectRadioBtn.set(false);
         questionsProperty().clear();
         addAllQuestions();
         cpt = 0;
+        disablebtnValidateQuestion();
+    }
 
+    public void enablebtnValidateQuestion() {
+        btnValidateQuestion.set(false);
+    }
+
+    public void disablebtnValidateQuestion() {
+        btnValidateQuestion.set(true);
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
@@ -232,7 +246,7 @@ public class VMInitGame {
     public void nextQuestion(String response, Stage stage, ToggleGroup g) {
         if (stage != null && g != null) {
             g.selectToggle(null);
-            hint.set("");
+            disablebtnValidateQuestion();
             if (!response.equals("")) {
                 if (isGameOn()) {
                     displayTheQuestion();
@@ -274,6 +288,7 @@ public class VMInitGame {
             }
             incrementQuestion();
             disableRadioBtn.set(true);
+            hint.set("");
         }
     }
 
@@ -352,7 +367,7 @@ public class VMInitGame {
 
     public void incrementPoints(Question q) {
         System.out.println(hintClicked);
-        System.out.println(hint.get());
+        System.out.println("mmmmmmmmmmmmmmmmmm" + hint.get());
         if (hintClicked && q.getFakeHint() != null && q.getHint() != null) {
             System.out.println(hint.get());
             if (q.getFakeHint().get().equals(hint.get())) {
@@ -524,6 +539,10 @@ public class VMInitGame {
 
     }
 
+    public BooleanProperty BtnValidateQuestionProperty() {
+        return btnValidateQuestion;
+    }
+
     public void addQuestions(Category q) {
         if (q.getName().get().equals("Tous")) {
             addAllQuestions();
@@ -585,7 +604,8 @@ public class VMInitGame {
         hintClicked = true;
         Question q = getQuestionFromIndex();
         hint.set(randomHint(q));
-        System.out.println(hint.get());
+        bntHint.set(false);
+        
     }
 
     public String randomHint(Question q) {

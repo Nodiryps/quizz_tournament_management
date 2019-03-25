@@ -142,6 +142,7 @@ public class ViewGame extends VBox {
         vm.getQuestionPoint().bindBidirectional((attrQPoint));
         vm.hint.bindBidirectional(hint.textProperty());
         btnHint.visibleProperty().bind(vm.bntHint);
+        validate.disableProperty().bind(vm.BtnValidateQuestionProperty());
 
     }
 
@@ -187,7 +188,7 @@ public class ViewGame extends VBox {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov,
                     Toggle old_toggle, Toggle new_toggle) {
-                validate.disableProperty().set(false);
+               vm.enablebtnValidateQuestion();
             }
         });
     }
