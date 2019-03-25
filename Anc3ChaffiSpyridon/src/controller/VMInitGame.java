@@ -70,6 +70,7 @@ public class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
+    private int totalPointsRestant;
     static int cpt;
 
     public VMInitGame(ViewModel vm) {
@@ -120,6 +121,7 @@ public class VMInitGame {
     }
 
     private void launchAttributes() {
+        totalPointsRestant = cptPointProperty().get();
         cptPointProperty().set(0);
         cptFillQuestions.set(1);
         gameOver.set(false);
@@ -171,7 +173,7 @@ public class VMInitGame {
                 if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                     this.selectedQuestionList.add(getSelectedQuestion().get());
                     cptPoint.set(cptPoint.get() + q.getPoints());
-                    MAX_POINTS_GAME.set(cptPoint.get());
+                    MAX_POINTS_GAME.set(cptPointProperty().get());
                     questionsProperty().remove(q);
                     cptFillQuestions.set(selectedQuestionList.size());
                 }
@@ -215,33 +217,42 @@ public class VMInitGame {
 
     }
 
-    public void nextQuestion(String response, Stage stage,ToggleGroup g) {
+    public void nextQuestion(String response, Stage stage, ToggleGroup g) {
         g.selectToggle(null);
         if (!response.equals("")) {
             if (isGameOn()) {
                 displayTheQuestion();
                 nextQuestionManagmnt(response);
                 ++cpt;
+                System.out.println("totalPointsRestant " + totalPointsRestant);
+                System.out.println("cptPointProperty() " + cptPointProperty().get());
                 if (isTheLastQuestion()) {
                     lastQuestion(response);
                 }
             }
-            if (cpt > selectedQuestionList.size()) {
+//            if(totalPointsRestant<(cptPointProperty().get()/2)){
+//                 endOfGameManagmnt(stage);
+//            }
+            if (cpt > selectedQuestionList.size() || totalPointsRestant < (MAX_POINTS_GAME.get() / 2)) {
                 endOfGameManagmnt(stage);
             }
         }
     }
 
     private void lastQuestion(String response) {
-        if (isResponseRight(response)) 
-            incrementPoints();
+        if (isResponseRight(response)) {
+            Question q = getQuestionFromIndex();
+            incrementPoints(q);
+        }
         ++cpt;
     }
 
     private void nextQuestionManagmnt(String response) {
         if (hasNextQuestion()) {
+            Question q = getQuestionFromIndex();
+            totalPointsRestant -= q.getPoints();
             if (isResponseRight(response)) {
-                incrementPoints();
+                incrementPoints(q);
             }
             incrementQuestion();
             disableRadioBtn.set(true);
@@ -314,15 +325,14 @@ public class VMInitGame {
         }
         if (score > (MAX_POINTS_GAME.get() / 2)) {
             winner = RESULTS.VAINQUEUR_J2.name();
-        } 
+        }
         if (score == (MAX_POINTS_GAME.get() / 2)) {
             winner = RESULTS.EX_AEQUO.name();
         }
         return winner;
     }
 
-    public void incrementPoints() {
-        Question q = getQuestionFromIndex();
+    public void incrementPoints(Question q) {
         cptPointProperty().set(cptPointProperty().get() + q.getPoints());
     }
 
