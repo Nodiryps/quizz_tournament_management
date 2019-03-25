@@ -15,16 +15,22 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -64,6 +70,8 @@ public class ViewGame extends VBox {
     private IntegerProperty indexQuestion = new SimpleIntegerProperty();
     private Button validate = new Button("valider");
     private Button abandon = new Button("abandonner");
+    private Button btnHint = new Button("indice");
+    private Label hint = new Label();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private final Player p1;
     private final Player p2;
@@ -93,13 +101,19 @@ public class ViewGame extends VBox {
         display.add(lbTitle, 0, 0);
         display.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 1);
         display.add(lbCptQ, 0, 5);
-        displayQuestion.getChildren().addAll(attrQName, lbAttrQPoints, lbResponse, reponse1, reponse2, reponse3, reponse4);
+        displayQuestion.getChildren().addAll(attrQName, lbAttrQPoints, lbResponse, reponse1, reponse2, reponse3, reponse4, btnHint, hint);
+        //btnHint.sets(new Insets(15));
         display.add(displayQuestion, 0, 8);
         display.add(lbP2Points, 0, 9);
-        display.add(validate, 0, 10);
-        display.add(abandon, 0, 11);
+//        display.add(validate, 0, 11);
+//        display.add(abandon, 1, 11);
+
+        HBox btnBottom = new HBox(validate, abandon);
+        display.add(btnBottom, 0, 11);
+        btnBottom.setSpacing(25);
         displayQuestion.setStyle(css());
         display.alignmentProperty().set(Pos.CENTER);
+        validate.disableProperty().set(true);
     }
 
     private void configRadioButton() {
@@ -126,6 +140,9 @@ public class ViewGame extends VBox {
         vm.getIndexQuestion().bindBidirectional(indexQuestion);
         vm.getQuestionName().bindBidirectional(attrQName.textProperty());
         vm.getQuestionPoint().bindBidirectional((attrQPoint));
+        vm.hint.bindBidirectional(hint.textProperty());
+        btnHint.visibleProperty().bind(vm.bntHint);
+
     }
 
     private void setToggleGrp() {
@@ -162,6 +179,16 @@ public class ViewGame extends VBox {
         });
         abandon.setOnAction((ActionEvent event) -> {
             vm.giveUpGame(stage);
+        });
+        btnHint.setOnAction((ActionEvent event) -> {
+            vm.displayHint();
+        });
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> ov,
+                    Toggle old_toggle, Toggle new_toggle) {
+                validate.disableProperty().set(false);
+            }
         });
     }
 

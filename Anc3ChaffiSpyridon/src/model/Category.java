@@ -18,32 +18,38 @@ import javafx.collections.ObservableList;
  *
  * @author 2707chshyaka
  */
-public class Category implements Composant{
-    
+public class Category implements Composant {
+
+    private final StringProperty fakeHint;
+    private final StringProperty hint;
     private final StringProperty name;
     private final IntegerProperty numCorrectResponse;
     private final IntegerProperty points;
-    private  ObservableList<String> responses;
-    public  ObservableList<Elem> subElem;
-    
+    private ObservableList<String> responses;
+    public ObservableList<Elem> subElem;
+
     public Category(Elem elem) {
         this.name = new SimpleStringProperty(elem.name);
         this.numCorrectResponse = new SimpleIntegerProperty(elem.numCorrectResponse);
         this.points = new SimpleIntegerProperty(elem.points);
-        if(elem.responses != null){
-        this.responses = FXCollections.observableArrayList(elem.responses);
+        if (elem.responses != null) {
+            this.responses = FXCollections.observableArrayList(elem.responses);
         }
-        this.subElem=FXCollections.observableArrayList(elem.subElems);
+        this.subElem = FXCollections.observableArrayList(elem.subElems);
+        this.fakeHint = new SimpleStringProperty(elem.fakeHint);
+        this.hint = new SimpleStringProperty(elem.hint);
     }
 
     Category() {
-        this.name=new SimpleStringProperty("Tous");
-    this.numCorrectResponse=null;
-    this.points=null;
+        this.name = new SimpleStringProperty("Tous");
+        this.numCorrectResponse = null;
+        this.points = null;
+        this.fakeHint=null;
+        this.hint=null;
     }
-    
+
     @Override
-     public StringProperty getName() {
+    public StringProperty getName() {
         return name;
     }
 
@@ -56,7 +62,7 @@ public class Category implements Composant{
     public int getPoints() {
         return points.get();
     }
-    
+
     @Override
     public IntegerProperty pointsProperty() {
         return points;
@@ -66,10 +72,10 @@ public class Category implements Composant{
     public ObservableList<String> getResponses() {
         return responses;
     }
-    
+
     @Override
-    public String toString(){
-      return this.getName().get();
+    public String toString() {
+        return this.getName().get();
     }
 
     @Override
@@ -96,7 +102,5 @@ public class Category implements Composant{
         }
         return true;
     }
-
-   
 
 }

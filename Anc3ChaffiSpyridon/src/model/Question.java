@@ -19,6 +19,16 @@ import javafx.collections.ObservableList;
  */
 public class Question implements Composant{
 
+    public StringProperty getFakeHint() {
+        return fakeHint;
+    }
+
+    public StringProperty getHint() {
+        return hint;
+    }
+
+    private final StringProperty fakeHint;
+     private final StringProperty hint;
     private final StringProperty name;
     private final IntegerProperty numCorrectResponse;
     private final IntegerProperty points;
@@ -32,8 +42,11 @@ public class Question implements Composant{
         if(elem.responses != null){
         this.responses = FXCollections.observableArrayList(elem.responses);
         }
+        this.fakeHint=new SimpleStringProperty(elem.fakeHint);
+        this.hint=new SimpleStringProperty(elem.hint);
     }
 
+    @Override
     public StringProperty getName() {
         return name;
     }

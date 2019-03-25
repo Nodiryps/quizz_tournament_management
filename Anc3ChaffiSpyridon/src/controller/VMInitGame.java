@@ -25,6 +25,7 @@ import model.Question;
 import model.TournamentFacade;
 import view.ViewGame;
 import java.io.FileNotFoundException;
+import java.util.Random;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -73,6 +74,10 @@ public class VMInitGame {
     private int totalPointsRestant;
     static int cpt;
 
+    public BooleanProperty bntHint = new SimpleBooleanProperty();
+    public StringProperty hint = new SimpleStringProperty();
+    private boolean hintClicked = false;
+
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
         disableRadioBtn.set(true);
@@ -80,6 +85,7 @@ public class VMInitGame {
         questionsProperty().clear();
         addAllQuestions();
         cpt = 0;
+
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
@@ -110,6 +116,7 @@ public class VMInitGame {
 
     public void setAttributQuetion(Question q) {
         if (q != null) {
+            bntHint.set(false);
             selectedQuestion.set(q);
             selectRightRespRadioBtn();
             this.questionName.set(q.getName().get());
@@ -117,6 +124,9 @@ public class VMInitGame {
             setResponse(q);
             this.currentQuestion.set(q);
             selectedQuestion.set(null);
+            if (q.getPoints() == 3) {
+                bntHint.set(true);
+            }
         }
     }
 
@@ -128,10 +138,12 @@ public class VMInitGame {
     }
 
     public void setResponse(Question q) {
-        res1.set(q.getResponses().get(0));
-        res2.set(q.getResponses().get(1));
-        res3.set(q.getResponses().get(2));
-        res4.set(q.getResponses().get(3));
+        if (q != null) {
+            res1.set(q.getResponses().get(0));
+            res2.set(q.getResponses().get(1));
+            res3.set(q.getResponses().get(2));
+            res4.set(q.getResponses().get(3));
+        }
     }
 
     public void clearComboBox() {
@@ -218,23 +230,21 @@ public class VMInitGame {
     }
 
     public void nextQuestion(String response, Stage stage, ToggleGroup g) {
-        g.selectToggle(null);
-        if (!response.equals("")) {
-            if (isGameOn()) {
-                displayTheQuestion();
-                nextQuestionManagmnt(response);
-                ++cpt;
-                System.out.println("totalPointsRestant " + totalPointsRestant);
-                System.out.println("cptPointProperty() " + cptPointProperty().get());
-                if (isTheLastQuestion()) {
-                    lastQuestion(response);
+        if (stage != null && g != null) {
+            g.selectToggle(null);
+            hint.set("");
+            if (!response.equals("")) {
+                if (isGameOn()) {
+                    displayTheQuestion();
+                    nextQuestionManagmnt(response);
+                    ++cpt;
+                    if (isTheLastQuestion()) {
+                        lastQuestion(response);
+                    }
                 }
-            }
-//            if(totalPointsRestant<(cptPointProperty().get()/2)){
-//                 endOfGameManagmnt(stage);
-//            }
-            if (noMoreQuestion() || noMorePoints()) {
-                endOfGameManagmnt(stage);
+                if (noMoreQuestion() || noMorePoints()) {
+                    endOfGameManagmnt(stage);
+                }
             }
         }
     }
@@ -244,7 +254,7 @@ public class VMInitGame {
     }
 
     private boolean noMorePoints() {
-        return totalPointsRestant < (MAX_POINTS_GAME.get() / 2);
+        return totalPointsRestant + cptPointProperty().get() < (MAX_POINTS_GAME.get() / 2);
     }
 
     private void lastQuestion(String response) {
@@ -341,7 +351,19 @@ public class VMInitGame {
     }
 
     public void incrementPoints(Question q) {
-        cptPointProperty().set(cptPointProperty().get() + q.getPoints());
+        System.out.println(hintClicked);
+        System.out.println(hint.get());
+        if (hintClicked && q.getFakeHint() != null && q.getHint() != null) {
+            System.out.println(hint.get());
+            if (q.getFakeHint().get().equals(hint.get())) {
+                cptPointProperty().set(cptPointProperty().get() + 2);
+            } else {
+                cptPointProperty().set(cptPointProperty().get() + 1);
+            }
+        } else {
+            cptPointProperty().set(cptPointProperty().get() + q.getPoints());
+        }
+
     }
 
     public IntegerProperty cptPointProperty() {
@@ -557,5 +579,23 @@ public class VMInitGame {
 
     private String getQuestionName(ObservableList<Question> list, int index) {
         return list.get(index).getName().get();
+    }
+
+    public void displayHint() {
+        hintClicked = true;
+        Question q = getQuestionFromIndex();
+        hint.set(randomHint(q));
+        System.out.println(hint.get());
+    }
+
+    public String randomHint(Question q) {
+        Random rand = new Random();
+        int val = rand.nextInt(5);
+        System.out.println(val);
+        if (val == 3) {
+            return q.getFakeHint().get();
+        } else {
+            return q.getHint().get();
+        }
     }
 }

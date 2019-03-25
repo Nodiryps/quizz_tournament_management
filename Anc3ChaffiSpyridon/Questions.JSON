@@ -1,1 +1,1024 @@
-{"elems": [{"name": "Sciences", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "En quelle année a eu lieu la première vaccination contre la variole", "numCorrectResponse": 1, "points": 3, "responses": ["1796", "1846", "1911", "1947"], "subElems": null}, {"name": "Biologie", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Combien y-a-t-il d'os chez un être humain adulte", "numCorrectResponse": 4, "points": 3, "responses": ["68", "127", "161", "208"], "subElems": null}, {"name": "Zoologie", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quel animal est le père des faons", "numCorrectResponse": 4, "points": 1, "responses": ["Le Paon", "Le Renne", "L'Éland", "Le Cerf"], "subElems": null}, {"name": "Des feuilles de quel arbre odorant les koalas font-ils leur repas", "numCorrectResponse": 2, "points": 1, "responses": ["Le tilleul", "L'eucalyptus", "L'arbre au caramel", "Le figuier"], "subElems": null}]}]}]}, {"name": "Histoire", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quel révolutionnaire fut assassiné dans son bain par Charlotte Corday", "numCorrectResponse": 3, "points": 2, "responses": ["Che Guevara", "Maximilien Robespierre", "Marat", "Raspoutine"], "subElems": null}, {"name": "Quel fut le premier empereur romain", "numCorrectResponse": 3, "points": 2, "responses": ["Jules César", "Néron", "Auguste", "Titus"], "subElems": null}, {"name": "Quel pays a livré une guerre de 10 ans contre l'Iran dans les années 80", "numCorrectResponse": 2, "points": 2, "responses": ["Israël", "L'Irak", "Les États-Unis", "Le Koweit"], "subElems": null}, {"name": "Histoire France", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quelles pastilles aromatisées aux essences naturelles et de forme octogonale étaient chères à l'impératrice Eugénie", "numCorrectResponse": 4, "points": 3, "responses": ["Les Valda", "Les pastilles Ricola", "Les pastilles Evian", "Les pastilles Vichy"], "subElems": null}, {"name": "Quel instrument Nicolas-Jacques Pelletier eut-il le triste privilège d'expérimenter en premier", "numCorrectResponse": 2, "points": 3, "responses": ["La pince à épiler", "La guillotine", "La machine à baffe", "La chaise électrique"], "subElems": null}, {"name": "Qu'est-ce que François 1er dessina lui-même dans son château d'Amboise", "numCorrectResponse": 3, "points": 3, "responses": ["Les portes", "Les tables", "Les baignoires", "Les écuries"], "subElems": null}]}, {"name": "Histoire Sciences", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Qui s'est écrié Eurêka", "numCorrectResponse": 4, "points": 3, "responses": ["Artistote", "Platon", "Socrate", "Archimède"], "subElems": null}]}, {"name": "Histoire Belgique", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quelle est la date de la Fête Nationale Belge", "numCorrectResponse": 3, "points": 1, "responses": ["11 juillet", "14 juillet", "21 juillet", "15 août"], "subElems": null}]}]}, {"name": "Culture", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quelle est la tâche principale de l'Académie Française", "numCorrectResponse": 1, "points": 2, "responses": ["Rédiger un dictionnaire", "Monter des pièces de théâtre", "Honorer les grands acteurs", "Définir les règles de grammaire"], "subElems": null}, {"name": "Combien y-a-t-il de passagers à bord d'un Mirage 2000", "numCorrectResponse": 1, "points": 2, "responses": ["1", "2", "3", "4"], "subElems": null}, {"name": "Qui a écrit le livre du Tao", "numCorrectResponse": 1, "points": 2, "responses": ["Lao-Tseu", "Confucius", "Boudha", "Vishnou"], "subElems": null}, {"name": "Qu'elle est la spécialité des titulaires de la Médaille Fields", "numCorrectResponse": 3, "points": 2, "responses": ["La peinture", "L'agriculture", "Les mathématiques", "La natation"], "subElems": null}, {"name": "Dans laquelle de ces disciplines n'y a-t-il pas de prix Nobel", "numCorrectResponse": 2, "points": 1, "responses": ["Physique", "Mathématiques", "Médecine", "Economie"], "subElems": null}, {"name": "Comment s'appelaient les anciens dirigeants de l'Inde", "numCorrectResponse": 1, "points": 1, "responses": ["Maharadjahs", "Shoguns", "Bonzes", "Tsars"], "subElems": null}, {"name": "Qu'était Bucéphale pour Alexandre le Grand", "numCorrectResponse": 3, "points": 1, "responses": ["Son conseiller", "Son fauteuil de campagne", "Son cheval", "Sa femme"], "subElems": null}, {"name": "Dans quelle conte trouve-t-on la phrase: Tire la chevillette, la bobinette cherra", "numCorrectResponse": 4, "points": 1, "responses": ["Hansel et Gretel", "Le petit poucet", "Blanche-Neige", "Le petit chaperon rouge"], "subElems": null}, {"name": "Inventions", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quelle société a inventé le rasoir jetable", "numCorrectResponse": 1, "points": 2, "responses": ["Bic", "Gilette", "Microsoft", "Wilkinson"], "subElems": null}, {"name": "Quel était le fabricant de la première mobylette", "numCorrectResponse": 3, "points": 3, "responses": ["Mobylette", "Honda", "Motobécane", "Peugeot"], "subElems": null}, {"name": "En quelle année apparut le moulin à café électrique", "numCorrectResponse": 3, "points": 3, "responses": ["1946", "1953", "1957", "1959"], "subElems": null}, {"name": "En quelle année apparut la cocotte-minute", "numCorrectResponse": 2, "points": 3, "responses": ["1951", "1953", "1957", "1959"], "subElems": null}]}, {"name": "Chanson", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quel chanteur commença sa carrière avec Et moi, et moi, et moi", "numCorrectResponse": 4, "points": 1, "responses": ["Serge Lama", "Claude François", "Sacha Distel", "Jacques Dutronc"], "subElems": null}, {"name": "Quel chanteur est un loup garoup puis un mort vivant dans son clip Thriller", "numCorrectResponse": 4, "points": 1, "responses": ["Christophe Willem", "Warren Zevon", "Norman Reedus", "Michael Jackson"], "subElems": null}]}, {"name": "Cinéma", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quel est le dernier film d'Alfred Hitchcock", "numCorrectResponse": 3, "points": 2, "responses": ["Les oiseaux", "Psychose", "Complot de famille", "Le rideau déchiré"], "subElems": null}, {"name": "À quel réalisateur doit-on Wall Street et JFK", "numCorrectResponse": 2, "points": 1, "responses": ["Brian De Palma", "Oliver Stone", "Steven Spielberg", "Joss Whedon"], "subElems": null}, {"name": "Comment s'appelle le poisson dans le film de Charles Crichton avec Jamie Lee Curtis", "numCorrectResponse": 3, "points": 1, "responses": ["Nemo", "Polochon", "Wanda", "Bubulle"], "subElems": null}, {"name": "Que cultive Catherine Deneuve dans le film Indochine", "numCorrectResponse": 1, "points": 2, "responses": ["L'hévéa", "Le tabac", "Le riz", "Le pavot"], "subElems": null}]}, {"name": "Lecture", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "BD", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quelle est la couleur des cheveux de Spirou", "numCorrectResponse": 2, "points": 1, "responses": ["Blond", "Roux", "Chatin", "Noir"], "subElems": null}, {"name": "Quel inspecteur de police est aidé par le héros de la BD Gilles Jordan", "numCorrectResponse": 3, "points": 3, "responses": ["Bourdon", "Cappa", "Crouton", "Soda"], "subElems": null}, {"name": "De quelle planète viennent Les Transformers", "numCorrectResponse": 3, "points": 3, "responses": ["Cyborg", "Cybernauto", "Cyberton", "Cyberville"], "subElems": null}, {"name": "Quel animal est effrayé par Haddock dans Tintin au Tibet", "numCorrectResponse": 4, "points": 1, "responses": ["Un lama", "Milou", "Un tapir", "Le Yéti"], "subElems": null}]}, {"name": "Littérature", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Quel tragédien grec a écrit Antigone", "numCorrectResponse": 1, "points": 3, "responses": ["Sophocle", "Eschyle", "Euripide", "Homère"], "subElems": null}, {"name": "Laquelle de ces œuvres n'a pas été écrite par Homère", "numCorrectResponse": 2, "points": 2, "responses": ["L'Illiade", "L'Enéide", "L'Odysée", "Bratachomyomachia"], "subElems": null}, {"name": "Quel écrivain français a produit un ensemble de romans appelé la Comédie Humaine", "numCorrectResponse": 1, "points": 1, "responses": ["Balzac", "Zola", "Maupassant", "Hugo"], "subElems": null}, {"name": "Quel est le nom de famille des sœurs ayant écrit Jane Eyre et Les Hauts de Hurlevent", "numCorrectResponse": 3, "points": 2, "responses": ["March", "Woolf", "Brontë", "Jackson"], "subElems": null}]}]}]}, {"name": "Géographie", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Sur quel continent a-t-on retrouvé les fossiles des êtres humains les plus anciens", "numCorrectResponse": 3, "points": 1, "responses": ["L'Asie", "L'Europe", "L'Afrique", "l'Océanie"], "subElems": null}, {"name": "Quelle ligne imaginaire sépare l'hémisphère nord de l'hémisphère sud", "numCorrectResponse": 3, "points": 1, "responses": ["Le tropique du Capricorne", "Le tropique du cancer", "L'équateur", "La ligne septentrionale"], "subElems": null}, {"name": "De quel centre de tir partent les fusées Ariane", "numCorrectResponse": 2, "points": 1, "responses": ["Cape Canaveral", "Kourou", "Centre Ch. De Gaule", "Baïkonour"], "subElems": null}, {"name": "Géographie Belgique", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "﻿Quelle est la capitale de la Wallonie", "numCorrectResponse": 3, "points": 1, "responses": ["Bruxelles", "Liège", "Namur", "Charleroi"], "subElems": null}]}, {"name": "Géographie France", "numCorrectResponse": 0, "points": 0, "responses": null, "subElems": [{"name": "Dans quel quartier de Paris se trouve l'église du Sacré-Cœur", "numCorrectResponse": 1, "points": 2, "responses": ["Montmartre", "Montparnasse", "Le Quartier Latin", "Le Marais"], "subElems": null}]}]}]}
+{
+   "elems":[
+      {
+         "fakeHint":null,
+         "hint":null,
+         "name":"Sports et Loisirs",
+         "numCorrectResponse":0,
+         "points":0,
+         "responses":null,
+         "subElems":[
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Échecs",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Comment appelle-t-on, aux échecs, le sacrifice d'un pion dans l'ouverture",
+                     "numCorrectResponse":4,
+                     "points":1,
+                     "responses":[
+                        "Blitz",
+                        "Sacsac",
+                        "Zugzwang",
+                        "Gambit"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Sport",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Combien de points vaut un panier au basket-ball, si la balle est lancée à 7 mètres du panier",
+                     "numCorrectResponse":3,
+                     "points":2,
+                     "responses":[
+                        "1",
+                        "2",
+                        "3",
+                        "4"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Dans quel sport Jean-Philippe Gatien est-il devenu le n°1 mondial",
+                     "numCorrectResponse":3,
+                     "points":2,
+                     "responses":[
+                        "Le tennis",
+                        "Le saut à la perche",
+                        "Le tennis de table",
+                        "L'aviron"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":"Aussi près ?",
+                     "hint":"Quatre-vingt-dix",
+                     "name":"A quelle distance maximum de la cible pratique-t-on le tir à l'arc aux jeux olympiques",
+                     "numCorrectResponse":4,
+                     "points":3,
+                     "responses":[
+                        "30 mètres",
+                        "50 mètres",
+                        "70 mètres",
+                        "90 mètres"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Football",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":"Balle à la main",
+                           "hint":"Expatriés",
+                           "name":"Quel est le point commun entre les footballeurs français Platini, Blanc, Papin et Sauzée",
+                           "numCorrectResponse":2,
+                           "points":3,
+                           "responses":[
+                              "Ils ont été champions du monde",
+                              "Ils ont joué dans des clubs italiens",
+                              "Ils ont joué comme gardien de but",
+                              "Ils ont été entraineurs"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":"Comme le gazon",
+                           "hint":"Comme une arme",
+                           "name":"Qui de ces 4 a remporté le plus de coupes de France de football",
+                           "numCorrectResponse":1,
+                           "points":3,
+                           "responses":[
+                              "Bereta",
+                              "Di Nallo",
+                              "Larqué",
+                              "Herbin"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quel pays a éliminé lors du dernier match la France de la Coupe du monde de football 1994",
+                           "numCorrectResponse":4,
+                           "points":2,
+                           "responses":[
+                              "La Croatie",
+                              "L'Italie",
+                              "La Suisse",
+                              "La Bulgarie"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Natation",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":"Avec un fusil",
+                           "hint":"Panier",
+                           "name":"De ces sports sub-aquatique, lequel est imaginaire",
+                           "numCorrectResponse":3,
+                           "points":3,
+                           "responses":[
+                              "La chasse",
+                              "Le hockey",
+                              "Le basket",
+                              "Le rugby"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quelle est la température réglementaire de l'eau d'une piscine olympique",
+                           "numCorrectResponse":4,
+                           "points":2,
+                           "responses":[
+                              "18°",
+                              "20°",
+                              "22°",
+                              "24°"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Tennis",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Qui Yannick Noah battit-il lors de sa seule finale victorieuse en grand chelem",
+                           "numCorrectResponse":4,
+                           "points":2,
+                           "responses":[
+                              "John McEnroe",
+                              "Ivan Lendl",
+                              "Andre Agassi",
+                              "Mats Willander"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Sport Automobile",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Des 4 pilotes, lequel est le plus petit",
+                           "numCorrectResponse":1,
+                           "points":2,
+                           "responses":[
+                              "Alain Prost",
+                              "Nigel Mansell",
+                              "Ayrton Senna",
+                              "Lewis Hamilton"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Loisirs",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Quelle carte d'atout est supérieure aux autres, à la belote",
+                     "numCorrectResponse":1,
+                     "points":2,
+                     "responses":[
+                        "Valet",
+                        "Dame",
+                        "Roi",
+                        "As"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "fakeHint":null,
+         "hint":null,
+         "name":"Culture",
+         "numCorrectResponse":0,
+         "points":0,
+         "responses":null,
+         "subElems":[
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Quelle est la tâche principale de l'Académie Française",
+               "numCorrectResponse":1,
+               "points":2,
+               "responses":[
+                  "Rédiger un dictionnaire",
+                  "Monter des pièces de théâtre",
+                  "Honorer les grands acteurs",
+                  "Définir les règles de grammaire"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Combien y-a-t-il de passagers à bord d'un Mirage 2000",
+               "numCorrectResponse":1,
+               "points":2,
+               "responses":[
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Qui a écrit le livre du Tao",
+               "numCorrectResponse":1,
+               "points":2,
+               "responses":[
+                  "Lao-Tseu",
+                  "Confucius",
+                  "Boudha",
+                  "Vishnou"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Qu'elle est la spécialité des titulaires de la Médaille Fields",
+               "numCorrectResponse":3,
+               "points":2,
+               "responses":[
+                  "La peinture",
+                  "L'agriculture",
+                  "Les mathématiques",
+                  "La natation"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Dans laquelle de ces disciplines n'y a-t-il pas de prix Nobel",
+               "numCorrectResponse":2,
+               "points":1,
+               "responses":[
+                  "Physique",
+                  "Mathématiques",
+                  "Médecine",
+                  "Economie"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Comment s'appelaient les anciens dirigeants de l'Inde",
+               "numCorrectResponse":1,
+               "points":1,
+               "responses":[
+                  "Maharadjahs",
+                  "Shoguns",
+                  "Bonzes",
+                  "Tsars"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Qu'était Bucéphale pour Alexandre le Grand",
+               "numCorrectResponse":3,
+               "points":1,
+               "responses":[
+                  "Son conseiller",
+                  "Son fauteuil de campagne",
+                  "Son cheval",
+                  "Sa femme"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Dans quelle conte trouve-t-on la phrase: Tire la chevillette, la bobinette cherra",
+               "numCorrectResponse":4,
+               "points":1,
+               "responses":[
+                  "Hansel et Gretel",
+                  "Le petit poucet",
+                  "Blanche-Neige",
+                  "Le petit chaperon rouge"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Inventions",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Quelle société a inventé le rasoir jetable",
+                     "numCorrectResponse":1,
+                     "points":2,
+                     "responses":[
+                        "Bic",
+                        "Gilette",
+                        "Microsoft",
+                        "Wilkinson"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":"Soleil Levant",
+                     "hint":"Moto",
+                     "name":"Quel était le fabricant de la première mobylette",
+                     "numCorrectResponse":3,
+                     "points":3,
+                     "responses":[
+                        "Mobylette",
+                        "Honda",
+                        "Motobécane",
+                        "Peugeot"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":"Après-guerre",
+                     "hint":"Termine par 7",
+                     "name":"En quelle année apparut le moulin à café électrique",
+                     "numCorrectResponse":3,
+                     "points":3,
+                     "responses":[
+                        "1946",
+                        "1953",
+                        "1957",
+                        "1959"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":"Tard",
+                     "hint":"Staline",
+                     "name":"En quelle année apparut la cocotte-minute",
+                     "numCorrectResponse":2,
+                     "points":3,
+                     "responses":[
+                        "1951",
+                        "1953",
+                        "1957",
+                        "1959"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Chanson",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Quel chanteur commença sa carrière avec Et moi, et moi, et moi",
+                     "numCorrectResponse":4,
+                     "points":1,
+                     "responses":[
+                        "Serge Lama",
+                        "Claude François",
+                        "Sacha Distel",
+                        "Jacques Dutronc"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Quel chanteur est un loup garoup puis un mort vivant dans son clip Thriller",
+                     "numCorrectResponse":4,
+                     "points":1,
+                     "responses":[
+                        "Christophe Willem",
+                        "Warren Zevon",
+                        "Norman Reedus",
+                        "Michael Jackson"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Cinéma",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Quel est le dernier film d'Alfred Hitchcock",
+                     "numCorrectResponse":3,
+                     "points":2,
+                     "responses":[
+                        "Les oiseaux",
+                        "Psychose",
+                        "Complot de famille",
+                        "Le rideau déchiré"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"À quel réalisateur doit-on Wall Street et JFK",
+                     "numCorrectResponse":2,
+                     "points":1,
+                     "responses":[
+                        "Brian De Palma",
+                        "Oliver Stone",
+                        "Steven Spielberg",
+                        "Joss Whedon"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Comment s'appelle le poisson dans le film de Charles Crichton avec Jamie Lee Curtis",
+                     "numCorrectResponse":3,
+                     "points":1,
+                     "responses":[
+                        "Nemo",
+                        "Polochon",
+                        "Wanda",
+                        "Bubulle"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Que cultive Catherine Deneuve dans le film Indochine",
+                     "numCorrectResponse":1,
+                     "points":2,
+                     "responses":[
+                        "L'hévéa",
+                        "Le tabac",
+                        "Le riz",
+                        "Le pavot"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Lecture",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"BD",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quelle est la couleur des cheveux de Spirou",
+                           "numCorrectResponse":2,
+                           "points":1,
+                           "responses":[
+                              "Blond",
+                              "Roux",
+                              "Chatin",
+                              "Noir"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":"J'ai soif",
+                           "hint":"À la soupe",
+                           "name":"Quel inspecteur de police est aidé par le héros de la BD Gilles Jordan",
+                           "numCorrectResponse":3,
+                           "points":3,
+                           "responses":[
+                              "Bourdon",
+                              "Cappa",
+                              "Crouton",
+                              "Soda"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":"Pas des champs",
+                           "hint":"De bon ton",
+                           "name":"De quelle planète viennent Les Transformers",
+                           "numCorrectResponse":3,
+                           "points":3,
+                           "responses":[
+                              "Cyborg",
+                              "Cybernauto",
+                              "Cyberton",
+                              "Cyberville"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quel animal est effrayé par Haddock dans Tintin au Tibet",
+                           "numCorrectResponse":4,
+                           "points":1,
+                           "responses":[
+                              "Un lama",
+                              "Milou",
+                              "Un tapir",
+                              "Le Yéti"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Littérature",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":"Odyssée",
+                           "hint":"Œdipe",
+                           "name":"Quel tragédien grec a écrit Antigone",
+                           "numCorrectResponse":1,
+                           "points":3,
+                           "responses":[
+                              "Sophocle",
+                              "Eschyle",
+                              "Euripide",
+                              "Homère"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Laquelle de ces œuvres n'a pas été écrite par Homère",
+                           "numCorrectResponse":2,
+                           "points":2,
+                           "responses":[
+                              "L'Illiade",
+                              "L'Enéide",
+                              "L'Odysée",
+                              "Bratachomyomachia"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quel écrivain français a produit un ensemble de romans appelé la Comédie Humaine",
+                           "numCorrectResponse":1,
+                           "points":1,
+                           "responses":[
+                              "Balzac",
+                              "Zola",
+                              "Maupassant",
+                              "Hugo"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quel est le nom de famille des sœurs ayant écrit Jane Eyre et Les Hauts de Hurlevent",
+                           "numCorrectResponse":3,
+                           "points":2,
+                           "responses":[
+                              "March",
+                              "Woolf",
+                              "Brontë",
+                              "Jackson"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "fakeHint":null,
+         "hint":null,
+         "name":"Histoire",
+         "numCorrectResponse":0,
+         "points":0,
+         "responses":null,
+         "subElems":[
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Quel révolutionnaire fut assassiné dans son bain par Charlotte Corday",
+               "numCorrectResponse":3,
+               "points":2,
+               "responses":[
+                  "Che Guevara",
+                  "Maximilien Robespierre",
+                  "Marat",
+                  "Raspoutine"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Quel fut le premier empereur romain",
+               "numCorrectResponse":3,
+               "points":2,
+               "responses":[
+                  "Jules César",
+                  "Néron",
+                  "Auguste",
+                  "Titus"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Quel pays a livré une guerre de 10 ans contre l'Iran dans les années 80",
+               "numCorrectResponse":2,
+               "points":2,
+               "responses":[
+                  "Israël",
+                  "L'Irak",
+                  "Les États-Unis",
+                  "Le Koweit"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Histoire France",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":"Pour la gorge",
+                     "hint":"Capitale de guerre",
+                     "name":"Quelles pastilles aromatisées aux essences naturelles et de forme octogonale étaient chères à l'impératrice Eugénie",
+                     "numCorrectResponse":4,
+                     "points":3,
+                     "responses":[
+                        "Les Valda",
+                        "Les pastilles Ricola",
+                        "Les pastilles Evian",
+                        "Les pastilles Vichy"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":"N'est pas rasoir",
+                     "hint":"Tout condamné à mort…",
+                     "name":"Quel instrument Nicolas-Jacques Pelletier eut-il le triste privilège d'expérimenter en premier",
+                     "numCorrectResponse":2,
+                     "points":3,
+                     "responses":[
+                        "La pince à épiler",
+                        "La guillotine",
+                        "La machine à baffe",
+                        "La chaise électrique"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":"Dehors",
+                     "hint":"La beauté de l'hygiène",
+                     "name":"Qu'est-ce que François 1er dessina lui-même dans son château d'Amboise",
+                     "numCorrectResponse":3,
+                     "points":3,
+                     "responses":[
+                        "Les portes",
+                        "Les tables",
+                        "Les baignoires",
+                        "Les écuries"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Histoire Sciences",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":"Philosophe",
+                     "hint":"C'est un principe",
+                     "name":"Qui s'est écrié Eurêka",
+                     "numCorrectResponse":4,
+                     "points":3,
+                     "responses":[
+                        "Aristote",
+                        "Platon",
+                        "Socrate",
+                        "Archimède"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Histoire Belgique",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Quelle est la date de la Fête Nationale Belge",
+                     "numCorrectResponse":3,
+                     "points":1,
+                     "responses":[
+                        "11-juil",
+                        "14-juil",
+                        "21-juil",
+                        "15-août"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "fakeHint":null,
+         "hint":null,
+         "name":"Sciences",
+         "numCorrectResponse":0,
+         "points":0,
+         "responses":null,
+         "subElems":[
+            {
+               "fakeHint":"Après guerre",
+               "hint":"Tôt",
+               "name":"En quelle année a eu lieu la première vaccination contre la variole",
+               "numCorrectResponse":1,
+               "points":3,
+               "responses":[
+                  "1796",
+                  "1846",
+                  "1911",
+                  "1947"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Biologie",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":"Premier",
+                     "hint":"Beaucoup",
+                     "name":"Combien y-a-t-il d'os chez un être humain adulte",
+                     "numCorrectResponse":4,
+                     "points":3,
+                     "responses":[
+                        "68",
+                        "127",
+                        "161",
+                        "208"
+                     ],
+                     "subElems":null
+                  },
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Zoologie",
+                     "numCorrectResponse":0,
+                     "points":0,
+                     "responses":null,
+                     "subElems":[
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Quel animal est le père des faons",
+                           "numCorrectResponse":4,
+                           "points":1,
+                           "responses":[
+                              "Le Paon",
+                              "Le Renne",
+                              "L'Éland",
+                              "Le Cerf"
+                           ],
+                           "subElems":null
+                        },
+                        {
+                           "fakeHint":null,
+                           "hint":null,
+                           "name":"Des feuilles de quel arbre odorant les koalas font-ils leur repas",
+                           "numCorrectResponse":2,
+                           "points":1,
+                           "responses":[
+                              "Le tilleul",
+                              "L'eucalyptus",
+                              "L'arbre au caramel",
+                              "Le figuier"
+                           ],
+                           "subElems":null
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "fakeHint":null,
+         "hint":null,
+         "name":"Géographie",
+         "numCorrectResponse":0,
+         "points":0,
+         "responses":null,
+         "subElems":[
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Sur quel continent a-t-on retrouvé les fossiles des êtres humains les plus anciens",
+               "numCorrectResponse":3,
+               "points":1,
+               "responses":[
+                  "L'Asie",
+                  "L'Europe",
+                  "L'Afrique",
+                  "l'Océanie"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Quelle ligne imaginaire sépare l'hémisphère nord de l'hémisphère sud",
+               "numCorrectResponse":3,
+               "points":1,
+               "responses":[
+                  "Le tropique du Capricorne",
+                  "Le tropique du cancer",
+                  "L'équateur",
+                  "La ligne septentrionale"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"De quel centre de tir partent les fusées Ariane",
+               "numCorrectResponse":2,
+               "points":1,
+               "responses":[
+                  "Cape Canaveral",
+                  "Kourou",
+                  "Centre Ch. De Gaule",
+                  "Baïkonour"
+               ],
+               "subElems":null
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Géographie Belgique",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"﻿Quelle est la capitale de la Wallonie",
+                     "numCorrectResponse":3,
+                     "points":1,
+                     "responses":[
+                        "Bruxelles",
+                        "Liège",
+                        "Namur",
+                        "Charleroi"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            },
+            {
+               "fakeHint":null,
+               "hint":null,
+               "name":"Géographie France",
+               "numCorrectResponse":0,
+               "points":0,
+               "responses":null,
+               "subElems":[
+                  {
+                     "fakeHint":null,
+                     "hint":null,
+                     "name":"Dans quel quartier de Paris se trouve l'église du Sacré-Cœur",
+                     "numCorrectResponse":1,
+                     "points":2,
+                     "responses":[
+                        "Montmartre",
+                        "Montparnasse",
+                        "Le Quartier Latin",
+                        "Le Marais"
+                     ],
+                     "subElems":null
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
