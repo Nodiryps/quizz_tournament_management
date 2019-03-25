@@ -233,10 +233,18 @@ public class VMInitGame {
 //            if(totalPointsRestant<(cptPointProperty().get()/2)){
 //                 endOfGameManagmnt(stage);
 //            }
-            if (cpt > selectedQuestionList.size() || totalPointsRestant < (MAX_POINTS_GAME.get() / 2)) {
+            if (noMoreQuestion() || noMorePoints()) {
                 endOfGameManagmnt(stage);
             }
         }
+    }
+
+    private boolean noMoreQuestion() {
+        return cpt > selectedQuestionList.size();
+    }
+
+    private boolean noMorePoints() {
+        return totalPointsRestant < (MAX_POINTS_GAME.get() / 2);
     }
 
     private void lastQuestion(String response) {
