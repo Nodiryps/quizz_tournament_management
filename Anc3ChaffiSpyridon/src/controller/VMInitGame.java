@@ -366,10 +366,7 @@ public class VMInitGame {
     }
 
     public void incrementPoints(Question q) {
-        System.out.println(hintClicked);
-        System.out.println("mmmmmmmmmmmmmmmmmm" + hint.get());
         if (hintClicked && q.getFakeHint() != null && q.getHint() != null) {
-            System.out.println(hint.get());
             if (q.getFakeHint().get().equals(hint.get())) {
                 cptPointProperty().set(cptPointProperty().get() + 2);
             } else {
@@ -611,7 +608,6 @@ public class VMInitGame {
     public String randomHint(Question q) {
         Random rand = new Random();
         int val = rand.nextInt(5);
-        System.out.println(val);
         if (val == 3) {
             return q.getFakeHint().get();
         } else {

@@ -5,9 +5,7 @@
  */
 package view;
 
-import java.io.FileNotFoundException;
 import controller.VMInitGame;
-import controller.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,7 +18,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -30,12 +27,9 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import model.Player;
 import model.Question;
 
@@ -102,11 +96,8 @@ public class ViewGame extends VBox {
         display.add(new Label(p1.getFirstName() + "  CONTRE  " + p2.getFirstName()), 0, 1);
         display.add(lbCptQ, 0, 5);
         displayQuestion.getChildren().addAll(attrQName, lbAttrQPoints, lbResponse, reponse1, reponse2, reponse3, reponse4, btnHint, hint);
-        //btnHint.sets(new Insets(15));
         display.add(displayQuestion, 0, 8);
         display.add(lbP2Points, 0, 9);
-//        display.add(validate, 0, 11);
-//        display.add(abandon, 1, 11);
 
         HBox btnBottom = new HBox(validate, abandon);
         display.add(btnBottom, 0, 11);
