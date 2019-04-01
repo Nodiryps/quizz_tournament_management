@@ -303,7 +303,7 @@ public class ViewInitGame extends Popup {
         
         cbCat.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
-                    vm.SetCategory(cbCat.getSelectionModel().getSelectedItem());
+                    vm.setCategory(cbCat.getSelectionModel().getSelectedItem());
                 });
         addQuestion.setOnAction((ActionEvent e) -> {
                 vm.addQuestionforOpp(getSelectedItem(questionList));

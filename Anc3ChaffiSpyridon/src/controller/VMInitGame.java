@@ -22,17 +22,16 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import model.Player;
 import model.Question;
-import model.TournamentFacade;
 import view.ViewGame;
-import java.io.FileNotFoundException;
 import java.util.Random;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleGroup;
+import model.CareTaker;
 import model.Category;
+import model.MementoBuilding;
 import model.RESULTS;
-import model.Tournament;
 
 /**
  *
@@ -73,6 +72,7 @@ public class VMInitGame {
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     private int totalPointsRestant;
     static int cpt;
+    private MementoBuilding mementoBuilding;
 
     public BooleanProperty bntHint = new SimpleBooleanProperty();
     public StringProperty hint = new SimpleStringProperty();
@@ -185,6 +185,35 @@ public class VMInitGame {
         }
     }
 
+    private void selectFalseRespRadioBtn(String res) {
+        unselectAllRadioBouton();
+
+        switch (getIndexWrongResponse(res)) {
+            case 1:
+                boolSelectRadioBtn1.setValue(Boolean.TRUE);
+                break;
+            case 2:
+                boolSelectRadioBtn2.setValue(Boolean.TRUE);
+                break;
+            case 3:
+                boolSelectRadioBtn3.setValue(Boolean.TRUE);
+                break;
+            case 4:
+                boolSelectRadioBtn4.setValue(Boolean.TRUE);
+                break;
+        }
+    }
+
+    private int getIndexWrongResponse(String res) {
+        int wrongRes = 0;
+        for (String r : selectedQuestion.get().getResponses()) {
+            if (res.equals(r)) {
+                wrongRes = selectedQuestion.get().getResponses().indexOf(r);
+            }
+        }
+        return wrongRes;
+    }
+
     private void unselectAllRadioBouton() {
         boolSelectRadioBtn1.set(false);
         boolSelectRadioBtn2.set(false);
@@ -244,6 +273,7 @@ public class VMInitGame {
     }
 
     public void nextQuestion(String response, Stage stage, ToggleGroup g) {
+
         if (stage != null && g != null) {
             g.selectToggle(null);
             disablebtnValidateQuestion();
@@ -285,6 +315,9 @@ public class VMInitGame {
             totalPointsRestant -= q.getPoints();
             if (isResponseRight(response)) {
                 incrementPoints(q);
+            } else {
+                System.out.println("la reponse est fausse");
+                mementoBuilding = new MementoBuilding(q, response);
             }
             incrementQuestion();
             disableRadioBtn.set(true);
@@ -293,6 +326,14 @@ public class VMInitGame {
     }
 
     private void incrementQuestion() {
+        boolean test=randomValue();
+        System.out.println(test);
+        if (test) {
+            mementoBuilding.undo();
+            Question mem = mementoBuilding.question;
+            setAttributQuetion(mem);
+            selectFalseRespRadioBtn(mementoBuilding.response);
+        }
         getCptFillQuestions().set(getCptFillQuestions().get() + 1);
         getIndexQuestion().set(getIndexQuestion().get() + 1);
     }
@@ -375,7 +416,90 @@ public class VMInitGame {
         } else {
             cptPointProperty().set(cptPointProperty().get() + q.getPoints());
         }
+    }
 
+    public void addQuestions(Category q) {
+        if (q.getName().get().equals("Tous")) {
+            addAllQuestions();
+        } else {
+            for (Elem e : q.subElem) {
+                if (e.subElems == null) {
+                    questionsProperty().add(new Question(e));
+                }
+                removeIfSameQuestion();
+                if (e.subElems != null) {
+                    Category c = new Category(e);
+                    addQuestions(c);
+                }
+            }
+            pointTotauxProperty().set(0);
+            addPointsToTotal();
+        }
+    }
+
+    public void addAllQuestions() {
+        questionsProperty().clear();
+        for (Category c : getCat()) {
+            if (!c.getName().get().equals("Tous")) {
+                for (Elem e : c.subElem) {
+                    if (e.subElems == null) {
+                        removeIfSameQuestion();
+                        questionsProperty().add(new Question(e));
+                    }
+                }
+            }
+        }
+        pointTotauxProperty().set(0);
+        addPointsToTotal();
+    }
+
+    public ObservableList<Category> getCat() {
+        return vm.getFacade().getCategory();
+    }
+
+    private void removeIfSameQuestion() {
+        for (int x = 0; x <= selectedQuestionList.size() - 1; ++x) {
+            for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
+                if (getQuestionName(selectedQuestionList, x).equals(getQuestionName(questionsProperty(), y))) {
+                    questionsProperty().remove(questionsProperty().get(y));
+                }
+            }
+        }
+    }
+
+    private String getQuestionName(ObservableList<Question> list, int index) {
+        return list.get(index).getName().get();
+    }
+
+    public void displayHint() {
+        hintClicked = true;
+        Question q = getQuestionFromIndex();
+        hint.set(randomHint(q));
+        bntHint.set(false);
+
+    }
+
+    public String randomHint(Question q) {
+        if (randomValue()) {
+            return q.getFakeHint().get();
+        } else {
+            return q.getHint().get();
+        }
+    }
+
+    public String random(Question q) {
+        if (randomValue()) {
+            return q.getFakeHint().get();
+        } else {
+            return q.getHint().get();
+        }
+    }
+
+    public boolean randomValue() {
+        Random rand = new Random();
+       int value=rand.nextInt(5);
+        System.out.println(value);
+        return value == 3;
     }
 
     public IntegerProperty cptPointProperty() {
@@ -530,88 +654,13 @@ public class VMInitGame {
         return new SimpleListProperty<>(vm.facade.getCategory());
     }
 
-    public void SetCategory(Category q) {
+    public void setCategory(Category q) {
         vm.facade.getQuestions().clear();
         addQuestions(q);
-
     }
 
-    public BooleanProperty BtnValidateQuestionProperty() {
+    public BooleanProperty btnValidateQuestionProperty() {
         return btnValidateQuestion;
     }
 
-    public void addQuestions(Category q) {
-        if (q.getName().get().equals("Tous")) {
-            addAllQuestions();
-        } else {
-            for (Elem e : q.subElem) {
-                if (e.subElems == null) {
-                    questionsProperty().add(new Question(e));
-                }
-
-                removeIfSameQuestion();
-
-                if (e.subElems != null) {
-                    Category c = new Category(e);
-                    addQuestions(c);
-                }
-            }
-            pointTotauxProperty().set(0);
-            addPointsToTotal();
-        }
-
-    }
-
-    public void addAllQuestions() {
-        questionsProperty().clear();
-        for (Category c : getCat()) {
-            if (!c.getName().get().equals("Tous")) {
-                for (Elem e : c.subElem) {
-                    if (e.subElems == null) {
-                        removeIfSameQuestion();
-                        questionsProperty().add(new Question(e));
-                    }
-                }
-            }
-
-        }
-        pointTotauxProperty().set(0);
-        addPointsToTotal();
-    }
-
-    public ObservableList<Category> getCat() {
-        return vm.getFacade().getCategory();
-    }
-
-    private void removeIfSameQuestion() {
-        for (int x = 0; x <= selectedQuestionList.size() - 1; ++x) {
-            for (int y = 0; y <= questionsProperty().size() - 1; ++y) {
-                if (getQuestionName(selectedQuestionList, x).equals(getQuestionName(questionsProperty(), y))) {
-                    questionsProperty().remove(questionsProperty().get(y));
-                }
-            }
-        }
-    }
-
-    private String getQuestionName(ObservableList<Question> list, int index) {
-        return list.get(index).getName().get();
-    }
-
-    public void displayHint() {
-        hintClicked = true;
-        Question q = getQuestionFromIndex();
-        hint.set(randomHint(q));
-        bntHint.set(false);
-        
-    }
-
-    public String randomHint(Question q) {
-        Random rand = new Random();
-        int val = rand.nextInt(5);
-        if (val == 3) {
-            return q.getFakeHint().get();
-        } else {
-            return q.getHint().get();
-        }
-    }
 }

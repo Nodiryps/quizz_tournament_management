@@ -133,7 +133,7 @@ public class ViewGame extends VBox {
         vm.getQuestionPoint().bindBidirectional((attrQPoint));
         vm.hint.bindBidirectional(hint.textProperty());
         btnHint.visibleProperty().bind(vm.bntHint);
-        validate.disableProperty().bind(vm.BtnValidateQuestionProperty());
+        validate.disableProperty().bind(vm.btnValidateQuestionProperty());
 
     }
 
@@ -168,6 +168,7 @@ public class ViewGame extends VBox {
     private void configListerner() {
         validate.setOnAction((ActionEvent event) -> {
             vm.nextQuestion(((RadioButton) group.getSelectedToggle()).getText(), stage, group);
+          
         });
         abandon.setOnAction((ActionEvent event) -> {
             vm.giveUpGame(stage);
