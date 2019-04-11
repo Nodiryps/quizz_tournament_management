@@ -5,15 +5,17 @@
  */
 package model;
 
+import element.Elem;
+
 /**
  *
  * @author 2208sptheodorou
  */
 public abstract class UndoableQuestion extends Question{
-    
-    public UndoableQuestion(Question q) {
-        super(q);
+
+    public UndoableQuestion(Question elem) {
+        super(elem);
     }
-    
+  
     public abstract void undo();
 }

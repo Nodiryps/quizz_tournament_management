@@ -28,6 +28,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Player;
@@ -65,7 +68,7 @@ public class ViewGame extends VBox {
     private Button validate = new Button("valider");
     private Button abandon = new Button("abandonner");
     private Button btnHint = new Button("indice");
-    private Label hint = new Label();
+    private final Text hint = new Text();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private final Player p1;
     private final Player p2;
@@ -102,6 +105,9 @@ public class ViewGame extends VBox {
         HBox btnBottom = new HBox(validate, abandon);
         display.add(btnBottom, 0, 11);
         btnBottom.setSpacing(25);
+        hint.setFont(Font.font ("Arial", 15));
+        btnHint.setStyle("-fx-background-color: red;");
+        hint.setFill(Color.RED);
         displayQuestion.setStyle(css());
         display.alignmentProperty().set(Pos.CENTER);
         validate.disableProperty().set(true);
@@ -118,7 +124,7 @@ public class ViewGame extends VBox {
     }
 
     private void configBindLabels() {
-        lbCptQ.textProperty().bind(cptQ.asString("Question(s): %d/" + this.getSelectedQuestionList().size()));
+        lbCptQ.textProperty().bind(cptQ.asString("Question(s): %d/" + vm.selectedQuestionProperty().size()));
         lbAttrQPoints.textProperty().bind(attrQPoint.asString("%d point(s)"));
     }
 
@@ -147,8 +153,6 @@ public class ViewGame extends VBox {
     private void configBindRadioBtn() {
         configBindText();
         configBindRes();
-
-        vm.getSelectedQuestionList().bind(this.getSelectedQuestionList());
     }
 
     private void configBindText() {
@@ -193,8 +197,6 @@ public class ViewGame extends VBox {
                 + "-fx-padding: 12;\n";
     }
 
-    public SimpleListProperty<Question> getSelectedQuestionList() {
-        return new SimpleListProperty<>(selectedQuestionList);
-    }
+   
 
 }

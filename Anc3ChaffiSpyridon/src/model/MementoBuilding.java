@@ -13,12 +13,14 @@ package model;
 public class MementoBuilding extends UndoableQuestion {
 
     private CareTaker careTaker;
-    public  Question question;
-    public  String response;
+    public Question question;
+    public String response;
 
-    public MementoBuilding(Question q, String r) {
-        super(q);
-        careTaker = new CareTaker(createMemento(q, r));
+    public MementoBuilding(Question q, String r,CareTaker c) {
+        super(q);// cree une copie question
+        question = q;
+        response = r;
+        careTaker=c;
     }
 
     @Override
@@ -49,18 +51,17 @@ public class MementoBuilding extends UndoableQuestion {
             return "MementoImpl{" + "response=" + response + '}';
         }
 
-      
-        
     }
 
-    public Memento createMemento(Question q, String r) {
-        return new MementoImpl(q, r);
+    public MementoImpl createMemento() {
+        return new MementoImpl(question, response);
     }
 
     public void setMemento(Memento m) {
-        System.out.println(m);
         MementoImpl mi = (MementoImpl) m;
         this.question = mi.question;
         this.response = mi.response;
     }
+    
+    
 }

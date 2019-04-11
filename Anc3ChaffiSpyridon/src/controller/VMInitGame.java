@@ -72,7 +72,10 @@ public class VMInitGame {
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     private int totalPointsRestant;
     static int cpt;
+    private CareTaker careTaker;
     private MementoBuilding mementoBuilding;
+    private boolean boolLastQuestRight = false;
+    private boolean boolRandom = false;
 
     public BooleanProperty bntHint = new SimpleBooleanProperty();
     public StringProperty hint = new SimpleStringProperty();
@@ -81,6 +84,8 @@ public class VMInitGame {
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
+
+        careTaker = new CareTaker();
         initData();
 
     }
@@ -129,6 +134,7 @@ public class VMInitGame {
     }
 
     public void setAttributQuetion(Question q) {
+        System.out.println(q);
         if (q != null) {
             bntHint.set(false);
             selectedQuestion.set(q);
@@ -142,6 +148,7 @@ public class VMInitGame {
                 bntHint.set(true);
             }
         }
+      
     }
 
     private void launchAttributes() {
@@ -186,7 +193,6 @@ public class VMInitGame {
     }
 
     private void selectFalseRespRadioBtn(String res) {
-        unselectAllRadioBouton();
 
         switch (getIndexWrongResponse(res)) {
             case 1:
@@ -206,6 +212,7 @@ public class VMInitGame {
 
     private int getIndexWrongResponse(String res) {
         int wrongRes = 0;
+        if(selectedQuestion.get()!=null)
         for (String r : selectedQuestion.get().getResponses()) {
             if (res.equals(r)) {
                 wrongRes = selectedQuestion.get().getResponses().indexOf(r);
@@ -230,7 +237,7 @@ public class VMInitGame {
                     cptPoint.set(cptPoint.get() + q.getPoints());
                     MAX_POINTS_GAME.set(cptPointProperty().get());
                     questionsProperty().remove(q);
-                    cptFillQuestions.set(selectedQuestionList.size());
+                    cptFillQuestions.set(selectedQuestionList.size()-1);
                 }
                 totalPoints.set(totalPoints.get() - q.getPoints());
                 setResponse(selectedQuestion.get());
@@ -273,10 +280,10 @@ public class VMInitGame {
     }
 
     public void nextQuestion(String response, Stage stage, ToggleGroup g) {
-
         if (stage != null && g != null) {
             g.selectToggle(null);
             disablebtnValidateQuestion();
+            boolRandom=randomValue();
             if (!response.equals("")) {
                 if (isGameOn()) {
                     displayTheQuestion();
@@ -286,7 +293,7 @@ public class VMInitGame {
                         lastQuestion(response);
                     }
                 }
-                if (noMoreQuestion() || noMorePoints()) {
+                if (!boolRandom && (noMoreQuestion() || noMorePoints())) {
                     endOfGameManagmnt(stage);
                 }
             }
@@ -314,10 +321,11 @@ public class VMInitGame {
             Question q = getQuestionFromIndex();
             totalPointsRestant -= q.getPoints();
             if (isResponseRight(response)) {
+                boolLastQuestRight = true;
                 incrementPoints(q);
             } else {
-                System.out.println("la reponse est fausse");
-                mementoBuilding = new MementoBuilding(q, response);
+                mementoBuilding = new MementoBuilding(q, response,careTaker);
+                careTaker.keepMemento(mementoBuilding.createMemento());
             }
             incrementQuestion();
             disableRadioBtn.set(true);
@@ -326,11 +334,10 @@ public class VMInitGame {
     }
 
     private void incrementQuestion() {
-        boolean test=randomValue();
-        System.out.println(test);
-        if (test) {
+        if (boolLastQuestRight && boolRandom) {
             mementoBuilding.undo();
             Question mem = mementoBuilding.question;
+            selectedQuestion.set(mem);
             setAttributQuetion(mem);
             selectFalseRespRadioBtn(mementoBuilding.response);
         }
@@ -474,6 +481,7 @@ public class VMInitGame {
     public void displayHint() {
         hintClicked = true;
         Question q = getQuestionFromIndex();
+        System.out.println(q);
         hint.set(randomHint(q));
         bntHint.set(false);
 
@@ -497,7 +505,7 @@ public class VMInitGame {
 
     public boolean randomValue() {
         Random rand = new Random();
-       int value=rand.nextInt(5);
+        int value = rand.nextInt(5);
         System.out.println(value);
         return value == 3;
     }
@@ -662,5 +670,5 @@ public class VMInitGame {
     public BooleanProperty btnValidateQuestionProperty() {
         return btnValidateQuestion;
     }
-
+     
 }

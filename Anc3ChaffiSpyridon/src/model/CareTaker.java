@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class CareTaker {
 
     private ArrayList<Memento> mementosList = new ArrayList<>();
-
-    public CareTaker(Memento m) {
-        mementosList.add(m);
+    
+    public CareTaker() {
+        
     }
 
     public void keepMemento(Memento m) {
@@ -25,12 +25,9 @@ public class CareTaker {
 
     public Memento getMemento() {
         Memento m = null;
-        System.out.println("CareTAkerLIst "+ mementosList.size());
-        System.out.println(mementosList);
         if (mementosList.size() > 0) {
             m = mementosList.get(0);
             mementosList.remove(0);
-            System.out.println("je suis dans le if");
         }
         return m;
     }
