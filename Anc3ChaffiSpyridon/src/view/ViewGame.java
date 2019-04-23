@@ -167,6 +167,10 @@ public class ViewGame extends VBox {
         vm.getRes2().bindBidirectional(res2);
         vm.getRes3().bindBidirectional(res3);
         vm.getRes4().bindBidirectional(res4);
+//        reponse1.selectedProperty().bind(vm.getBoolSelectRadioBtn1());
+//        reponse2.selectedProperty().bind(vm.getBoolSelectRadioBtn2());
+//        reponse3.selectedProperty().bind(vm.getBoolSelectRadioBtn3());
+//        reponse4.selectedProperty().bind(vm.getBoolSelectRadioBtn4());
     }
 
     private void configListerner() {

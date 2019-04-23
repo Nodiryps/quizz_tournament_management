@@ -192,18 +192,17 @@ public class VMInitGame {
     }
 
     private void selectFalseRespRadioBtn(String res) {
-
         switch (getIndexWrongResponse(res)) {
-            case 1:
+            case 0:
                 boolSelectRadioBtn1.setValue(Boolean.TRUE);
                 break;
-            case 2:
+            case 1:
                 boolSelectRadioBtn2.setValue(Boolean.TRUE);
                 break;
-            case 3:
+            case 2:
                 boolSelectRadioBtn3.setValue(Boolean.TRUE);
                 break;
-            case 4:
+            case 3:
                 boolSelectRadioBtn4.setValue(Boolean.TRUE);
                 break;
         }
@@ -284,7 +283,6 @@ public class VMInitGame {
             g.selectToggle(null);
             disablebtnValidateQuestion();
             boolRandom = randomValue();
-            if (!response.equals("")) {
                 if (isGameOn()) {
                     displayTheQuestion();
                     nextQuestionManagmnt(response);
@@ -296,7 +294,6 @@ public class VMInitGame {
                 if (!boolRandom && (noMoreQuestion() || noMorePoints())) {
                     endOfGameManagmnt(stage);
                 }
-            }
         }
     }
 
@@ -337,8 +334,8 @@ public class VMInitGame {
         if (boolLastQuestRight && boolRandom) {
             mementoBuilding.undo();
             Question mem = mementoBuilding.question;
-            selectedQuestion.set(mem);
             setAttributQuetion(mem);
+            selectedQuestion.set(mem);
             selectFalseRespRadioBtn(mementoBuilding.response);
         } else if(getCptFillQuestions().get() < selectedQuestionList.size()) {
             getCptFillQuestions().set(getCptFillQuestions().get() + 1);
