@@ -148,7 +148,6 @@ public class VMInitGame {
                 bntHint.set(true);
             }
         }
-      
     }
 
     private void launchAttributes() {
@@ -212,10 +211,11 @@ public class VMInitGame {
 
     private int getIndexWrongResponse(String res) {
         int wrongRes = 0;
-        if(selectedQuestion.get()!=null)
-        for (String r : selectedQuestion.get().getResponses()) {
-            if (res.equals(r)) {
-                wrongRes = selectedQuestion.get().getResponses().indexOf(r);
+        if (selectedQuestion.get() != null) {
+            for (String r : selectedQuestion.get().getResponses()) {
+                if (res.equals(r)) {
+                    wrongRes = selectedQuestion.get().getResponses().indexOf(r);
+                }
             }
         }
         return wrongRes;
@@ -237,7 +237,7 @@ public class VMInitGame {
                     cptPoint.set(cptPoint.get() + q.getPoints());
                     MAX_POINTS_GAME.set(cptPointProperty().get());
                     questionsProperty().remove(q);
-                    cptFillQuestions.set(selectedQuestionList.size()-1);
+                    cptFillQuestions.set(selectedQuestionList.size() - 1);
                 }
                 totalPoints.set(totalPoints.get() - q.getPoints());
                 setResponse(selectedQuestion.get());
@@ -283,7 +283,7 @@ public class VMInitGame {
         if (stage != null && g != null) {
             g.selectToggle(null);
             disablebtnValidateQuestion();
-            boolRandom=randomValue();
+            boolRandom = randomValue();
             if (!response.equals("")) {
                 if (isGameOn()) {
                     displayTheQuestion();
@@ -324,7 +324,7 @@ public class VMInitGame {
                 boolLastQuestRight = true;
                 incrementPoints(q);
             } else {
-                mementoBuilding = new MementoBuilding(q, response,careTaker);
+                mementoBuilding = new MementoBuilding(q, response, careTaker);
                 careTaker.keepMemento(mementoBuilding.createMemento());
             }
             incrementQuestion();
@@ -340,9 +340,10 @@ public class VMInitGame {
             selectedQuestion.set(mem);
             setAttributQuetion(mem);
             selectFalseRespRadioBtn(mementoBuilding.response);
+        } else if(getCptFillQuestions().get() < selectedQuestionList.size()) {
+            getCptFillQuestions().set(getCptFillQuestions().get() + 1);
+            getIndexQuestion().set(getIndexQuestion().get() + 1);
         }
-        getCptFillQuestions().set(getCptFillQuestions().get() + 1);
-        getIndexQuestion().set(getIndexQuestion().get() + 1);
     }
 
     private boolean isTheLastQuestion() {
@@ -670,5 +671,5 @@ public class VMInitGame {
     public BooleanProperty btnValidateQuestionProperty() {
         return btnValidateQuestion;
     }
-     
+
 }
