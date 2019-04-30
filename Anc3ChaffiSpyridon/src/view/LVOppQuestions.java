@@ -7,8 +7,11 @@ package view;
 
 import controller.VMInitGame;
 import controller.ViewModel;
+import java.io.FileNotFoundException;
 import javafx.beans.Observable;
+import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import model.Question;
 
 /**
@@ -31,6 +34,8 @@ public class LVOppQuestions extends ListView<Question> {
                 .addListener((Observable o) -> {
                     vm.setAttributQuetion(this.getSelectionModel().getSelectedItem());
                 });
+        
+         
     }
 
     public void configbinding() {

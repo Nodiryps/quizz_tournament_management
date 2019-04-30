@@ -33,6 +33,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Player;
 import model.Question;
 
@@ -82,6 +83,7 @@ public class ViewGame extends VBox {
         this.p2 = p2;
         initData();
         stage = s;
+        stage.setResizable(false);
         stage.setTitle("Répondez aux questions");
         stage.setScene(new Scene(display, 650, 300));
         stage.show();
@@ -105,7 +107,7 @@ public class ViewGame extends VBox {
         HBox btnBottom = new HBox(validate, abandon);
         display.add(btnBottom, 0, 11);
         btnBottom.setSpacing(25);
-        hint.setFont(Font.font ("Arial", 15));
+        hint.setFont(Font.font("Arial", 15));
         btnHint.setStyle("-fx-background-color: red;");
         hint.setFill(Color.RED);
         displayQuestion.setStyle(css());
@@ -176,7 +178,7 @@ public class ViewGame extends VBox {
     private void configListerner() {
         validate.setOnAction((ActionEvent event) -> {
             vm.nextQuestion(((RadioButton) group.getSelectedToggle()).getText(), stage, group);
-          
+
         });
         abandon.setOnAction((ActionEvent event) -> {
             vm.giveUpGame(stage);
@@ -188,7 +190,7 @@ public class ViewGame extends VBox {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov,
                     Toggle old_toggle, Toggle new_toggle) {
-               vm.enablebtnValidateQuestion();
+                vm.enablebtnValidateQuestion();
             }
         });
     }
@@ -200,7 +202,5 @@ public class ViewGame extends VBox {
                 + "-fx-border-style: solid;\n"
                 + "-fx-padding: 12;\n";
     }
-
-   
 
 }

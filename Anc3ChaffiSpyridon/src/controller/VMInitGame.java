@@ -72,7 +72,7 @@ public class VMInitGame {
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     private int totalPointsRestant;
     static int cpt;
-    private CareTaker careTaker;
+    private static CareTaker careTaker;
     private MementoBuilding mementoBuilding;
     private boolean boolLastQuestRight = false;
     private boolean boolRandom = false;
@@ -84,13 +84,12 @@ public class VMInitGame {
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
-
-        careTaker = new CareTaker();
+         careTaker=new CareTaker();
         initData();
 
     }
 
-    public void initData() {
+    private void initData() {
         disableRadioBtn.set(true);
         selectRadioBtn.set(false);
         questionsProperty().clear();
@@ -134,7 +133,6 @@ public class VMInitGame {
     }
 
     public void setAttributQuetion(Question q) {
-        System.out.println(q);
         if (q != null) {
             bntHint.set(false);
             selectedQuestion.set(q);
@@ -291,7 +289,7 @@ public class VMInitGame {
                         lastQuestion(response);
                     }
                 }
-                if (!boolRandom && (noMoreQuestion() || noMorePoints())) {
+                if ( (noMoreQuestion() || noMorePoints())&& !boolRandom  ) {
                     endOfGameManagmnt(stage);
                 }
         }
@@ -315,14 +313,18 @@ public class VMInitGame {
 
     private void nextQuestionManagmnt(String response) {
         if (hasNextQuestion()) {
+            
             Question q = getQuestionFromIndex();
+            System.out.println(q);
             totalPointsRestant -= q.getPoints();
             if (isResponseRight(response)) {
                 boolLastQuestRight = true;
                 incrementPoints(q);
+                System.out.println("VM elem"+careTaker.getMemento());
             } else {
-                mementoBuilding = new MementoBuilding(q, response, careTaker);
-                careTaker.keepMemento(mementoBuilding.createMemento());
+                
+                mementoBuilding = new MementoBuilding(q, response,careTaker);
+                System.out.println("VM liste"+careTaker.getMemeto());
             }
             incrementQuestion();
             disableRadioBtn.set(true);
@@ -331,15 +333,19 @@ public class VMInitGame {
     }
 
     private void incrementQuestion() {
-        if (boolLastQuestRight && boolRandom) {
+       boolRandom=true;
+        if (boolLastQuestRight && boolRandom && mementoBuilding !=null) {
+            System.out.println("avt undo " + mementoBuilding);
             mementoBuilding.undo();
+            System.out.println("apres undo " + mementoBuilding);
             Question mem = mementoBuilding.question;
             setAttributQuetion(mem);
             selectedQuestion.set(mem);
-            selectFalseRespRadioBtn(mementoBuilding.response);
-        } else if(getCptFillQuestions().get() < selectedQuestionList.size()) {
+           
+        } if(getCptFillQuestions().get() < selectedQuestionList.size()) {
             getCptFillQuestions().set(getCptFillQuestions().get() + 1);
             getIndexQuestion().set(getIndexQuestion().get() + 1);
+           System.out.println("second if");
         }
     }
 
@@ -479,7 +485,6 @@ public class VMInitGame {
     public void displayHint() {
         hintClicked = true;
         Question q = getQuestionFromIndex();
-        System.out.println(q);
         hint.set(randomHint(q));
         bntHint.set(false);
 

@@ -13,10 +13,10 @@ import java.util.ArrayList;
  */
 public class CareTaker {
 
-    private ArrayList<Memento> mementosList = new ArrayList<>();
+    private  ArrayList<Memento> mementosList = new ArrayList<>();
     
     public CareTaker() {
-        
+        emptyList();
     }
 
     public void keepMemento(Memento m) {
@@ -27,8 +27,20 @@ public class CareTaker {
         Memento m = null;
         if (mementosList.size() > 0) {
             m = mementosList.get(0);
-            mementosList.remove(0);
+           // mementosList.remove(0);
+            System.out.println("Getmement(CareTaker) "+m);
         }
         return m;
     }
+    
+    public ArrayList<Memento> getMemeto(){
+     return mementosList;
+    }
+    
+    private void emptyList(){
+   mementosList.clear();
+     
+     
+    }
 }
+
