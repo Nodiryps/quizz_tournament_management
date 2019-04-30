@@ -139,7 +139,6 @@ public class VMGame {
                 }
 
             }
-            incrementQuestion();
             disableRadioBtn.set(true);
             hint.set("");
         }
@@ -196,7 +195,7 @@ public class VMGame {
     }
 
     private void incrementQuestion() {
-        boolRandom = true;
+      
         if (boolLastQuestRight && boolRandom && mementoBuilding != null) {
             mementoBuilding.undo();
             Question mem = mementoBuilding.question;
