@@ -40,6 +40,7 @@ public class LVOppQuestions extends ListView<Question> {
 
     public void configbinding() {
         this.itemsProperty().bind(vm.selectedQuestionProperty());
+        this.getSelectionModel().select(1);
     }
 
 }

@@ -37,7 +37,7 @@ import model.RESULTS;
  *
  * @author 2707chshyaka
  */
-public class VMInitGame {
+public final class VMInitGame {
 
     private ViewModel vm;
     private final int MINIMUM_POINTS = 5;
@@ -72,10 +72,7 @@ public class VMInitGame {
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     private int totalPointsRestant;
     static int cpt;
-    private static CareTaker careTaker;
-    private MementoBuilding mementoBuilding;
-    private boolean boolLastQuestRight = false;
-    private boolean boolRandom = false;
+  
 
     public BooleanProperty bntHint = new SimpleBooleanProperty();
     public StringProperty hint = new SimpleStringProperty();
@@ -84,35 +81,26 @@ public class VMInitGame {
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
-         careTaker=new CareTaker();
-        initData();
-
-    }
-
-    private void initData() {
-        disableRadioBtn.set(true);
-        selectRadioBtn.set(false);
-        questionsProperty().clear();
-        addAllQuestions();
-        cpt = 0;
-        disablebtnValidateQuestion();
+     
+     disableRadioBtn.set(true);
+     selectRadioBtn.set(false);
+     cpt=0;
+     questionsProperty().clear();
+     addAllQuestions();
     }
 
     public void enablebtnValidateQuestion() {
         btnValidateQuestion.set(false);
     }
 
-    public void disablebtnValidateQuestion() {
-        btnValidateQuestion.set(true);
-    }
-
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
         if (isPartyValid(p1, p2)) {
             launchAttributes();
-            new ViewGame(this, selectedQuestionList, p1, p2, stage);
+            VMGame vmg = new VMGame(this,selectedQuestionList);
+            new ViewGame(vmg, selectedQuestionList, p1, p2, stage);
             if (cptFillQuestions.get() <= selectedQuestionList.size()) {
                 displayTheQuestion();
-                indexQuestion.set(indexQuestion.get() + 1);
+                indexQuestion.set(indexQuestion.get()+1);
             }
         }
     }
@@ -121,7 +109,7 @@ public class VMInitGame {
         return cptPointProperty().get() >= MINIMUM_POINTS;
     }
 
-    private void displayTheQuestion() {
+    public void displayTheQuestion() {
         disableRadioBtn.set(true);
         if (indexQuestion.get() < 0) {
             indexQuestion.set(0);
@@ -257,178 +245,6 @@ public class VMInitGame {
         }
     }
 
-    public void addPointsToTotal() {
-        for (Question q : questionsProperty()) {
-            totalPoints.set(totalPoints.get() + q.getPoints());
-        }
-    }
-
-    public void giveUpGame(Stage stage) {
-        Alert alert = new Alert(AlertType.WARNING, "Êtes-vous sûr.e de vouloir quitter la partie ?", ButtonType.YES, ButtonType.NO);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.YES) {
-            alert.close();
-            endOfGameManagmnt(stage);
-        } else {
-            alert.close();
-        }
-
-    }
-
-    public void nextQuestion(String response, Stage stage, ToggleGroup g) {
-        if (stage != null && g != null) {
-            g.selectToggle(null);
-            disablebtnValidateQuestion();
-            boolRandom = randomValue();
-                if (isGameOn()) {
-                    displayTheQuestion();
-                    nextQuestionManagmnt(response);
-                    ++cpt;
-                    if (isTheLastQuestion()) {
-                        lastQuestion(response);
-                    }
-                }
-                if ( (noMoreQuestion() || noMorePoints())&& !boolRandom  ) {
-                    endOfGameManagmnt(stage);
-                }
-        }
-    }
-
-    private boolean noMoreQuestion() {
-        return cpt > selectedQuestionList.size();
-    }
-
-    private boolean noMorePoints() {
-        return totalPointsRestant + cptPointProperty().get() < (MAX_POINTS_GAME.get() / 2);
-    }
-
-    private void lastQuestion(String response) {
-        if (isResponseRight(response)) {
-            Question q = getQuestionFromIndex();
-            incrementPoints(q);
-        }
-        ++cpt;
-    }
-
-    private void nextQuestionManagmnt(String response) {
-        if (hasNextQuestion()) {
-            
-            Question q = getQuestionFromIndex();
-            System.out.println(q);
-            totalPointsRestant -= q.getPoints();
-            if (isResponseRight(response)) {
-                boolLastQuestRight = true;
-                incrementPoints(q);
-                System.out.println("VM elem"+careTaker.getMemento());
-            } else {
-                
-                mementoBuilding = new MementoBuilding(q, response,careTaker);
-                System.out.println("VM liste"+careTaker.getMemeto());
-            }
-            incrementQuestion();
-            disableRadioBtn.set(true);
-            hint.set("");
-        }
-    }
-
-    private void incrementQuestion() {
-       boolRandom=true;
-        if (boolLastQuestRight && boolRandom && mementoBuilding !=null) {
-            System.out.println("avt undo " + mementoBuilding);
-            mementoBuilding.undo();
-            System.out.println("apres undo " + mementoBuilding);
-            Question mem = mementoBuilding.question;
-            setAttributQuetion(mem);
-            selectedQuestion.set(mem);
-           
-        } if(getCptFillQuestions().get() < selectedQuestionList.size()) {
-            getCptFillQuestions().set(getCptFillQuestions().get() + 1);
-            getIndexQuestion().set(getIndexQuestion().get() + 1);
-           System.out.println("second if");
-        }
-    }
-
-    private boolean isTheLastQuestion() {
-        return getIndexQuestion().get() == selectedQuestionList.size();
-    }
-
-    private boolean hasNextQuestion() {
-        return getIndexQuestion().get() <= selectedQuestionList.size();
-    }
-
-    private boolean isGameOn() {
-        return hasNextQuestion();
-    }
-
-    private void endOfGameManagmnt(Stage stage) {
-        String score = getScore();
-        createMatch(score);
-        emptySelectedList();
-        clearOppList();
-        popupEnd(score);
-        stage.close();
-    }
-
-    private String getScore() {
-        String score = "";
-        score = analyseScore();
-        return score;
-    }
-
-    private void popupEnd(String score) {
-        Alert alert = new Alert(AlertType.INFORMATION, score, ButtonType.FINISH);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.FINISH) {
-            alert.close();
-        }
-    }
-
-    private boolean isResponseRight(String s) {
-        String resp = getResponseFromIndex(getRightResponseIndex());
-        return resp.equals(s);
-    }
-
-    private int getRightResponseIndex() {
-        return getSelectedQuestionList().get(getIndexQuestion().get() - 1).getNumCorrectResponse().get();
-    }
-
-    private String getResponseFromIndex(int rightRespIndex) {
-        return getSelectedQuestionList().get(getIndexQuestion().get() - 1).getResponses().get(rightRespIndex - 1);
-    }
-
-    private Question getQuestionFromIndex() {
-        return getSelectedQuestionList().get(getIndexQuestion().get() - 1);
-    }
-
-    private String analyseScore() {
-        int score = getCptPoint().get();
-        String winner = "";
-        if (score < (MAX_POINTS_GAME.get() / 2)) {
-            winner = RESULTS.VAINQUEUR_J1.name();
-        }
-        if (score > (MAX_POINTS_GAME.get() / 2)) {
-            winner = RESULTS.VAINQUEUR_J2.name();
-        }
-        if (score == (MAX_POINTS_GAME.get() / 2)) {
-            winner = RESULTS.EX_AEQUO.name();
-        }
-        return winner;
-    }
-
-    public void incrementPoints(Question q) {
-        if (hintClicked && q.getFakeHint() != null && q.getHint() != null) {
-            if (q.getFakeHint().get().equals(hint.get())) {
-                cptPointProperty().set(cptPointProperty().get() + 2);
-            } else {
-                cptPointProperty().set(cptPointProperty().get() + 1);
-            }
-        } else {
-            cptPointProperty().set(cptPointProperty().get() + q.getPoints());
-        }
-    }
-
     public void addQuestions(Category q) {
         if (q.getName().get().equals("Tous")) {
             addAllQuestions();
@@ -464,6 +280,12 @@ public class VMInitGame {
         addPointsToTotal();
     }
 
+    public void addPointsToTotal() {
+        for (Question q : questionsProperty()) {
+            totalPoints.set(totalPoints.get() + q.getPoints());
+        }
+    }
+
     public ObservableList<Category> getCat() {
         return vm.getFacade().getCategory();
     }
@@ -480,37 +302,6 @@ public class VMInitGame {
 
     private String getQuestionName(ObservableList<Question> list, int index) {
         return list.get(index).getName().get();
-    }
-
-    public void displayHint() {
-        hintClicked = true;
-        Question q = getQuestionFromIndex();
-        hint.set(randomHint(q));
-        bntHint.set(false);
-
-    }
-
-    public String randomHint(Question q) {
-        if (randomValue()) {
-            return q.getFakeHint().get();
-        } else {
-            return q.getHint().get();
-        }
-    }
-
-    public String random(Question q) {
-        if (randomValue()) {
-            return q.getFakeHint().get();
-        } else {
-            return q.getHint().get();
-        }
-    }
-
-    public boolean randomValue() {
-        Random rand = new Random();
-        int value = rand.nextInt(5);
-        System.out.println(value);
-        return value == 3;
     }
 
     public IntegerProperty cptPointProperty() {
@@ -605,14 +396,6 @@ public class VMInitGame {
         return currentQuestion;
     }
 
-    public BooleanProperty getGameOver() {
-        return gameOver;
-    }
-
-    public IntegerProperty getCptFillQuestions() {
-        return cptFillQuestions;
-    }
-
     public IntegerProperty getCptPoint() {
         return cptPoint;
     }
@@ -670,8 +453,9 @@ public class VMInitGame {
         addQuestions(q);
     }
 
-    public BooleanProperty btnValidateQuestionProperty() {
-        return btnValidateQuestion;
+    public IntegerProperty getCptFillQuestions() {
+        return cptFillQuestions;
     }
+
 
 }

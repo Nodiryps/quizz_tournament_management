@@ -5,6 +5,7 @@
  */
 package view;
 
+import controller.VMGame;
 import controller.VMInitGame;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -44,7 +45,7 @@ import model.Question;
 public class ViewGame extends VBox {
 
     Stage stage;
-    VMInitGame vm;
+    VMGame vm;
     private final VBox displayQuestion = new VBox();
     private final GridPane display = new GridPane();
     private final IntegerProperty score = new SimpleIntegerProperty();
@@ -76,8 +77,9 @@ public class ViewGame extends VBox {
     private BooleanProperty gameOver = new SimpleBooleanProperty();
     private final BooleanProperty boolUnselectRadioBtn = new SimpleBooleanProperty();
 
-    public ViewGame(VMInitGame vm, ObservableList<Question> list, Player p1, Player p2, Stage s) {
+    public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2, Stage s) {
         this.selectedQuestionList = list;
+        System.out.println(selectedQuestionList.size());
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
@@ -202,5 +204,8 @@ public class ViewGame extends VBox {
                 + "-fx-border-style: solid;\n"
                 + "-fx-padding: 12;\n";
     }
+    
+    
+
 
 }
