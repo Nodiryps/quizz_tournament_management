@@ -74,7 +74,6 @@ public class ViewGame extends VBox {
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private final Player p1;
     private final Player p2;
-    private BooleanProperty gameOver = new SimpleBooleanProperty();
     private final BooleanProperty boolUnselectRadioBtn = new SimpleBooleanProperty();
 
     public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2, Stage s) {
@@ -110,7 +109,7 @@ public class ViewGame extends VBox {
         display.add(btnBottom, 0, 11);
         btnBottom.setSpacing(25);
         hint.setFont(Font.font("Arial", 15));
-        btnHint.setStyle("-fx-background-color: red;");
+        btnHint.setStyle("-fx-background-color: white;");
         hint.setFill(Color.RED);
         displayQuestion.setStyle(css());
         display.alignmentProperty().set(Pos.CENTER);
@@ -123,7 +122,6 @@ public class ViewGame extends VBox {
         configBindPoints();
         configBindLabels();
         cptQ.bind(vm.getCptFillQuestions());
-        gameOver.bindBidirectional(vm.getGameOver());
         boolUnselectRadioBtn.bindBidirectional(vm.getDisableRadioBtn());
     }
 
@@ -141,8 +139,8 @@ public class ViewGame extends VBox {
         vm.getIndexQuestion().bindBidirectional(indexQuestion);
         vm.getQuestionName().bindBidirectional(attrQName.textProperty());
         vm.getQuestionPoint().bindBidirectional((attrQPoint));
-        vm.hint.bindBidirectional(hint.textProperty());
-        btnHint.visibleProperty().bind(vm.bntHint);
+        vm.getHint().bindBidirectional(hint.textProperty());
+        btnHint.visibleProperty().bind(vm.getBtnHint());
         validate.disableProperty().bind(vm.btnValidateQuestionProperty());
 
     }

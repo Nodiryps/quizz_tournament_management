@@ -69,9 +69,9 @@ public final class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
-    static int cpt;
-    public BooleanProperty bntHint = new SimpleBooleanProperty();
-    public StringProperty hint = new SimpleStringProperty();
+    private static int cpt;
+    private BooleanProperty btnHint = new SimpleBooleanProperty();
+    private StringProperty hint = new SimpleStringProperty();
     private BooleanProperty btnValidateQuestion = new SimpleBooleanProperty();
 
     public VMInitGame(ViewModel vm) {
@@ -89,9 +89,9 @@ public final class VMInitGame {
     }
 
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
-        if (isPartyValid(p1, p2)) {
+        if (isPartyValid()) {
             launchAttributes();
-            VMGame vmg = new VMGame(this, selectedQuestionList);
+            VMGame vmg = new VMGame(this);
             new ViewGame(vmg, selectedQuestionList, p1, p2, stage);
             if (cptFillQuestions.get() <= selectedQuestionList.size()) {
                 displayTheQuestion();
@@ -100,7 +100,7 @@ public final class VMInitGame {
         }
     }
 
-    private boolean isPartyValid(Player p1, Player p2) {
+    private boolean isPartyValid() {
         return cptPointProperty().get() >= MINIMUM_POINTS;
     }
 
@@ -112,12 +112,11 @@ public final class VMInitGame {
         } else if (indexQuestion.get() < selectedQuestionList.size()) {
             setAttributQuetion(selectedQuestionList.get(indexQuestion.get()));
         }
-
     }
 
     public void setAttributQuetion(Question q) {
         if (q != null) {
-            bntHint.set(false);
+            btnHint.set(false);
             selectedQuestion.set(q);
             selectRightRespRadioBtn();
             this.questionName.set(q.getName().get());
@@ -126,7 +125,7 @@ public final class VMInitGame {
             this.currentQuestion.set(q);
             selectedQuestion.set(null);
             if (q.getPoints() == 3) {
-                bntHint.set(true);
+                btnHint.set(true);
             }
         }
     }
@@ -170,35 +169,6 @@ public final class VMInitGame {
         }
     }
 
-    private void selectFalseRespRadioBtn(String res) {
-        switch (getIndexWrongResponse(res)) {
-            case 0:
-                boolSelectRadioBtn1.setValue(Boolean.TRUE);
-                break;
-            case 1:
-                boolSelectRadioBtn2.setValue(Boolean.TRUE);
-                break;
-            case 2:
-                boolSelectRadioBtn3.setValue(Boolean.TRUE);
-                break;
-            case 3:
-                boolSelectRadioBtn4.setValue(Boolean.TRUE);
-                break;
-        }
-    }
-
-    private int getIndexWrongResponse(String res) {
-        int wrongRes = 0;
-        if (selectedQuestion.get() != null) {
-            for (String r : selectedQuestion.get().getResponses()) {
-                if (res.equals(r)) {
-                    wrongRes = selectedQuestion.get().getResponses().indexOf(r);
-                }
-            }
-        }
-        return wrongRes;
-    }
-
     private void unselectAllRadioBouton() {
         boolSelectRadioBtn1.set(false);
         boolSelectRadioBtn2.set(false);
@@ -208,7 +178,7 @@ public final class VMInitGame {
 
     public void addQuestionforOpp(Question q) {
         if (q != null) {
-            if (cptPoint.get() + q.getPoints() <= MAXIMUM_POINTS && !selectedQuestionList.contains(q)) { // 
+            if (cptPoint.get() + q.getPoints() <= MAXIMUM_POINTS && !selectedQuestionList.contains(q)) {
                 selectedQuestion.set(q);
                 if (!selectedQuestionList.contains(getSelectedQuestion().get()) && getSelectedQuestion().get() != null) {
                     this.selectedQuestionList.add(getSelectedQuestion().get());
@@ -229,8 +199,8 @@ public final class VMInitGame {
             if (selectedQuestionList.contains(q)) {
                 selectedQuestion.set(q);
                 MAX_POINTS_GAME.set(cptPointProperty().get() - q.getPoints());
-                cptPoint.set(cptPoint.get() - selectedQuestion.get().getPoints());
-                this.selectedQuestionList.remove(q);
+                cptPoint.set(cptPoint.get() - q.getPoints());
+                selectedQuestionList.remove(q);
                 totalPoints.set(totalPoints.get() + q.getPoints());
                 cptFillQuestions.set(selectedQuestionList.size());
                 questionsProperty().clear();
@@ -358,7 +328,7 @@ public final class VMInitGame {
         return MAXIMUM_POINTS;
     }
 
-    public IntegerProperty getMAX_POINTS_GAME() {
+    public static IntegerProperty getMAX_POINTS_GAME() {
         return MAX_POINTS_GAME;
     }
 
@@ -449,6 +419,18 @@ public final class VMInitGame {
 
     public IntegerProperty getCptFillQuestions() {
         return cptFillQuestions;
+    }
+
+    public BooleanProperty getBtnHint() {
+        return btnHint;
+    }
+
+    public StringProperty getHint() {
+        return hint;
+    }
+
+    public static int getCpt() {
+        return cpt;
     }
 
 }

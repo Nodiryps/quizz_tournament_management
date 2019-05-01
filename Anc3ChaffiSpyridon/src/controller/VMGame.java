@@ -5,7 +5,6 @@
  */
 package controller;
 
-import static controller.VMInitGame.cpt;
 import java.util.Random;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -35,97 +34,154 @@ import model.RESULTS;
 public class VMGame {
 
     private VMInitGame vm;
-    private static IntegerProperty MAX_POINTS_GAME = new SimpleIntegerProperty();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
-    private BooleanProperty gameOver = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
-    public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
+    private final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     private int totalPointsRestant;
-    static int cpt;
+    private int cpt;
     private static CareTaker careTaker;
     private MementoBuilding mementoBuilding;
     private boolean boolLastQuestRight = false;
     private boolean boolRandom = false;
     private boolean isUndo = false;
-    public BooleanProperty bntHint = new SimpleBooleanProperty();
-    public StringProperty hint = new SimpleStringProperty();
-    private boolean hintClicked = false;
+    private BooleanProperty btnHint;
+    private StringProperty hint;
+    private boolean hintClicked;
     private BooleanProperty btnValidateQuestion = new SimpleBooleanProperty();
+    private IntegerProperty indexQuestion = new SimpleIntegerProperty();
+    private StringProperty questionName = new SimpleStringProperty();
+    private IntegerProperty questionPoint = new SimpleIntegerProperty();
+    private IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
+    private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
+    private BooleanProperty boolSelectRadioBtn1;
+    private BooleanProperty boolSelectRadioBtn2;
+    private BooleanProperty boolSelectRadioBtn3;
+    private BooleanProperty boolSelectRadioBtn4;
+    private StringProperty res1 = new SimpleStringProperty();
+    private StringProperty res2 = new SimpleStringProperty();
+    private StringProperty res3 = new SimpleStringProperty();
+    private StringProperty res4 = new SimpleStringProperty();
 
-    public VMGame(VMInitGame vm, ObservableList<Question> list) {
+    public VMGame(VMInitGame vm) {
         this.vm = vm;
-        selectedQuestionList = vm.getSelectedQuestionList();
         initData();
     }
-
+    
     private void initData() {
+        selectedQuestionList = vm.getSelectedQuestionList();
         careTaker = new CareTaker();
-        cpt = 0;
+        cpt = VMInitGame.getCpt();
         disablebtnValidateQuestion();
+        initBoolSelectRadioBtn();
+        initHint();
+    }
+    
+    private void initHint(){
+        btnHint = vm.getBtnHint();
+        hint = vm.getHint();
+        hintClicked = false;
+    }
+    
+    private void initBoolSelectRadioBtn(){
+        boolSelectRadioBtn1 = vm.getBoolSelectRadioBtn1();
+        boolSelectRadioBtn2 = vm.getBoolSelectRadioBtn2();
+        boolSelectRadioBtn3 = vm.getBoolSelectRadioBtn3();
+        boolSelectRadioBtn4 = vm.getBoolSelectRadioBtn4();
     }
 
-    public void disablebtnValidateQuestion() {
+    private void disablebtnValidateQuestion() {
         btnValidateQuestion.set(true);
+    }
+    
+    private void selectFalseRespRadioBtn(String res) {
+        switch (getIndexWrongResponse(res)) {
+            case 0:
+                boolSelectRadioBtn1.setValue(Boolean.TRUE);
+                break;
+            case 1:
+                boolSelectRadioBtn2.setValue(Boolean.TRUE);
+                break;
+            case 2:
+                boolSelectRadioBtn3.setValue(Boolean.TRUE);
+                break;
+            case 3:
+                boolSelectRadioBtn4.setValue(Boolean.TRUE);
+                break;
+        }
+    }
+
+    private int getIndexWrongResponse(String res) {
+        int wrongRes = 0;
+        if (selectedQuestion.get() != null) {
+            for (String r : selectedQuestion.get().getResponses()) {
+                if (res.equals(r)) {
+                    wrongRes = selectedQuestion.get().getResponses().indexOf(r);
+                }
+            }
+        }
+        return wrongRes;
     }
 
     public void nextQuestion(String response, Stage stage, ToggleGroup g) {
         if (stage != null && g != null) {
+            System.out.println("points restants: " + totalPointsRestant);
             g.selectToggle(null);
             disablebtnValidateQuestion();
-            boolRandom = randomValue();
+            randMemento();
             if (hasNextQuestion()) {
-                System.out.println("cpt: " + cpt);
                 vm.displayTheQuestion();
                 nextQuestionManagmnt(response);
                 ++cpt;
-                if (isTheLastQuestion()) {
+                if (isTheLastQuestion()) 
                     lastQuestion(response);
-                }
             }
-            if ((noMoreQuestion() || noMorePoints()) && !boolRandom) {
+            if (isTheEnd()) 
                 endOfGameManagmnt(stage);
-            }
         }
+    }
+    
+    private void randMemento(){
+        if (!isTheLastQuestion() || indexQuestion.get() > 0) 
+            boolRandom = randomValue();
+    }
+    
+    private boolean isTheEnd(){
+        return (noMoreQuestion() || noMorePoints()) && !boolRandom;
     }
 
     private void nextQuestionManagmnt(String response) {
-        System.out.println("nextQuestionManagmnt 1 + undo: " + isUndo);
-            Question q = getQuestionFromIndex();
-            totalPointsRestant -= q.getPoints();
-            if (!isUndo) {
-                System.out.println("nextQuestionManagmnt 2 + undo: " + isUndo);
-                if (isResponseRight(response)) {
-                    boolLastQuestRight = true;
-                    incrementPoints(q);
-                } else {
-                    mementoBuilding = new MementoBuilding(q, response, careTaker);
-                }
-                incrementQuestion();
+//        System.out.println("nextQuestionManagmnt 1 + undo: " + isUndo);
+        Question q = getQuestionFromIndex();
+        totalPointsRestant -= q.getPoints();
+        if (!isUndo) {
+//                System.out.println("nextQuestionManagmnt 2 + undo: " + isUndo);
+            if (isResponseRight(response)) {
+                boolLastQuestRight = true;
+                incrementPoints(q);
             } else {
-                System.out.println("nextQuestionManagmnt 3 + undo: " + isUndo);
-                if (isRightRespUndo(response)) {
-
-                    boolLastQuestRight = true;
-                    incrementPoints(mementoBuilding.question);
-                    System.out.println("nextQuestionManagmnt 4");
-                    getIndexQuestion().set(cpt + 1);
-                    Question p = vm.getSelectedQuestionList().get(cpt);
-                    vm.setAttributQuetion(p);
-                    incrementQuestion();
-                }
-
+                mementoBuilding = new MementoBuilding(q, response, careTaker);
             }
-            disableRadioBtn.set(true);
-            hint.set("");
+            incrementQuestion();
+        } else {
+//                System.out.println("nextQuestionManagmnt 3 + undo: " + isUndo);
+            if (isRightRespUndo(response)) {
+
+                boolLastQuestRight = true;
+                incrementPoints(mementoBuilding.question);
+//                    System.out.println("nextQuestionManagmnt 4");
+                getIndexQuestion().set(cpt + 1);
+                Question p = vm.getSelectedQuestionList().get(cpt);
+                vm.setAttributQuetion(p);
+                incrementQuestion();
+            }
+        }
+        disableRadioBtn.set(true);
+        hint.set("");
     }
 
     public void enablebtnValidateQuestion() {
         btnValidateQuestion.set(false);
-    }
-
-    public BooleanProperty getGameOver() {
-        return gameOver;
     }
 
     private boolean noMoreQuestion() {
@@ -133,7 +189,7 @@ public class VMGame {
     }
 
     private boolean noMorePoints() {
-        return totalPointsRestant + vm.cptPointProperty().get() < (MAX_POINTS_GAME.get() / 2);
+        return totalPointsRestant + vm.cptPointProperty().get() < (vm.getMAX_POINTS_GAME().get() / 2);
     }
 
     private void lastQuestion(String response) {
@@ -170,7 +226,6 @@ public class VMGame {
     }
 
     private void incrementQuestion() {
-
         if (boolLastQuestRight && boolRandom && mementoBuilding != null) {
             mementoBuilding.undo();
             Question mem = mementoBuilding.question;
@@ -222,13 +277,13 @@ public class VMGame {
     private String analyseScore() {
         int score = vm.getCptPoint().get();
         String winner = "";
-        if (score < (MAX_POINTS_GAME.get() / 2)) {
+        if (score < (vm.getMAX_POINTS_GAME().get() / 2)) {
             winner = RESULTS.VAINQUEUR_J1.name();
         }
-        if (score > (MAX_POINTS_GAME.get() / 2)) {
+        if (score > (vm.getMAX_POINTS_GAME().get() / 2)) {
             winner = RESULTS.VAINQUEUR_J2.name();
         }
-        if (score == (MAX_POINTS_GAME.get() / 2)) {
+        if (score == (vm.getMAX_POINTS_GAME().get() / 2)) {
             winner = RESULTS.EX_AEQUO.name();
         }
         return winner;
@@ -267,7 +322,7 @@ public class VMGame {
         hintClicked = true;
         Question q = getQuestionFromIndex();
         hint.set(randomHint(q));
-        bntHint.set(false);
+        btnHint.set(false);
 
     }
 
@@ -342,4 +397,12 @@ public class VMGame {
         return vm.getQuestionPoint();
     }
 
+    public BooleanProperty getBtnHint() {
+        return btnHint;
+    }
+
+    public StringProperty getHint() {
+        return hint;
+    }
+    
 }
