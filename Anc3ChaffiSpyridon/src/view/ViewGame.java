@@ -79,7 +79,7 @@ public class ViewGame extends VBox {
 
     public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2, Stage s) {
         this.selectedQuestionList = list;
-        System.out.println(selectedQuestionList.size());
+        System.out.println("size list vg: " + selectedQuestionList.size());
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;

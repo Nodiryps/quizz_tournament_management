@@ -140,7 +140,6 @@ public final class VMInitGame {
         totalPointsRestant = cptPointProperty().get();
         cptPointProperty().set(0);
         cptFillQuestions.set(1);
-        gameOver.set(false);
     }
 
     public void setResponse(Question q) {
@@ -222,7 +221,7 @@ public final class VMInitGame {
                     cptPoint.set(cptPoint.get() + q.getPoints());
                     MAX_POINTS_GAME.set(cptPointProperty().get());
                     questionsProperty().remove(q);
-                    cptFillQuestions.set(selectedQuestionList.size() - 1);
+                    cptFillQuestions.set(selectedQuestionList.size());
                 }
                 totalPoints.set(totalPoints.get() - q.getPoints());
                 setResponse(selectedQuestion.get());

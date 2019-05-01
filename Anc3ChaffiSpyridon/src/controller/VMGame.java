@@ -35,33 +35,10 @@ import model.RESULTS;
 public class VMGame {
 
     private VMInitGame vm;
-
     private static IntegerProperty MAX_POINTS_GAME = new SimpleIntegerProperty();
-    private BooleanProperty reponse1 = new SimpleBooleanProperty(true);
-    private BooleanProperty reponse2 = new SimpleBooleanProperty(true);
-    private BooleanProperty reponse3 = new SimpleBooleanProperty(true);
-    private BooleanProperty reponse4 = new SimpleBooleanProperty(true);
-    private StringProperty questionName = new SimpleStringProperty();
-    private IntegerProperty questionPoint = new SimpleIntegerProperty();
-    private StringProperty res1 = new SimpleStringProperty();
-    private StringProperty res2 = new SimpleStringProperty();
-    private StringProperty res3 = new SimpleStringProperty();
-    private StringProperty res4 = new SimpleStringProperty();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
-    private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
     private BooleanProperty gameOver = new SimpleBooleanProperty();
-    private IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
-    private IntegerProperty cptPoint = new SimpleIntegerProperty();
-    private IntegerProperty indexQuestion = new SimpleIntegerProperty();
-    private IntegerProperty totalPoints = new SimpleIntegerProperty();
-    private final ObjectProperty<Player> cb1 = new SimpleObjectProperty<>();
-    private final ObjectProperty<Player> cb2 = new SimpleObjectProperty<>();
-    private StringProperty cb3 = new SimpleStringProperty();
-    private final BooleanProperty boolSelectRadioBtn1 = new SimpleBooleanProperty();
-    private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
-    private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
-    private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
     private int totalPointsRestant;
@@ -76,9 +53,9 @@ public class VMGame {
     private boolean hintClicked = false;
     private BooleanProperty btnValidateQuestion = new SimpleBooleanProperty();
 
-    public VMGame(VMInitGame vm,ObservableList<Question> list) {
+    public VMGame(VMInitGame vm, ObservableList<Question> list) {
         this.vm = vm;
-        selectedQuestionList=vm.getSelectedQuestionList();
+        selectedQuestionList = vm.getSelectedQuestionList();
         initData();
     }
 
@@ -98,6 +75,7 @@ public class VMGame {
             disablebtnValidateQuestion();
             boolRandom = randomValue();
             if (isGameOn()) {
+                System.out.println("cpt: ");
                 vm.displayTheQuestion();
                 nextQuestionManagmnt(response);
                 ++cpt;
@@ -112,12 +90,12 @@ public class VMGame {
     }
 
     private void nextQuestionManagmnt(String response) {
-        System.out.println("is1" + isUndo);
+        System.out.println("nextQuestionManagmnt 1 + undo: " + isUndo);
         if (hasNextQuestion()) {
             Question q = getQuestionFromIndex();
             totalPointsRestant -= q.getPoints();
             if (!isUndo) {
-                System.out.println("is2" + isUndo);
+                System.out.println("nextQuestionManagmnt 2 + undo: " + isUndo);
                 if (isResponseRight(response)) {
                     boolLastQuestRight = true;
                     incrementPoints(q);
@@ -126,12 +104,12 @@ public class VMGame {
                 }
                 incrementQuestion();
             } else {
-                System.out.println("is3" + isUndo);
+                System.out.println("nextQuestionManagmnt 3 + undo: " + isUndo);
                 if (isRightRespUndo(response)) {
 
                     boolLastQuestRight = true;
                     incrementPoints(mementoBuilding.question);
-                    System.out.println("test2");
+                    System.out.println("nextQuestionManagmnt 4");
                     getIndexQuestion().set(cpt + 1);
                     Question p = vm.getSelectedQuestionList().get(cpt);
                     vm.setAttributQuetion(p);
@@ -171,10 +149,10 @@ public class VMGame {
 
     private boolean isRightRespUndo(String res) {
         Question q = mementoBuilding.question;
-        int x = -1;
-        x = q.getResponses().indexOf(res);
-        System.out.println(x);
-        return q.getNumCorrectResponse().get() == x;
+        int indexResp = -1;
+        indexResp = q.getResponses().indexOf(res);
+        System.out.println("indexResp: " + indexResp);
+        return q.getNumCorrectResponse().get() == indexResp;
     }
 
     private boolean isResponseRight(String s) {
@@ -195,7 +173,7 @@ public class VMGame {
     }
 
     private void incrementQuestion() {
-      
+
         if (boolLastQuestRight && boolRandom && mementoBuilding != null) {
             mementoBuilding.undo();
             Question mem = mementoBuilding.question;
@@ -214,15 +192,15 @@ public class VMGame {
     }
 
     private boolean hasNextQuestion() {
-        System.out.println("selectedQuestionList.size():  "+selectedQuestionList.size());
-        System.out.println("vm.getIndexQuestion().get()"+vm.getIndexQuestion().get());
-        
+        System.out.println("hasnextQ list size:  " + selectedQuestionList.size());
+        System.out.println("hasnextQ indexQ: " + vm.getIndexQuestion().get());
+
         return vm.getIndexQuestion().get() <= selectedQuestionList.size();
     }
 
     private boolean isGameOn() {
-        
-        System.out.println("hasNextQuestion: "+hasNextQuestion());
+        System.out.println("hasnextQ: " + hasNextQuestion());
+
         return hasNextQuestion();
     }
 
@@ -321,7 +299,7 @@ public class VMGame {
     public boolean randomValue() {
         Random rand = new Random();
         int value = rand.nextInt(5);
-        System.out.println(value);
+        System.out.println("rand: " + value);
         return value == 3;
     }
 
