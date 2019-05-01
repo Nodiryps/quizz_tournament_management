@@ -76,7 +76,7 @@ public class ViewModel {
         matchList = FXCollections.observableArrayList(matchsProperty());
         setFirstIndex();
         btnValidate.set(true);
-        btnPlayClicked.set(false);
+        btnPlayClicked.set(true);
     }
     
     public void setFirstIndex(){
@@ -135,24 +135,32 @@ public class ViewModel {
         }
     }
 
-    public void createMatch(String t) {
+    public void createMatch(String score) {
         System.out.println(cb3.get());
-        if (!t.equals(null) && cb1!=null && cb2 != null) {
+        if (isComboBoxesNotEmpty(score)) {
             Match m = new Match(new Player(cb1.getValue().toString()),
                       new Player(cb2.getValue().toString()),
-                      results(t));
+                      results(score));
             if (!matchsProperty().contains(m)) {
                 facade.getTournament().addMatch(m);
             }
         }
         fillList();
         ClearComboBox();
+        btnValidate.set(true);
+    }
+    
+    private boolean isComboBoxesNotEmpty(String score){
+        return !score.equals("") 
+                && !cb1.get().getFirstName().equals("") 
+                && !cb2.get().getFirstName().equals("");
     }
 
     public void ClearComboBox() {
         clearPlayerOne.set(null);
         clearPlayerTwo.set(null);
         clearResult.set("");
+        btnValidate.set(true);
     }
 
     public void removeMatch() {
@@ -216,13 +224,14 @@ public class ViewModel {
         }
         btnValidateDisable();
     }
-
+    
     public void btnValidateDisable() {
         if (actualProperty().get() != null && cb2.get() != null && cb3.get() != null) {
             btnValidate.set(false);
         }
+        btnPlayClicked.set(false);
     }
-
+    
     public void emptyselectedList() {
         selectedQuestionList.clear();
     }

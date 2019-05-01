@@ -52,8 +52,8 @@ public class ViewInitGame extends Popup {
     private final Stage stage;
     private final Player p1;
     private final Player p2;
-    private final LVQuestions questionList;
-    private final LVOppQuestions fillQuestion;
+    private LVQuestions questionList;
+    private LVOppQuestions fillQuestion;
     private final BorderPane borderPane = new BorderPane();
     private final VBox vbMiddle = new VBox();
     private final GridPane gpDetailsQuestion = new GridPane();
@@ -103,25 +103,31 @@ public class ViewInitGame extends Popup {
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
-        this.questionList = new LVQuestions(this.vm, radioBtn1, radioBtn2, radioBtn3, radioBtn4);
-        this.fillQuestion = new LVOppQuestions(this.vm);
+        
         init();
         stage = new Stage();
+        initStage();
+    }
+
+    private void init() {
+        this.questionList = new LVQuestions(this.vm, radioBtn1, radioBtn2, radioBtn3, radioBtn4);
+        this.fillQuestion = new LVOppQuestions(this.vm);
+        configView();
+        setToggleGroup();
+        configBinding();
+        configListener();
+    }
+    
+    private void initStage(){
 //        stage.setResizable(false);
 //        stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("Choix de questions");
         stage.setScene(new Scene(borderPane, 1145, 500));
         stage.show();
+        
         stage.setOnCloseRequest((WindowEvent event) -> {
             vm.windowClosed();
         });
-    }
-
-    private void init() {
-        configView();
-        setToggleGroup();
-        configBinding();
-        configListener();
     }
     
     private void configBinding() {

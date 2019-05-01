@@ -319,8 +319,8 @@ public class VMGame {
         return q.getFakeHint().get().equals("") && q.getHint().get().equals("");
     }
 
-    public void giveUpGame(Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Êtes-vous sûr.e de vouloir quitter la partie ?", ButtonType.YES, ButtonType.NO);
+    public void giveUpGame(Stage stage, String msg) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, msg, ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {

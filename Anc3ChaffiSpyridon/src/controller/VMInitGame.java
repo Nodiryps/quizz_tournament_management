@@ -81,6 +81,7 @@ public final class VMInitGame {
         cpt = 0;
         questionsProperty().clear();
         addAllQuestions();
+        vm.setBtnPlayClicked(true);
     }
 
     public void enablebtnValidateQuestion() {
@@ -435,6 +436,10 @@ public final class VMInitGame {
 
     public static int getCpt() {
         return cpt;
+    }
+    
+    BooleanProperty getBtnPlayClicked(){
+        return vm.getBtnPlayClicked();
     }
     
     void setBtnPlayClicked(boolean b){

@@ -89,7 +89,7 @@ public class ViewGame extends VBox {
         stage.setScene(new Scene(display, 650, 300));
         stage.show();
         stage.setOnCloseRequest((WindowEvent event) -> {
-            vm.giveUpGame(stage);
+            vm.giveUpGame(stage, "Êtes-vous sûr.e de vouloir quitter la partie ? (abandon!)");
         });
     }
 
@@ -183,7 +183,7 @@ public class ViewGame extends VBox {
             vm.nextQuestion(((RadioButton) group.getSelectedToggle()).getText(), stage, group);
         });
         abandon.setOnAction((ActionEvent event) -> {
-            vm.giveUpGame(stage);
+            vm.giveUpGame(stage, "Êtes-vous sûr.e de vouloir quitter la partie ?");
         });
         btnHint.setOnAction((ActionEvent event) -> {
             vm.displayHint();
