@@ -56,7 +56,6 @@ public final class VMInitGame {
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
     private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
-    private BooleanProperty gameOver = new SimpleBooleanProperty();
     private IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
     private IntegerProperty cptPoint = new SimpleIntegerProperty();
     private IntegerProperty indexQuestion = new SimpleIntegerProperty();
@@ -70,23 +69,19 @@ public final class VMInitGame {
     private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
     public final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
-    private int totalPointsRestant;
     static int cpt;
-  
-
     public BooleanProperty bntHint = new SimpleBooleanProperty();
     public StringProperty hint = new SimpleStringProperty();
-    private boolean hintClicked = false;
     private BooleanProperty btnValidateQuestion = new SimpleBooleanProperty();
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
-     
-     disableRadioBtn.set(true);
-     selectRadioBtn.set(false);
-     cpt=0;
-     questionsProperty().clear();
-     addAllQuestions();
+
+        disableRadioBtn.set(true);
+        selectRadioBtn.set(false);
+        cpt = 0;
+        questionsProperty().clear();
+        addAllQuestions();
     }
 
     public void enablebtnValidateQuestion() {
@@ -96,11 +91,11 @@ public final class VMInitGame {
     public void launchPlay(Player p1, Player p2, Stage stage) throws Exception {
         if (isPartyValid(p1, p2)) {
             launchAttributes();
-            VMGame vmg = new VMGame(this,selectedQuestionList);
+            VMGame vmg = new VMGame(this, selectedQuestionList);
             new ViewGame(vmg, selectedQuestionList, p1, p2, stage);
             if (cptFillQuestions.get() <= selectedQuestionList.size()) {
                 displayTheQuestion();
-                indexQuestion.set(indexQuestion.get()+1);
+                indexQuestion.set(indexQuestion.get() + 1);
             }
         }
     }
@@ -137,7 +132,6 @@ public final class VMInitGame {
     }
 
     private void launchAttributes() {
-        totalPointsRestant = cptPointProperty().get();
         cptPointProperty().set(0);
         cptFillQuestions.set(1);
     }
@@ -234,6 +228,7 @@ public final class VMInitGame {
         if (q != null) {
             if (selectedQuestionList.contains(q)) {
                 selectedQuestion.set(q);
+                MAX_POINTS_GAME.set(cptPointProperty().get() - q.getPoints());
                 cptPoint.set(cptPoint.get() - selectedQuestion.get().getPoints());
                 this.selectedQuestionList.remove(q);
                 totalPoints.set(totalPoints.get() + q.getPoints());
@@ -455,6 +450,5 @@ public final class VMInitGame {
     public IntegerProperty getCptFillQuestions() {
         return cptFillQuestions;
     }
-
 
 }

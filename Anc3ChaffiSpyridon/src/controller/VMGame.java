@@ -74,8 +74,8 @@ public class VMGame {
             g.selectToggle(null);
             disablebtnValidateQuestion();
             boolRandom = randomValue();
-            if (isGameOn()) {
-                System.out.println("cpt: ");
+            if (hasNextQuestion()) {
+                System.out.println("cpt: " + cpt);
                 vm.displayTheQuestion();
                 nextQuestionManagmnt(response);
                 ++cpt;
@@ -91,7 +91,6 @@ public class VMGame {
 
     private void nextQuestionManagmnt(String response) {
         System.out.println("nextQuestionManagmnt 1 + undo: " + isUndo);
-        if (hasNextQuestion()) {
             Question q = getQuestionFromIndex();
             totalPointsRestant -= q.getPoints();
             if (!isUndo) {
@@ -119,8 +118,6 @@ public class VMGame {
             }
             disableRadioBtn.set(true);
             hint.set("");
-        }
-
     }
 
     public void enablebtnValidateQuestion() {
@@ -196,12 +193,6 @@ public class VMGame {
         System.out.println("hasnextQ indexQ: " + vm.getIndexQuestion().get());
 
         return vm.getIndexQuestion().get() <= selectedQuestionList.size();
-    }
-
-    private boolean isGameOn() {
-        System.out.println("hasnextQ: " + hasNextQuestion());
-
-        return hasNextQuestion();
     }
 
     private void endOfGameManagmnt(Stage stage) {
