@@ -35,6 +35,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import model.Player;
 import model.Question;
 
@@ -78,7 +79,6 @@ public class ViewGame extends VBox {
 
     public ViewGame(VMGame vm, ObservableList<Question> list, Player p1, Player p2, Stage s) {
         this.selectedQuestionList = list;
-        System.out.println("size list vg: " + selectedQuestionList.size());
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
@@ -88,6 +88,9 @@ public class ViewGame extends VBox {
         stage.setTitle("Répondez aux questions");
         stage.setScene(new Scene(display, 650, 300));
         stage.show();
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            vm.giveUpGame(stage);
+        });
     }
 
     public void initData() {
@@ -178,7 +181,6 @@ public class ViewGame extends VBox {
     private void configListerner() {
         validate.setOnAction((ActionEvent event) -> {
             vm.nextQuestion(((RadioButton) group.getSelectedToggle()).getText(), stage, group);
-
         });
         abandon.setOnAction((ActionEvent event) -> {
             vm.giveUpGame(stage);
@@ -193,6 +195,9 @@ public class ViewGame extends VBox {
                 vm.enablebtnValidateQuestion();
             }
         });
+//        stage.setOnCloseRequest((WindowEvent event) -> {
+//            vm.giveUpGame(stage);
+//        });
     }
 
     public String css() {

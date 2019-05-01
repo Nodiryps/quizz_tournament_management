@@ -37,6 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.Category;
 import model.Player;
 import model.Question;
@@ -111,6 +112,9 @@ public class ViewInitGame extends Popup {
         stage.setTitle("Choix de questions");
         stage.setScene(new Scene(borderPane, 1145, 500));
         stage.show();
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            vm.windowClosed();
+        });
     }
 
     private void init() {
@@ -327,6 +331,9 @@ public class ViewInitGame extends Popup {
             } catch (Exception ex) {
             }
         });
+//        stage.setOnCloseRequest((WindowEvent event) -> {
+//            vm.windowClosed();
+//        });
     }
 
     private Question getSelectedItem(ListView<Question> o) {

@@ -34,39 +34,36 @@ import view.ViewInitGame;
 public class ViewModel {
 
     TournamentFacade facade;
-    private final int MAX_POINT = 10;
     private ObservableList<Player> subscribeList;
     private ObservableList<Match> matchList;
     private ObservableList<Player> oppList = FXCollections.observableArrayList();
-    public IntegerProperty indexTournament = new SimpleIntegerProperty();
+    private IntegerProperty indexTournament = new SimpleIntegerProperty();
     private final ObjectProperty<Player> actualPlayer = new SimpleObjectProperty<Player>();
     private final ObjectProperty<Player> cb1 = new SimpleObjectProperty<>();
     private final ObjectProperty<Player> cb2 = new SimpleObjectProperty<>();
     private StringProperty cb3 = new SimpleStringProperty();
     private IntegerProperty indexMatch = new SimpleIntegerProperty();
-    public ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
+    private ObjectProperty<Match> matchSelected = new SimpleObjectProperty<>();
     private ObservableList<Question> selectedQuestionList = FXCollections.observableArrayList();
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
-    public BooleanProperty btnValidate = new SimpleBooleanProperty();
-
-    private IntegerProperty cptPoint = new SimpleIntegerProperty();
-
+    private BooleanProperty btnValidate = new SimpleBooleanProperty();
     private StringProperty questionName = new SimpleStringProperty();
     private IntegerProperty questionPoint = new SimpleIntegerProperty();
-    public StringProperty res1 = new SimpleStringProperty();
-    public StringProperty res2 = new SimpleStringProperty();
-    public StringProperty res3 = new SimpleStringProperty();
-    public StringProperty res4 = new SimpleStringProperty();
-    public ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
-    public IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
-    public IntegerProperty indexQuestion = new SimpleIntegerProperty();
-    public BooleanProperty gameOver = new SimpleBooleanProperty();
-    public final BooleanProperty bl = new SimpleBooleanProperty(true);
-    public final BooleanProperty deselectedRadioButon = new SimpleBooleanProperty(true);
-    public ObjectProperty<Player> clearPlayerOne = new SimpleObjectProperty<>();
-    public ObjectProperty<Player> clearPlayerTwo = new SimpleObjectProperty<>();
-    public ObjectProperty<String> clearResult = new SimpleObjectProperty<>();
-    public ObjectProperty<FocusModel<Tournament>> selectTournament = new SimpleObjectProperty<>();
+    private StringProperty res1 = new SimpleStringProperty();
+    private StringProperty res2 = new SimpleStringProperty();
+    private StringProperty res3 = new SimpleStringProperty();
+    private StringProperty res4 = new SimpleStringProperty();
+    private ObjectProperty<Question> currentQuestion = new SimpleObjectProperty<>();
+    private IntegerProperty cptFillQuestions = new SimpleIntegerProperty();
+    private IntegerProperty indexQuestion = new SimpleIntegerProperty();
+    private BooleanProperty gameOver = new SimpleBooleanProperty();
+    private final BooleanProperty bl = new SimpleBooleanProperty(true);
+    private final BooleanProperty deselectedRadioButon = new SimpleBooleanProperty(true);
+    private ObjectProperty<Player> clearPlayerOne = new SimpleObjectProperty<>();
+    private ObjectProperty<Player> clearPlayerTwo = new SimpleObjectProperty<>();
+    private ObjectProperty<String> clearResult = new SimpleObjectProperty<>();
+    private ObjectProperty<FocusModel<Tournament>> selectTournament = new SimpleObjectProperty<>();
+    private BooleanProperty btnPlayClicked = new SimpleBooleanProperty();
 
     public ViewModel(TournamentFacade facade) {
         this.facade = facade;
@@ -79,6 +76,7 @@ public class ViewModel {
         matchList = FXCollections.observableArrayList(matchsProperty());
         setFirstIndex();
         btnValidate.set(true);
+        btnPlayClicked.set(false);
     }
     
     public void setFirstIndex(){
@@ -141,15 +139,14 @@ public class ViewModel {
         System.out.println(cb3.get());
         if (!t.equals(null) && cb1!=null && cb2 != null) {
             Match m = new Match(new Player(cb1.getValue().toString()),
-                    new Player(cb2.getValue().toString()),
-                    results(t));
+                      new Player(cb2.getValue().toString()),
+                      results(t));
             if (!matchsProperty().contains(m)) {
                 facade.getTournament().addMatch(m);
             }
         }
         fillList();
         ClearComboBox();
-//        oppValidList();
     }
 
     public void ClearComboBox() {
@@ -218,7 +215,6 @@ public class ViewModel {
             }
         }
         btnValidateDisable();
-
     }
 
     public void btnValidateDisable() {
@@ -230,12 +226,7 @@ public class ViewModel {
     public void emptyselectedList() {
         selectedQuestionList.clear();
     }
-
-//    public void clearComboBox() {
-//        cb1.set(new Player(""));
-//        cb2.set(new Player(""));
-//        cb3.set(" ");
-//    }
+    
     public void setTournament() {
         facade.indexTournamentProperty().set(indexTournament.get());
         fillList();
@@ -307,15 +298,15 @@ public class ViewModel {
     }
 
     public SimpleListProperty<Player> opponentsListProperty() {
-        return new SimpleListProperty<Player>(this.oppList);
+        return new SimpleListProperty<>(this.oppList);
     }
 
     public SimpleListProperty<Match> matchsProperty() {
-        return new SimpleListProperty<Match>(facade.getMatchList());
+        return new SimpleListProperty<>(facade.getMatchList());
     }
 
     public SimpleListProperty<Tournament> tournamantProperty() {
-        return new SimpleListProperty<Tournament>(facade.getTournamentList());
+        return new SimpleListProperty<>(facade.getTournamentList());
     }
 
     public TournamentFacade getFacade() {
@@ -345,7 +336,110 @@ public class ViewModel {
 
     public SimpleListProperty<Match> matchListProperty() {
         return new SimpleListProperty<>(matchList);
+    }
 
+    public ObservableList<Player> getSubscribeList() {
+        return subscribeList;
+    }
+
+    public ObservableList<Match> getMatchList() {
+        return matchList;
+    }
+
+    public ObservableList<Player> getOppList() {
+        return oppList;
+    }
+
+    public IntegerProperty getIndexTournament() {
+        return indexTournament;
+    }
+
+    public ObjectProperty<Player> getActualPlayer() {
+        return actualPlayer;
+    }
+
+    public ObjectProperty<Player> getCb1() {
+        return cb1;
+    }
+
+    public ObjectProperty<Player> getCb2() {
+        return cb2;
+    }
+
+    public StringProperty getCb3() {
+        return cb3;
+    }
+
+    public IntegerProperty getIndexMatch() {
+        return indexMatch;
+    }
+
+    public ObjectProperty<Match> getMatchSelected() {
+        return matchSelected;
+    }
+
+    public ObservableList<Question> getSelectedQuestionList() {
+        return selectedQuestionList;
+    }
+
+    public BooleanProperty getBtnValidate() {
+        return btnValidate;
+    }
+
+    public StringProperty getQuestionName() {
+        return questionName;
+    }
+
+    public IntegerProperty getQuestionPoint() {
+        return questionPoint;
+    }
+
+    public ObjectProperty<Question> getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public IntegerProperty getCptFillQuestions() {
+        return cptFillQuestions;
+    }
+
+    public IntegerProperty getIndexQuestion() {
+        return indexQuestion;
+    }
+
+    public BooleanProperty getGameOver() {
+        return gameOver;
+    }
+
+    public BooleanProperty getBl() {
+        return bl;
+    }
+
+    public BooleanProperty getDeselectedRadioButon() {
+        return deselectedRadioButon;
+    }
+
+    public ObjectProperty<Player> getClearPlayerOne() {
+        return clearPlayerOne;
+    }
+
+    public ObjectProperty<Player> getClearPlayerTwo() {
+        return clearPlayerTwo;
+    }
+
+    public ObjectProperty<String> getClearResult() {
+        return clearResult;
+    }
+
+    public ObjectProperty<FocusModel<Tournament>> getSelectTournament() {
+        return selectTournament;
+    }
+
+    public BooleanProperty getBtnPlayClicked() {
+        return btnPlayClicked;
+    }
+
+    void setBtnPlayClicked(Boolean b){
+        btnPlayClicked.set(b);
     }
     
     

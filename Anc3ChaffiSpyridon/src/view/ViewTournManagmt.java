@@ -47,9 +47,6 @@ public class ViewTournManagmt extends VBox {
     private final Button btnClear = new Button();
     private final Button btnPlay = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
-    private PopUpDelete popup;
-    private final IntegerProperty indexTournament = new SimpleIntegerProperty();
-    private final StringProperty actualPlayer = new SimpleStringProperty("");
 
     public ViewTournManagmt(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
         this.vm = ctrl;
@@ -85,11 +82,11 @@ public class ViewTournManagmt extends VBox {
         tournamentsList.getSelectionModel().selectFirst();
         cbPlayersList.itemsProperty().bindBidirectional(vm.SubscribListProperty());
         cbOpponentsList.itemsProperty().bindBidirectional(vm.opponentsListProperty());
-        cbPlayersList.valueProperty().bindBidirectional(vm.clearPlayerOne);
-        cbOpponentsList.valueProperty().bindBidirectional(vm.clearPlayerTwo);
-        cbResultsList.valueProperty().bindBidirectional(vm.clearResult);
-        btnValidate.disableProperty().bindBidirectional(vm.btnValidate);
-
+        cbPlayersList.valueProperty().bindBidirectional(vm.getClearPlayerOne());
+        cbOpponentsList.valueProperty().bindBidirectional(vm.getClearPlayerTwo());
+        cbResultsList.valueProperty().bindBidirectional(vm.getClearResult());
+        btnValidate.disableProperty().bindBidirectional(vm.getBtnValidate());
+        btnPlay.disableProperty().bindBidirectional(vm.getBtnPlayClicked());
     }
 
     private void configBindingAttributes() {
@@ -141,12 +138,6 @@ public class ViewTournManagmt extends VBox {
         });
     }
 
-    private boolean cbEmpty() {
-        return cbPlayersList.getSelectionModel().isEmpty()
-                || cbOpponentsList.getSelectionModel().isEmpty()
-                || cbResultsList.getSelectionModel().isEmpty();
-    }
-
     // ajoute un listener sur les combobox.
     public void addListernerComboBox() {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
@@ -190,7 +181,6 @@ public class ViewTournManagmt extends VBox {
         configFocusListener();
         addListernerComboBox();
         addResultsToCB();
-
     }
 
     private void decor() {
@@ -198,7 +188,6 @@ public class ViewTournManagmt extends VBox {
         subsList.getSelectionModel().select(-1);
         tournamentsList.setPrefWidth(TEXTSIZE);
         matchesList.setPrefWidth(TEXTSIZE);
-
     }
 
     private void configDisplay() {

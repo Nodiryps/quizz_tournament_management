@@ -38,7 +38,7 @@ public class VMGame {
     private ObjectProperty<Question> selectedQuestion = new SimpleObjectProperty<>();
     private final BooleanProperty disableRadioBtn = new SimpleBooleanProperty();
     private final BooleanProperty selectRadioBtn = new SimpleBooleanProperty();
-    private int totalPointsRestant;
+    private int pointsLeft;
     private int cpt;
     private static CareTaker careTaker;
     private MementoBuilding mementoBuilding;
@@ -69,12 +69,19 @@ public class VMGame {
     }
     
     private void initData() {
+        vm.setBtnPlayClicked(true);
         selectedQuestionList = vm.getSelectedQuestionList();
         careTaker = new CareTaker();
         cpt = VMInitGame.getCpt();
+        initPointsLeft();
         disablebtnValidateQuestion();
         initBoolSelectRadioBtn();
         initHint();
+        System.out.println("points restants: " + pointsLeft);
+    }
+    
+    private void initPointsLeft(){
+        pointsLeft = getMAX_POINTS_GAME().get();
     }
     
     private void initHint(){
@@ -125,13 +132,14 @@ public class VMGame {
 
     public void nextQuestion(String response, Stage stage, ToggleGroup g) {
         if (stage != null && g != null) {
-            System.out.println("points restants: " + totalPointsRestant);
             g.selectToggle(null);
             disablebtnValidateQuestion();
             randMemento();
             if (hasNextQuestion()) {
                 vm.displayTheQuestion();
                 nextQuestionManagmnt(response);
+                System.out.println("nextQ\npoints restants: " + pointsLeft + 
+                                   "\npointsAccumulés: " + cptPointProperty());
                 ++cpt;
                 if (isTheLastQuestion()) 
                     lastQuestion(response);
@@ -142,8 +150,11 @@ public class VMGame {
     }
     
     private void randMemento(){
-        if (!isTheLastQuestion() || indexQuestion.get() > 0) 
-            boolRandom = randomValue();
+        if (indexQuestion.get() > 0) 
+            if(!isTheLastQuestion()) {
+                System.out.println("randMem: ");
+                boolRandom = randomValue();
+            }
     }
     
     private boolean isTheEnd(){
@@ -153,7 +164,7 @@ public class VMGame {
     private void nextQuestionManagmnt(String response) {
 //        System.out.println("nextQuestionManagmnt 1 + undo: " + isUndo);
         Question q = getQuestionFromIndex();
-        totalPointsRestant -= q.getPoints();
+        pointsLeft -= q.getPoints();
         if (!isUndo) {
 //                System.out.println("nextQuestionManagmnt 2 + undo: " + isUndo);
             if (isResponseRight(response)) {
@@ -165,7 +176,7 @@ public class VMGame {
             incrementQuestion();
         } else {
 //                System.out.println("nextQuestionManagmnt 3 + undo: " + isUndo);
-            if (isRightRespUndo(response)) {
+            if (isResponseRightUndo(response)) {
 
                 boolLastQuestRight = true;
                 incrementPoints(mementoBuilding.question);
@@ -189,7 +200,7 @@ public class VMGame {
     }
 
     private boolean noMorePoints() {
-        return totalPointsRestant + vm.cptPointProperty().get() < (vm.getMAX_POINTS_GAME().get() / 2);
+        return pointsLeft + cptPointProperty().get() < (getMAX_POINTS_GAME().get() / 2);
     }
 
     private void lastQuestion(String response) {
@@ -200,7 +211,7 @@ public class VMGame {
         ++cpt;
     }
 
-    private boolean isRightRespUndo(String res) {
+    private boolean isResponseRightUndo(String res) {
         Question q = mementoBuilding.question;
         int indexResp = -1;
         indexResp = q.getResponses().indexOf(res);
@@ -244,9 +255,6 @@ public class VMGame {
     }
 
     private boolean hasNextQuestion() {
-        System.out.println("hasnextQ list size:  " + selectedQuestionList.size());
-        System.out.println("hasnextQ indexQ: " + vm.getIndexQuestion().get());
-
         return vm.getIndexQuestion().get() <= selectedQuestionList.size();
     }
 
@@ -257,6 +265,7 @@ public class VMGame {
         vm.clearOppList();
         popupEnd(score);
         stage.close();
+        vm.setBtnPlayClicked(false);
     }
 
     private String getScore() {
@@ -290,15 +299,24 @@ public class VMGame {
     }
 
     public void incrementPoints(Question q) {
-        if (hintClicked && q.getFakeHint() != null && q.getHint() != null) {
+        System.out.println("incrementPt: avt if");
+        if (hintClicked && isHintNotEmpty(q)) {
+            System.out.println("incrementPt: if 1");
             if (q.getFakeHint().get().equals(hint.get())) {
-                vm.cptPointProperty().set(vm.cptPointProperty().get() + 2);
+                System.out.println("incrementPt: if 2");
+                cptPointProperty().set(cptPointProperty().get() + 2);
             } else {
-                vm.cptPointProperty().set(vm.cptPointProperty().get() + 1);
+                System.out.println("incrementPt: else 1");
+                cptPointProperty().set(cptPointProperty().get() + 1);
             }
         } else {
-            vm.cptPointProperty().set(vm.cptPointProperty().get() + q.getPoints());
+            System.out.println("incrementPt: else 2");
+            cptPointProperty().set(cptPointProperty().get() + q.getPoints());
         }
+    }
+    
+    private boolean isHintNotEmpty(Question q){
+        return q.getFakeHint().get().equals("") && q.getHint().get().equals("");
     }
 
     public void giveUpGame(Stage stage) {
@@ -311,7 +329,6 @@ public class VMGame {
         } else {
             alert.close();
         }
-
     }
 
     public BooleanProperty btnValidateQuestionProperty() {
@@ -327,14 +344,7 @@ public class VMGame {
     }
 
     public String randomHint(Question q) {
-        if (randomValue()) {
-            return q.getFakeHint().get();
-        } else {
-            return q.getHint().get();
-        }
-    }
-
-    public String random(Question q) {
+        System.out.println("randHint: ");
         if (randomValue()) {
             return q.getFakeHint().get();
         } else {
@@ -345,7 +355,7 @@ public class VMGame {
     public boolean randomValue() {
         Random rand = new Random();
         int value = rand.nextInt(5);
-        System.out.println("rand: " + value);
+        System.out.println(value);
         return value == 3;
     }
 
@@ -374,7 +384,7 @@ public class VMGame {
     }
 
     public IntegerProperty getMAX_POINTS_GAME() {
-        return vm.getMAX_POINTS_GAME();
+        return VMInitGame.getMAX_POINTS_GAME();
     }
 
     public IntegerProperty cptPointProperty() {

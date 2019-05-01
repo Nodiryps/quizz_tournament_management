@@ -76,7 +76,6 @@ public final class VMInitGame {
 
     public VMInitGame(ViewModel vm) {
         this.vm = vm;
-
         disableRadioBtn.set(true);
         selectRadioBtn.set(false);
         cpt = 0;
@@ -263,6 +262,11 @@ public final class VMInitGame {
             }
         }
     }
+    
+    public void windowClosed(){
+        clearComboBox();
+        setBtnPlayClicked(false);
+    }
 
     private String getQuestionName(ObservableList<Question> list, int index) {
         return list.get(index).getName().get();
@@ -432,5 +436,8 @@ public final class VMInitGame {
     public static int getCpt() {
         return cpt;
     }
-
+    
+    void setBtnPlayClicked(boolean b){
+        vm.setBtnPlayClicked(b);
+    }
 }
