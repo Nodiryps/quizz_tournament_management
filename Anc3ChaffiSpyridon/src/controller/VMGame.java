@@ -140,17 +140,13 @@ public class VMGame {
                 vm.displayTheQuestion();
                 nextQuestionManagmnt(response);
                 ++cpt;
-
             }
-            
             if (isTheLastQuestion()) {
                 lastQuestion(response);
             }
-
             if (isTheEnd()) {
                 endOfGameManagmnt(stage);
             }
-
         }
     }
 
@@ -164,31 +160,33 @@ public class VMGame {
     }
 
     private boolean isTheEnd() {
-        return (noMoreQuestion() || noMorePoints()) ;//&& !boolRandom;
+        return (noMoreQuestion() || noMorePoints())//&& !boolRandom
+                                                    ;
     }
 
     private void nextQuestionManagmnt(String response) {
         Question q = getQuestionFromIndex();
-       
         if (!isUndo) {
             if (isResponseRight(response)) {
                 boolLastQuestRight = true;
-                incrementPoints(q);
+                incrementPoints();
             } else {
+                decrementPointLeft(q.getPoints());
                 mementoBuilding = new MementoBuilding(q, response, careTaker);
             }
             incrementQuestion();
-        } else {
-            if (isResponseRightUndo(response)) {
-
-                boolLastQuestRight = true;
-                incrementPoints(mementoBuilding.question);
-                getIndexQuestion().set(cpt + 1);
-                Question p = vm.getSelectedQuestionList().get(cpt);
-                vm.setAttributQuetion(p);
-                incrementQuestion();
-            }
-        }
+        } 
+//        else {
+//            if (isResponseRightUndo(response)) {
+//
+//                boolLastQuestRight = true;
+//                incrementPoints(mementoBuilding.question);
+//                getIndexQuestion().set(cpt + 1);
+//                Question p = vm.getSelectedQuestionList().get(cpt);
+//                vm.setAttributQuetion(p);
+//                incrementQuestion();
+//            }
+//        }
         disableRadioBtn.set(true);
         hint.set("");
         hintClicked = false;
@@ -199,31 +197,41 @@ public class VMGame {
     }
 
     private boolean noMoreQuestion() {
-        System.out.println("noMoreQuestion ;"+( cpt > selectedQuestionList.size()));
+        System.out.println("noMoreQuestion ;" + (cpt > selectedQuestionList.size()));
         return cpt > selectedQuestionList.size();
     }
 
     private boolean noMorePoints() {
-        System.out.println("POintLeft: " + pointsLeft);
-        System.out.println("cptPoint: "+ cptPointProperty());
-        return (pointsLeft - cptPointProperty().get())+cptPointProperty().get() < (getMAX_POINTS_GAME().get() / 2);
+        return pointsLeft + cptPointProperty().get() < (getMAX_POINTS_GAME().get() / 2);
     }
-    
-    private void alreadyWin(){
-//      return cptPointProperty().get()> (getMAX_POINTS_GAME().get()/2);
-System.out.println(indexQuestion);    
-        System.out.println(selectedQuestionList.get(indexQuestion.get()+1));
-    }
-    
-    private void alreadyLost(Question q){
-     
-    }
-      
+
+//    private boolean alreadyWin() {
+//        return cptPointProperty().get() > (getMAX_POINTS_GAME().get() / 2);
+//    }
+//
+//    private boolean notFinishYet(Question q) {
+//        boolean bool = false;
+//        if(notEnoughPointsLeft() && notEnoughPointsEarned())
+//            if(enoughPointsToDoDraw())
+//                bool = true;
+//        return bool;
+//    }
+//    
+//    private boolean enoughPointsToDoDraw(){
+//        return cptPointProperty().get() + pointsLeft >= (getMAX_POINTS_GAME().get() / 2);
+//    }
+//    
+//    private boolean notEnoughPointsEarned(){
+//        return cptPointProperty().get() < (getMAX_POINTS_GAME().get() / 2);
+//    }
+//    
+//    private boolean notEnoughPointsLeft(){
+//        return pointsLeft < (getMAX_POINTS_GAME().get() / 2);
+//    }
+
     private void lastQuestion(String response) {
         if (isResponseRight(response)) {
-            Question q = getQuestionFromIndex();
-            System.out.println(q);
-            incrementPoints(q);
+            incrementPoints();
         }
         ++cpt;
     }
@@ -232,7 +240,6 @@ System.out.println(indexQuestion);
         Question q = mementoBuilding.question;
         int indexResp = -1;
         indexResp = q.getResponses().indexOf(res);
-        System.out.println("indexResp: " + indexResp);
         return q.getNumCorrectResponse().get() == indexResp;
     }
 
@@ -254,8 +261,8 @@ System.out.println(indexQuestion);
     }
 
     private void incrementQuestion() {
-        System.out.println("Points gagner" + cptPointProperty().get());
-        System.out.println("Points restant " + pointsLeft);
+        System.out.println("Points gagner: " + cptPointProperty().get());
+        System.out.println("Points restant: " + pointsLeft);
         if (boolLastQuestRight && boolRandom && mementoBuilding != null) {
             mementoBuilding.undo();
             Question mem = mementoBuilding.question;
@@ -317,12 +324,12 @@ System.out.println(indexQuestion);
         return winner;
     }
 
-    public void incrementPoints(Question q) {
-        System.out.println(hintClicked);
+    public void incrementPoints() {
+        System.out.println("hintclicked? " + hintClicked);
+        Question q = getQuestionFromIndex();
         if (hintClicked && isHintNotEmpty(q)) {
 
             if (q.getFakeHint().get().equals(hint.get())) {
-
                 cptPointProperty().set(cptPointProperty().get() + POINT_FAKE_HINT);
                 decrementPointLeft(2);
             } else {
@@ -330,6 +337,7 @@ System.out.println(indexQuestion);
                 decrementPointLeft(1);
             }
         } else {
+            System.out.println("ELSSSSSSSSSSSSE");
             cptPointProperty().set(cptPointProperty().get() + q.getPoints());
             decrementPointLeft(q.getPoints());
         }
