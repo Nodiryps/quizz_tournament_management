@@ -136,7 +136,6 @@ public class ViewModel {
     }
 
     public void createMatch(String score) {
-        System.out.println(cb3.get());
         if (isComboBoxesNotEmpty(score)) {
             Match m = new Match(new Player(cb1.getValue().toString()),
                       new Player(cb2.getValue().toString()),

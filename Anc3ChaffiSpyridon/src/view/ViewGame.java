@@ -112,7 +112,7 @@ public class ViewGame extends VBox {
         display.add(btnBottom, 0, 11);
         btnBottom.setSpacing(25);
         hint.setFont(Font.font("Arial", 15));
-        btnHint.setStyle("-fx-background-color: white;");
+        btnHint.setStyle("-fx-border-color:red; -fx-border-radius: 3px;");
         hint.setFill(Color.RED);
         displayQuestion.setStyle(css());
         display.alignmentProperty().set(Pos.CENTER);

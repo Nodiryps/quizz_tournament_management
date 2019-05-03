@@ -103,7 +103,6 @@ public class ViewInitGame extends Popup {
         this.vm = vm;
         this.p1 = p1;
         this.p2 = p2;
-        
         init();
         stage = new Stage();
         initStage();

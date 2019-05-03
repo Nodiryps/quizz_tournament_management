@@ -55,11 +55,8 @@ public class Tournament {
                 Category cate=(Category)c;
                 cat.add(cate);
                 addCategory(c);
-//           
             }
-
         }
-        System.out.println(composant);
     }
 
     public void addCategory(Composant c) {

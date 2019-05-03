@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package Memento;
 
 import java.util.ArrayList;
 
@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 public class CareTaker {
 
-    private  ArrayList<Memento> mementosList = new ArrayList<>();
-    
+    public ArrayList<Memento> mementosList = new ArrayList<>();
+
     public CareTaker() {
         emptyList();
     }
@@ -27,20 +27,16 @@ public class CareTaker {
         Memento m = null;
         if (mementosList.size() > 0) {
             m = mementosList.get(0);
-           // mementosList.remove(0);
-            System.out.println("Getmement(CareTaker) "+m);
+            // mementosList.remove(0);
         }
         return m;
     }
-    
-    public ArrayList<Memento> getMemeto(){
-     return mementosList;
+
+    public ArrayList<Memento> getMemeto() {
+        return mementosList;
     }
-    
-    private void emptyList(){
-   mementosList.clear();
-     
-     
+
+    private void emptyList() {
+        mementosList.clear();
     }
 }
-

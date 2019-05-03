@@ -28,9 +28,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleGroup;
-import model.CareTaker;
+import Memento.CareTaker;
 import model.Category;
-import model.MementoBuilding;
+import Memento.MementoBuilding;
 import model.RESULTS;
 
 /**
@@ -300,6 +300,22 @@ public final class VMInitGame {
     public BooleanProperty getBoolSelectRadioBtn4() {
         return boolSelectRadioBtn4;
     }
+    
+    void setBoolSelectRadioBtn1(boolean bool) {
+        boolSelectRadioBtn1.set(bool);
+    }
+    
+    void setBoolSelectRadioBtn2(boolean bool) {
+        boolSelectRadioBtn2.set(bool);
+    }
+    
+    void setBoolSelectRadioBtn3(boolean bool) {
+        boolSelectRadioBtn3.set(bool);
+    }
+    
+    void setBoolSelectRadioBtn4(boolean bool) {
+        boolSelectRadioBtn4.set(bool);
+    }
 
     public BooleanProperty getReponse1() {
         return reponse1;
@@ -403,6 +419,7 @@ public final class VMInitGame {
 
     public void emptySelectedList() {
         vm.emptyselectedList();
+        vm.setBtnPlayClicked(false);
     }
 
     public void createMatch(String res) {

@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package Memento;
+
+import model.Question;
 
 /**
  *
@@ -26,7 +28,6 @@ public class MementoBuilding extends UndoableQuestion {
 
     @Override
     public void undo() {
-        System.out.println("Undo");
         setMemento(careTaker.getMemento());
     }
 
@@ -60,11 +61,9 @@ public class MementoBuilding extends UndoableQuestion {
     }
 
     public void setMemento(Memento m) {
-        System.out.println("Buildoing setMemento"+m);
         MementoImpl mi = (MementoImpl) m;
         this.question = mi.question;
         this.response = mi.response;
-        System.out.println(" Building -question "+this.question + " et reponse "+this.response);
     }
     
     
