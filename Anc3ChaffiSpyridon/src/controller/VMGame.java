@@ -23,6 +23,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import Memento.CareTaker;
 import Memento.Memento;
+import javafx.event.EventHandler;
+import javafx.scene.control.DialogEvent;
+import javafx.stage.WindowEvent;
 import model.Question;
 import model.RESULTS;
 
@@ -57,8 +60,9 @@ public class VMGame {
     private Question mementoQuestion;
     private int mementoRespIndex;
     private CareTaker careTaker;
-    
+
     private static class MementoImpl implements Memento {
+
         Question question;
         int response;
 
@@ -81,31 +85,33 @@ public class VMGame {
         MementoImpl memImpl = (MementoImpl) m;
         mementoQuestion = memImpl.question;
         mementoRespIndex = memImpl.response;
-        System.out.println("setMemento => MEMQ: " + mementoQuestion + "\n\tMEMrep: "+ mementoRespIndex);
     }
-    
+
     private MementoImpl createMemento(String resp) {
         return new MementoImpl(mementoQuestion, mementoQuestion.getResponses().indexOf(resp));
     }
-    
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private boolean isEmptyMementoList() {
+        return careTaker.getMemeto().size() == 0;
+    }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public VMGame(VMInitGame vm) {
         this.vm = vm;
+
         initData();
     }
-    
+
     private void initData() {
         vm.setBtnPlayClicked(true);
         selectedQuestionList = vm.getSelectedQuestionList();
         careTaker = new CareTaker();
-        mementoQuestion = vm.getSelectedQuestion().get();
+        mementoQuestion = null;
         cpt = VMInitGame.getCpt();
         initPointsLeft();
+        vm.getIndexQuestion().set(0);
         disablebtnValidateQuestion();
         initHint();
     }
@@ -131,11 +137,15 @@ public class VMGame {
             randMemento();
             if (hasNextQuestion()) {
                 vm.displayTheQuestion();
-                if(isUndo)
+                if (isUndo) {
                     selectFalseRespRadioBtn();
+                }
                 nextQuestionManagmnt(response);
-                ++cpt;
+                if (!isUndo) {
+                    ++cpt;
+                }
             }
+
             if (isTheLastQuestion()) {
                 lastQuestion(response);
             }
@@ -148,15 +158,15 @@ public class VMGame {
     private void randMemento() {
         if (getIndexQuestion().get() > 0) {
             if (!isTheLastQuestion()) {
-                System.out.print("randMem: ");
                 boolRandomMem = randomValueBool();
+                boolRandomMem = true;
             }
         }
     }
 
     private void nextQuestionManagmnt(String response) {
         Question q = getQuestionFromIndex();
-        System.out.println("nextQM=> isUndo, " + isUndo);
+        int indexOfActualQuestion = vm.getSelectedQuestionList().get().indexOf(q);
         if (!isUndo) {
             if (isResponseRight(response)) {
                 boolPreviousQuestRight = true;
@@ -167,38 +177,39 @@ public class VMGame {
                 mementoRespIndex = q.getResponses().indexOf(response);
                 careTaker.keepMemento(createMemento(response));
                 boolPreviousQuestRight = false;
-                
-                for(Memento m : careTaker.mementosList)
-                    System.out.print("keepMemento=> " + m.toString() + "\n");
-                System.out.println("");
-                
+
             }
+            incrementQuestion();
+            disableRadioBtn.set(true);
+            hint.set("");
+            hintClicked = false;
         } else {
+
             if (isResponseRightUndo(response)) {
                 boolPreviousQuestRight = true;
                 incrementPoints(mementoQuestion);
-                getIndexQuestion().set(cpt + 1);
-                Question p = vm.getSelectedQuestionList().get(cpt);
-                vm.setAttributQuetion(p);
-                incrementQuestion();
-            } else
+                isUndo = false;
+                mementoQuestion = null;
+
+            } else {
+                careTaker.keepMemento(createMemento(response));
                 boolPreviousQuestRight = false;
+            }
+            incrementQuestion();
+
         }
-        incrementQuestion();
-        disableRadioBtn.set(true);
-        hint.set("");
-        hintClicked = false;
+
     }
 
     public void enablebtnValidateQuestion() {
         btnValidateQuestion.set(false);
     }
-    
+
     private boolean isTheEnd() {
         return alreadyWon() || ((noMorePoints() && !boolRandomMem) || noMoreQuestion());
     }
 
-    private boolean alreadyWon(){
+    private boolean alreadyWon() {
         return cptPointProperty().get() > (getMAX_POINTS_GAME().get() / 2);
     }
 
@@ -216,7 +227,7 @@ public class VMGame {
         }
         ++cpt;
     }
-    
+
     private void selectFalseRespRadioBtn() {
         switch (mementoRespIndex) {
             case 0:
@@ -233,12 +244,12 @@ public class VMGame {
                 break;
         }
     }
-    
+
     private boolean isResponseRightUndo(String res) {
         int indexCorrectResp = mementoQuestion.getNumCorrectResponse().get();
         int indexResp = mementoQuestion.getResponses().indexOf(res);
-        
-        return indexCorrectResp == indexResp;
+
+        return indexCorrectResp == indexResp + 1;
     }
 
     private boolean isResponseRight(String s) {
@@ -259,16 +270,21 @@ public class VMGame {
     }
 
     private void incrementQuestion() {
-        if (boolPreviousQuestRight && boolRandomMem && mementoQuestion != null) {
+
+        if (boolPreviousQuestRight && boolRandomMem && check() && !isEmptyMementoList()) {
             undo();
             vm.setAttributQuetion(mementoQuestion);
             vm.getSelectedQuestion().set(mementoQuestion);
             isUndo = true;
-        }
-        if (vm.getCptFillQuestions().get() < selectedQuestionList.size()) {
+
+        } else if (vm.getCptFillQuestions().get() < selectedQuestionList.size()) {
             vm.getCptFillQuestions().set(vm.getCptFillQuestions().get() + 1);
             getIndexQuestion().set(getIndexQuestion().get() + 1);
         }
+    }
+
+    private boolean check() {
+        return mementoQuestion != null;
     }
 
     private boolean isTheLastQuestion() {
@@ -304,15 +320,16 @@ public class VMGame {
             alert.close();
         }
     }
-    
-    private String msgPopupEnd(String score){
+
+    private String msgPopupEnd(String score) {
         String msg = "";
-        if(score.equals(RESULTS.EX_AEQUO.toString()))
+        if (score.equals(RESULTS.EX_AEQUO.toString())) {
             msg = "Match nul... ¯\\_(ツ)_/¯";
-        else if(score.equals(RESULTS.VAINQUEUR_J1.toString()))
+        } else if (score.equals(RESULTS.VAINQUEUR_J1.toString())) {
             msg = "Vous avez perdu... :/";
-        else
+        } else {
             msg = "!!! VOUS AVEZ GAGNÉÉÉÉÉÉÉÉ !!!";
+        }
         return msg;
     }
 
@@ -358,12 +375,13 @@ public class VMGame {
     public void giveUpGame(Stage stage, String msg) {
         Alert alert = new Alert(Alert.AlertType.WARNING, msg, ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
-
+      
         if (alert.getResult() == ButtonType.YES) {
+            cptPointProperty().set(0);
             alert.close();
             endOfGameManagmnt(stage);
-        } else {
-            alert.close();
+        } if (alert.getResult() == ButtonType.NO) {
+          
         }
     }
 
@@ -372,15 +390,19 @@ public class VMGame {
     }
 
     public void displayHint() {
+        Question q = null;
+        if (isUndo) {
+            q = mementoQuestion;
+        } else {
+            q = getQuestionFromIndex();
+        }
         hintClicked = true;
-        Question q = getQuestionFromIndex();
         hint.set(randomHint(q));
         btnHint.set(false);
 
     }
 
     public String randomHint(Question q) {
-        System.out.print("randHint: ");
         if (randomValueBool()) {
             return q.getFakeHint().get();
         } else {
@@ -391,7 +413,6 @@ public class VMGame {
     public boolean randomValueBool() {
         Random rand = new Random();
         int value = rand.nextInt(5);
-        System.out.println(value);
         return value == 3;
     }
 

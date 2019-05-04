@@ -27,7 +27,7 @@ public class CareTaker {
         Memento m = null;
         if (mementosList.size() > 0) {
             m = mementosList.get(0);
-            // mementosList.remove(0);
+            mementosList.remove(0);
         }
         return m;
     }

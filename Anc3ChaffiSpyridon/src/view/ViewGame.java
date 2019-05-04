@@ -88,6 +88,8 @@ public class ViewGame extends VBox {
         stage.setTitle("Répondez aux questions");
         stage.setScene(new Scene(display, 650, 300));
         stage.show();
+        stage.setResizable(false);
+
         stage.setOnCloseRequest((WindowEvent event) -> {
             vm.giveUpGame(stage, "Êtes-vous sûr.e de vouloir quitter la partie ? (abandon!)");
         });
@@ -207,8 +209,5 @@ public class ViewGame extends VBox {
                 + "-fx-border-style: solid;\n"
                 + "-fx-padding: 12;\n";
     }
-    
-    
-
 
 }

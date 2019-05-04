@@ -152,6 +152,7 @@ public final class VMInitGame {
 
     private void selectRightRespRadioBtn() {
         unselectAllRadioBouton();
+       // System.out.println(selectedQuestion.get().getNumCorrectResponse().get());
         int rightResponse = selectedQuestion.get().getNumCorrectResponse().get();
         switch (rightResponse) {
             case 1:
