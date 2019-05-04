@@ -57,6 +57,10 @@ public class VMGame {
     private StringProperty res2 = new SimpleStringProperty();
     private StringProperty res3 = new SimpleStringProperty();
     private StringProperty res4 = new SimpleStringProperty();
+    private final BooleanProperty boolSelectRadioBtn1 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn2 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn3 = new SimpleBooleanProperty();
+    private final BooleanProperty boolSelectRadioBtn4 = new SimpleBooleanProperty();
     private Question mementoQuestion;
     private int mementoRespIndex;
     private CareTaker careTaker;
@@ -98,6 +102,7 @@ public class VMGame {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
     public VMGame(VMInitGame vm) {
         this.vm = vm;
 
@@ -137,15 +142,11 @@ public class VMGame {
             randMemento();
             if (hasNextQuestion()) {
                 vm.displayTheQuestion();
-                if (isUndo) {
-                    selectFalseRespRadioBtn();
-                }
                 nextQuestionManagmnt(response);
                 if (!isUndo) {
                     ++cpt;
                 }
             }
-
             if (isTheLastQuestion()) {
                 lastQuestion(response);
             }
@@ -159,14 +160,13 @@ public class VMGame {
         if (getIndexQuestion().get() > 0) {
             if (!isTheLastQuestion()) {
                 boolRandomMem = randomValueBool();
-                boolRandomMem = true;
+               
             }
         }
     }
 
     private void nextQuestionManagmnt(String response) {
         Question q = getQuestionFromIndex();
-        int indexOfActualQuestion = vm.getSelectedQuestionList().get().indexOf(q);
         if (!isUndo) {
             if (isResponseRight(response)) {
                 boolPreviousQuestRight = true;
@@ -180,7 +180,6 @@ public class VMGame {
 
             }
             incrementQuestion();
-            disableRadioBtn.set(true);
             hint.set("");
             hintClicked = false;
         } else {
@@ -190,6 +189,7 @@ public class VMGame {
                 incrementPoints(mementoQuestion);
                 isUndo = false;
                 mementoQuestion = null;
+            
 
             } else {
                 careTaker.keepMemento(createMemento(response));
@@ -231,16 +231,16 @@ public class VMGame {
     private void selectFalseRespRadioBtn() {
         switch (mementoRespIndex) {
             case 0:
-                vm.setBoolSelectRadioBtn1(true);
+                boolSelectRadioBtn1.set(true);
                 break;
             case 1:
-                vm.setBoolSelectRadioBtn2(true);
+                setBoolSelectRadioBtn2(true);
                 break;
             case 2:
-                vm.setBoolSelectRadioBtn3(true);
+                setBoolSelectRadioBtn3(true);
                 break;
             case 3:
-                vm.setBoolSelectRadioBtn4(true);
+                setBoolSelectRadioBtn4(true);
                 break;
         }
     }
@@ -270,11 +270,11 @@ public class VMGame {
     }
 
     private void incrementQuestion() {
-
         if (boolPreviousQuestRight && boolRandomMem && check() && !isEmptyMementoList()) {
             undo();
             vm.setAttributQuetion(mementoQuestion);
             vm.getSelectedQuestion().set(mementoQuestion);
+             selectFalseRespRadioBtn();
             isUndo = true;
 
         } else if (vm.getCptFillQuestions().get() < selectedQuestionList.size()) {
@@ -475,4 +475,36 @@ public class VMGame {
     public int getPointLeft() {
         return pointsLeft;
     }
+    
+      public BooleanProperty getBoolSelectRadioBtn1() {
+        return boolSelectRadioBtn1;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn2() {
+        return boolSelectRadioBtn2;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn3() {
+        return boolSelectRadioBtn3;
+    }
+
+    public BooleanProperty getBoolSelectRadioBtn4() {
+        return boolSelectRadioBtn4;
+    }
+    void setBoolSelectRadioBtn1(boolean bool) {
+        boolSelectRadioBtn1.set(bool);
+    }
+    
+    void setBoolSelectRadioBtn2(boolean bool) {
+        boolSelectRadioBtn2.set(bool);
+    }
+    
+    void setBoolSelectRadioBtn3(boolean bool) {
+        boolSelectRadioBtn3.set(bool);
+    }
+    
+    void setBoolSelectRadioBtn4(boolean bool) {
+        boolSelectRadioBtn4.set(bool);
+    }
+    
 }
