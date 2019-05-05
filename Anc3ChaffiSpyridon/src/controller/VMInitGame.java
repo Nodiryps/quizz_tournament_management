@@ -6,8 +6,6 @@
 package controller;
 
 import element.Elem;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -23,15 +21,7 @@ import javafx.stage.Stage;
 import model.Player;
 import model.Question;
 import view.ViewGame;
-import java.util.Random;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ToggleGroup;
-import Memento.CareTaker;
 import model.Category;
-import Memento.MementoBuilding;
-import model.RESULTS;
 
 /**
  *
