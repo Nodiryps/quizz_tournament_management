@@ -46,6 +46,7 @@ public class ViewTournManagmt extends VBox {
     private final Button btnValidate = new Button();
     private final Button btnClear = new Button();
     private final Button btnPlay = new Button();
+    private final Button btnCredits = new Button();
     private final GridPane gpButtons = new GridPane();//gere les boutons
 
     public ViewTournManagmt(Stage primaryStage, ViewModel ctrl) throws FileNotFoundException {
@@ -143,9 +144,7 @@ public class ViewTournManagmt extends VBox {
         cbPlayersList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     vm.oppValidList();
-
                 });
-
         cbResultsList.getSelectionModel().selectedIndexProperty()
                 .addListener((Observable o) -> {
                     vm.btnValidateDisable();
@@ -166,6 +165,9 @@ public class ViewTournManagmt extends VBox {
         });
         btnClear.setOnAction((ActionEvent event) -> {
             vm.ClearComboBox();
+        });
+        btnCredits.setOnAction((ActionEvent event) -> {
+            vm.popupCredits();
         });
     }
 
@@ -218,8 +220,10 @@ public class ViewTournManagmt extends VBox {
         btnValidate.setText("valider");
         btnClear.setText("annuler");
         btnPlay.setText("jouer");
+        btnCredits.setText("crédits");
         gpButtons.add(btnPlay, 5, 1);
         gpButtons.add(btnValidate, 6, 1);
         gpButtons.add(btnClear, 7, 1);
+        gpButtons.add(btnCredits, 7, 0);
     }
 }

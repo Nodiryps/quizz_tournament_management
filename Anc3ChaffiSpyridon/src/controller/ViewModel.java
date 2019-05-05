@@ -13,8 +13,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.FocusModel;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -239,6 +243,18 @@ public class ViewModel {
         facade.indexTournamentProperty().set(indexTournament.get());
         fillList();
         ClearComboBox();
+    }
+    
+    public void popupCredits() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.CLOSE);
+        Image image = new Image("img/rodolphe&Lindsay.png");
+        
+        alert.setGraphic(new ImageView(image));
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.CLOSE) {
+            alert.close();
+        }
     }
 
     public SimpleListProperty<Question> quetionsProperty() {
